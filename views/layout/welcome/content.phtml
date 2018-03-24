@@ -1,0 +1,82 @@
+<div class="jumbotron">
+	<div class="container-fluid">
+		<div class="col-md-4">
+			<h3>
+				It’s time to get more from what you read. Find and share real perspectives about topics that matter today.
+			</h3>
+		</div>
+	</div>
+</div>
+<div class="col-md-8 offset-md-2">
+	<div class="row">
+		<?php if ($carovl['config']['maintenance_mode'] != '1') { ?>
+		<div class="col-md-8">
+			<div id="latest_posts">
+				<?php 
+				$latest_posts = getLatestPosts(array('limit' => 5));
+				foreach ($latest_posts as $carovl['latest_post']) {
+					echo loadPage('welcome/latest-post');
+				}
+				?>
+			</div>
+			<?php if (count($latest_posts) > 0) { ?> 
+			<div class="card load-more">
+				<div class="card-block">
+					<div class="get-more-posts pointer" id="get-more-posts" onclick="getMoreLatestPosts();">
+						<span>
+							<i class="fa fa-repeat icon-loader" data-icon="repeat"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			<?php } ?>
+		</div>
+		<div class="col-md-4">
+			<div class="card mb-3">
+				<div class="card-block">
+					<div class="join-us">
+						<p><?php echo $carovl['lang']['everyone_can_post']; ?></p>
+						<button type="button" class="btn btn-started" data-toggle="modal" data-target="#login-modal"><?php echo $carovl['lang']['start_posting']; ?></button>
+					</div>
+				</div>
+			</div>
+			<?php echo loadPage('footer/sidebar-footer'); ?>
+		</div>
+		<?php } ?>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	scrolled = 0;
+	$(window).scroll(function () {
+		if ($(window).scrollTop() + $(window).height() > $(document).height() - 200) {
+			if ($('#latest_posts').length > 0) {
+				if (scrolled == 0) {
+					scrolled = 1;
+					getMoreLatestPosts();
+				}
+			}
+		}
+	});
+});
+function getMoreLatestPosts() {
+	var more_latest_post = $('#get-more-posts');
+	var after_post_id = $('.latest_post:last').attr('data-post-id');
+	if (after_post_id != null) {
+		more_latest_post.show();
+	}
+	progressLoader(more_latest_post);
+	$.get(ajaxRequests(), {
+		f: 'get_more_latest_posts',
+		after_post_id: after_post_id
+	}, function (data) {
+		if (data.length == 0) {
+			$('#get-more-posts').html('<span><?php echo $carovl['lang']['no_more_posts']; ?></span>');
+		} else {
+			$('#latest_posts').append(data);
+		}
+		progressLoader(more_latest_post);
+		scrolled = 0;
+	});
+}
+</script>

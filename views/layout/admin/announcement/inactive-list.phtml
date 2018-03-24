@@ -1,0 +1,18 @@
+<div class="alert alert-warning announcement-<?php echo $carovl['inactive_announcement']['id']; ?>">
+	<span class="close delete-announcement" onclick="deleteAnnouncement(<?php echo $carovl['inactive_announcement']['id']; ?>);" title="<?php echo $carovl['lang']['delete_label']; ?>" data-toggle="tooltip">
+		<i class="fa fa-trash"></i>
+	</span>
+	<span class="close enable-announcement mr-3" onclick="enableAnnouncement(<?php echo $carovl['inactive_announcement']['id']; ?>);" title="<?php echo $carovl['lang']['enable']; ?>" data-toggle="tooltip">
+		<i class="fa fa-check"></i>
+	</span>
+	<?php echo $carovl['inactive_announcement']['text']; ?>
+	<span class="ajax-time" title="<?php echo date('c', $carovl['inactive_announcement']['time']); ?>">
+		<?php echo timeElapsedString($carovl['inactive_announcement']['time']); ?>
+	</span>
+	<span class="views">
+		<?php 
+		$views = getAnnouncementViews($carovl['inactive_announcement']['id']);
+		echo $views['views'];
+		?>
+	</span>
+</div>

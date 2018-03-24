@@ -1,0 +1,9 @@
+<div class="dropdown">
+	<button type="button" class="btn btn-no-border white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<i class="fa fa-user"></i>
+	</button>
+	<div class="dropdown-menu dropdown-menu-right">
+		<a onclick="openMessageConversation(<?php echo $carovl['profile']['user_id']; ?>);" class="dropdown-item pointer"><?php echo $carovl['lang']['send_a_message']; ?></a>
+		<a onclick="openBlockDialog(<?php echo $carovl['profile']['user_id']; ?>);" class="dropdown-item pointer"><?php echo $carovl['lang']['block']; ?></a>
+	</div>
+</div>

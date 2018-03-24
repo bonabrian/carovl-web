@@ -1,0 +1,20 @@
+<div class="empty-conversation">
+	<div class="empty-content">
+		<div class="header-container">
+			<div class="header">
+				<i class="fa fa-smile-o"></i> <?php echo $carovl['lang']['message_desc']; ?>
+			</div>
+		</div>
+		<div class="user-suggestions">
+			<div class="users">
+				<?php 
+				$followings = getFollowing($carovl['user']['user_id'], 'profile', 4);
+				foreach ($followings as $carovl['following']) { ?>
+					<a onclick="openMessageConversation(<?php echo $carovl['following']['user_id']; ?>);" class="conversation-user" title="<?php echo $carovl['following']['username']; ?>" data-toggle="tooltip">
+						<img src="<?php echo $carovl['following']['avatar']; ?>" class="avatar pointer" alt="<?php echo $carovl['following']['username']; ?>">
+					</a>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+</div>

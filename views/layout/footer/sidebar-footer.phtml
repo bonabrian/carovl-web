@@ -1,0 +1,29 @@
+<div class="sidebar-footer">
+	<div class="card">
+		<div class="card-block">
+			<center>
+				<h3><?php echo $carovl['config']['site_name']; ?></h3>
+				<h6><?php echo $carovl['lang']['built_with']; ?></h6>
+			</center>
+		</div>
+	</div>
+</div>
+<ul class="list-inline text-center mt-3">
+	<li class="list-inline-item">
+		<a href="<?php echo seoLink('index.php?page=about'); ?>" data-redirect="?page=about"><?php echo $carovl['lang']['about_label']; ?></a>
+	</li>
+	<li class="list-inline-item">
+		<a href="#">Blog</a>
+	</li>
+	<?php if ($carovl['config']['developers_page'] == 1) { ?> 
+	<li class="list-inline-item">
+		<a href="<?php echo seoLink('index.php?page=developers'); ?>" data-redirect="?page=developers"><?php echo $carovl['lang']['developers']; ?></a>
+	</li>
+	<?php } ?>
+	<li class="list-inline-item">
+		<a href="<?php echo seoLink('index.php?page=policy&type=terms-of-service'); ?>" data-redirect="?page=policy&type=terms-of-service"><?php echo $carovl['lang']['terms']; ?></a>
+	</li>
+	<li class="list-inline-item">
+		<a href="<?php echo seoLink('index.php?page=policy&type=privacy'); ?>" data-redirect="?page=policy&type=privacy"><?php echo $carovl['lang']['privacy']; ?></a>
+	</li>
+</ul>

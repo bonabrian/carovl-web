@@ -1,0 +1,21 @@
+<div class="col-md-10 offset-md-1">
+	<div class="card">
+		<img src="<?php echo $carovl['config']['resource']; ?>/img/developers.jpg" class="card-img-top img-fluid">
+		<div class="card-block docs">
+			<div class="row">
+				<div class="col-md-8">
+					<h3 class="card-title"><?php echo strtoupper($carovl['lang']['documentation']); ?></h3>
+					<hr>
+					<a href="<?php echo seoLink('index.php?page=docs&type=api'); ?>" data-redirect="?page=docs&type=api" class="docs-item mb-4">
+						<h4><?php echo $carovl['lang']['api']; ?></h4>
+						<?php echo $carovl['lang']['api_desc']; ?>
+					</a>
+					<a href="<?php echo seoLink('index.php?page=docs&type=api'); ?>" data-redirect="?page=docs&type=api" class="docs-item">
+						<h4><?php echo $carovl['lang']['api']; ?></h4>
+						<?php echo $carovl['lang']['api_desc']; ?>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

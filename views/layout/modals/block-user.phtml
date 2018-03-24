@@ -1,0 +1,22 @@
+<div class="modal confirm-dialog" id="block-dialog" tabindex="-1" role="dialog" aria-labelledby="block-dialog" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<?php 
+					$confirmation = str_replace('{username}', $carovl['profile']['username'], $carovl['lang']['block_user_confirmation']);
+					echo $confirmation;
+					?>
+				</h5>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default cancel" data-dismiss="modal">
+					<?php echo $carovl['lang']['nevermind_label']; ?>
+				</button>
+				<button type="button" class="btn btn-carovl" id="block-user" onclick="registerBlock(<?php echo $carovl['profile']['user_id']; ?>);">
+					<?php echo $carovl['lang']['block_label']; ?>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

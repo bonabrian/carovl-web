@@ -1,0 +1,22 @@
+<div class="conversation_messages">
+	<div class="conversation_icebreakers">
+		<a href="<?php echo $carovl['conversation']['recipient']['url']; ?>" class="avatar">
+			<img src="<?php echo $carovl['conversation']['recipient']['avatar']; ?>">
+		</a>
+		<div class="name">
+			<a href="<?php echo $carovl['conversation']['recipient']['url']; ?>">
+				<?php echo $carovl['conversation']['recipient']['username']; ?>
+			</a>
+		</div>
+		<div class="info">
+			<span class="text">
+				<?php echo $carovl['conversation']['recipient']['about']; ?>
+			</span>
+		</div>
+	</div>
+	<div class="message_list_wrapper message_list_wrapper_<?php echo $carovl['conversation']['recipient']['user_id']; ?>">
+		<div class="message_list">
+			<!-- {Message Content Goes Here} -->
+		</div>
+	</div>
+</div>

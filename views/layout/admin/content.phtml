@@ -1,0 +1,218 @@
+<?php 
+$is_admin = isAdmin();
+$is_moderator = isModerator();
+if ($is_admin === false && $is_moderator === false) {
+	header("Location: " . $carovl['config']['site_url']);
+	exit();
+}
+$page = 'dashboard';
+$admin_pages = array(
+	'dashboard',
+	'general-setting',
+	'site-setting',
+	'social-login',
+	'users',
+	'online-users',
+	'posts',
+	'groups',
+	'articles',
+	'events',
+	'reports',
+	'verification-requests',
+	'announcement',
+	'banned-ip',
+	'advertisements',
+	'mailing-list',
+	'applications',
+	'cache',
+	'policy',
+	'email-setting',
+	'sms-setting',
+	'video-setting',
+	'backup',
+	'languages',
+	'edit-language',
+	'edit-key',
+	'add-new-language',
+	'add-new-key'
+);
+$moderator_pages = array(
+	'dashboard',
+	'users',
+	'online-users',
+	'posts',
+	'groups',
+	'reports',
+	'advertisements',
+	'cache',
+	'policy'
+);
+$horizontal_line = array(
+	'languages',
+	'social-login',
+	'verification-requests',
+	'policy',
+	'mailing-list'
+);
+$pages_url = array(
+	'dashboard' => array(
+		'url' => seoLink('index.php?page=admincp&tab=dashboard'),
+		'name' => $carovl['lang']['dashboard'],
+		'ajax_url' => '?page=admincp&tab=dashboard'
+	),
+	'general-setting' => array(
+		'url' => seoLink('index.php?page=admincp&tab=general-setting'),
+		'name' => $carovl['lang']['general_setting'],
+		'ajax_url' => '?page=admincp&tab=general-setting'
+	),
+	'site-setting' => array(
+		'url' => seoLink('index.php?page=admincp&tab=site-setting'),
+		'name' => $carovl['lang']['site_setting'],
+		'ajax_url' => '?page=admincp&tab=site-setting'
+	),
+	'video-setting' => array(
+		'url' => seoLink('index.php?page=admincp&tab=video-setting'),
+		'name' => $carovl['lang']['video_setting'],
+		'ajax_url' => '?page=admincp&tab=video-setting'
+	),
+	'languages' => array(
+		'url' => seoLink('index.php?page=admincp&tab=languages'),
+		'name' => $carovl['lang']['languages'],
+		'ajax_url' => '?page=admincp&tab=languages'
+	),
+	'social-login' => array(
+		'url' => seoLink('index.php?page=admincp&tab=social-login'),
+		'name' => $carovl['lang']['social_login'],
+		'ajax_url' => '?page=admincp&tab=social-login'
+	),
+	'users' => array(
+		'url' => seoLink('index.php?page=admincp&tab=users'),
+		'name' => $carovl['lang']['users'],
+		'ajax_url' => '?page=admincp&tab=users'
+	),
+	'posts' => array(
+		'url' => seoLink('index.php?page=admincp&tab=posts'),
+		'name' => $carovl['lang']['admin_posts'],
+		'ajax_url' => '?page=admincp&tab=posts'
+	),
+	'groups' => array(
+		'url' => seoLink('index.php?page=admincp&tab=groups'),
+		'name' => $carovl['lang']['groups'],
+		'ajax_url' => '?page=admincp&tab=groups'
+	),
+	'articles' => array(
+		'url' => seoLink('index.php?page=admincp&tab=articles'),
+		'name' => $carovl['lang']['articles'],
+		'ajax_url' => '?page=admincp&tab=articles'
+	),
+	'events' => array(
+		'url' => seoLink('index.php?page=admincp&tab=events'),
+		'name' => $carovl['lang']['events'],
+		'ajax_url' => '?page=admincp&tab=events'
+	),
+	'announcement' => array(
+		'url' => seoLink('index.php?page=admincp&tab=announcement'),
+		'name' => $carovl['lang']['announcement'],
+		'ajax_url' => '?page=admincp&tab=announcement'
+	),
+	'banned-ip' => array(
+		'url' => seoLink('index.php?page=admincp&tab=banned-ip'),
+		'name' => $carovl['lang']['banned_ip'],
+		'ajax_url' => '?page=admincp&tab=banned-ip'
+	),
+	'advertisements' => array(
+		'url' => seoLink('index.php?page=admincp&tab=advertisements'),
+		'name' => $carovl['lang']['advertisements'],
+		'ajax_url' => '?page=admincp&tab=advertisements'
+	),
+	'policy' => array(
+		'url' => seoLink('index.php?page=admincp&tab=policy'),
+		'name' => $carovl['lang']['policy'],
+		'ajax_url' => '?page=admincp&tab=policy'
+	),
+	'reports' => array(
+		'url' => seoLink('index.php?page=admincp&tab=reports'),
+		'name' => $carovl['lang']['reports'],
+		'ajax_url' => '?page=admincp&tab=reports'
+	),
+	'verification-requests' => array(
+		'url' => seoLink('index.php?page=admincp&tab=verification-requests'),
+		'name' => $carovl['lang']['verification_requests'],
+		'ajax_url' => '?page=admincp&tab=verification-requests'
+	),
+	'email-setting' => array(
+		'url' => seoLink('index.php?page=admincp&tab=email-setting'),
+		'name' => $carovl['lang']['email_setting'],
+		'ajax_url' => '?page=admincp&tab=email-setting'
+	),
+	'sms-setting' => array(
+		'url' => seoLink('index.php?page=admincp&tab=sms-setting'),
+		'name' => $carovl['lang']['sms_setting'],
+		'ajax_url' => '?page=admincp&tab=sms-setting'
+	),
+	'mailing-list' => array(
+		'url' => seoLink('index.php?page=admincp&tab=mailing-list'),
+		'name' => $carovl['lang']['mailing_list'],
+		'ajax_url' => '?page=admincp&tab=mailing-list'
+	),
+	'applications' => array(
+		'url' => seoLink('index.php?page=admincp&tab=applications'),
+		'name' => $carovl['lang']['applications'],
+		'ajax_url' => '?page=admincp&tab=applications'
+	),
+	'cache' => array(
+		'url' => seoLink('index.php?page=admincp&tab=cache'),
+		'name' => $carovl['lang']['cache'],
+		'ajax_url' => '?page=admincp&tab=cache',
+	),
+	'backup' => array(
+		'url' => seoLink('index.php?page=admincp&tab=backup'),
+		'name' => $carovl['lang']['backup'],
+		'ajax_url' => '?page=admincp&tab=backup'
+	)
+);
+if ($is_moderator === true) {
+	$list_array = $moderator_pages;
+} elseif ($is_admin === true) {
+	$list_array = $admin_pages;
+}
+if (! empty($_GET['tab'])) {
+	if (in_array($_GET['tab'], $list_array)) {
+		$page = $_GET['tab'];
+	}
+}
+?>
+<div class="row">
+	<div class="col-md-3">
+		<ul class="list-group">
+		<?php 
+		foreach ($pages_url as $key => $value) {
+			if (in_array($key, $list_array)) {
+			?>
+			<li class="list-group-item <?php echo ($page == $key) ? 'active' : ''; ?> <?php echo (($page == 'edit-language' && $key == 'languages') || ($page == 'add-new-language' && $key == 'languages') || ($page == 'add-new-key' && $key == 'languages') || ($page == 'edit-key' && $key == 'languages') || ($page == 'online-users' && $key == 'dashboard')) ? 'active' : ''; ?>">
+				<a href="<?php echo $value['url']; ?>" <?php echo ($key != 'policy' && $key != 'social-login' && $key != 'mailing-list') ? 'data-redirect="' . $value['ajax_url'] . '"' : ''; ?>>
+					<?php echo $value['name']; ?>
+					<?php 
+					if ($key == 'reports') {
+						$reports = countUnseenReports();
+						if ($reports > 0) { ?>
+							<span class="badge badge-success unseen_reports"><?php echo $reports; ?></span>
+						 <?php }
+					}
+					?>
+				</a>
+			</li>
+			<?php if (in_array($key, $horizontal_line)) { echo '<div class="line"></div>'; } ?>
+			<?php
+			}
+		}
+		?>
+		<li class="list-group-item">
+			<span><i class="fa fa-copyright"></i> Beta Version 1.0</span>
+		</li>
+		</ul>
+	</div>
+	<div class="col-md-9">
+		<?php echo loadPage("admin/{$page}/content"); ?>
+	</div>
+</div>

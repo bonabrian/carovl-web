@@ -1,0 +1,171 @@
+<div class="card admin">
+	<div class="card-header">
+		<h3 class="card-title"><?php echo $carovl['lang']['advertisements']; ?></h3>
+	</div>
+	<div class="card-block">
+		<div class="header-advertisements mb-3">
+			<h5><?php echo $carovl['lang']['header_ads']; ?>
+				<span class="float-right">
+					<span class="pointer activate-ads mr-2" title="<?php echo (isAdsActive('header') == 1) ? $carovl['lang']['disable'] : $carovl['lang']['enable']; ?>" onclick="updateAdsStatus('header');">
+						<i class="fa <?php echo (isAdsActive('header') == 1) ? 'fa-times-circle' : 'fa-check-circle'; ?> icon-loader"></i>
+					</span>
+					<span class="pointer" onclick="showAdsForm('header');">
+						<i class="fa fa-pencil"></i>
+					</span>
+				</span>
+			</h5>
+			<form method="post" class="admin-ads-header hidden">
+				<div class="form-group carovl">
+					<textarea name="advertisement_text" class="advertisements form-control" dir="auto" rows="10"><?php echo getAds('header', true); ?></textarea>
+					<span class="highlight"></span>
+					<span class="bar"></span>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-carovl" onclick="saveAdsText('header');">
+						<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+					</button>
+				</div>
+				<input type="hidden" name="type" value="header">
+			</form>
+		</div>
+		<div class="sidebar-advertisements mb-3">
+			<h5><?php echo $carovl['lang']['sidebar_ads']; ?>
+				<span class="float-right">
+					<span class="pointer activate-ads mr-2" title="<?php echo (isAdsActive('sidebar') == 1) ? $carovl['lang']['disable'] : $carovl['lang']['enable']; ?>" onclick="updateAdsStatus('sidebar');">
+						<i class="fa <?php echo (isAdsActive('sidebar') == 1) ? 'fa-times-circle' : 'fa-check-circle'; ?> icon-loader"></i>
+					</span>
+					<span class="pointer" onclick="showAdsForm('sidebar');">
+						<i class="fa fa-pencil"></i>
+					</span>
+				</span>
+			</h5>
+			<form method="post" class="admin-ads-sidebar hidden">
+				<div class="form-group carovl">
+					<textarea name="advertisement_text" class="advertisements form-control" dir="auto" rows="10"><?php echo getAds('sidebar', true); ?></textarea>
+					<span class="highlight"></span>
+					<span class="bar"></span>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-carovl" onclick="saveAdsText('sidebar');">
+						<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+					</button>
+				</div>
+				<input type="hidden" name="type" value="sidebar">
+			</form>
+		</div>
+		<div class="post_first-advertisements mb-3">
+			<h5><?php echo str_replace('{count}', 10, $carovl['lang']['after_count_posts']); ?>
+				<span class="float-right">
+					<span class="pointer activate-ads mr-2" title="<?php echo (isAdsActive('post_first') == 1) ? $carovl['lang']['disable'] : $carovl['lang']['enable']; ?>" onclick="updateAdsStatus('post_first');">
+						<i class="fa <?php echo (isAdsActive('post_first') == 1) ? 'fa-times-circle' : 'fa-check-circle'; ?> icon-loader"></i>
+					</span>
+					<span class="pointer" onclick="showAdsForm('post_first');">
+						<i class="fa fa-pencil"></i>
+					</span>
+				</span>
+			</h5>
+			<form method="post" class="admin-ads-post_first hidden">
+				<div class="form-group carovl">
+					<textarea name="advertisement_text" class="advertisements form-control" dir="auto" rows="10"><?php echo getAds('post_first', true); ?></textarea>
+					<span class="highlight"></span>
+					<span class="bar"></span>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-carovl" onclick="saveAdsText('post_first');">
+						<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+					</button>
+				</div>
+				<input type="hidden" name="type" value="post_first">
+			</form>
+		</div>
+		<div class="post_second-advertisements mb-3">
+			<h5><?php echo str_replace('{count}', 20, $carovl['lang']['after_count_posts']); ?>
+				<span class="float-right">
+					<span class="pointer activate-ads mr-2" title="<?php echo (isAdsActive('post_second') == 1) ? $carovl['lang']['disable'] : $carovl['lang']['enable']; ?>" onclick="updateAdsStatus('post_second');">
+						<i class="fa <?php echo (isAdsActive('post_second') == 1) ? 'fa-times-circle' : 'fa-check-circle'; ?> icon-loader"></i>
+					</span>
+					<span class="pointer" onclick="showAdsForm('post_second');">
+						<i class="fa fa-pencil"></i>
+					</span>
+				</span>
+			</h5>
+			<form method="post" class="admin-ads-post_second hidden">
+				<div class="form-group carovl">
+					<textarea name="advertisement_text" class="advertisements form-control" dir="auto" rows="10"><?php echo getAds('post_second', true); ?></textarea>
+					<span class="highlight"></span>
+					<span class="bar"></span>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-carovl" onclick="saveAdsText('post_second');">
+						<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+					</button>
+				</div>
+				<input type="hidden" name="type" value="post_second">
+			</form>
+		</div>
+		<div class="post_third-advertisements mb-3">
+			<h5><?php echo str_replace('{count}', 30, $carovl['lang']['after_count_posts']); ?>
+				<span class="float-right">
+					<span class="pointer activate-ads mr-2" title="<?php echo (isAdsActive('post_third') == 1) ? $carovl['lang']['disable'] : $carovl['lang']['enable']; ?>" onclick="updateAdsStatus('post_third');">
+						<i class="fa <?php echo (isAdsActive('post_third') == 1) ? 'fa-times-circle' : 'fa-check-circle'; ?> icon-loader"></i>
+					</span>
+					<span class="pointer" onclick="showAdsForm('post_third');">
+						<i class="fa fa-pencil"></i>
+					</span>
+				</span>
+			</h5>
+			<form method="post" class="admin-ads-post_third hidden">
+				<div class="form-group carovl">
+					<textarea name="advertisement_text" class="advertisements form-control" dir="auto" rows="10"><?php echo getAds('post_third', true); ?></textarea>
+					<span class="highlight"></span>
+					<span class="bar"></span>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-carovl" onclick="saveAdsText('post_third');">
+						<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+					</button>
+				</div>
+				<input type="hidden" name="type" value="post_third">
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function showAdsForm(type) {
+	$('.admin-ads-' + type).toggleClass('hidden');
+}
+function saveAdsText(type) {
+	var ads_type = $('.admin-ads-' + type);
+	ads_type.ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=update_ads',
+		beforeSend: function () {
+			ads_type.find('button').attr('disabled', true);
+			progressLoader(ads_type.find('button'));
+		},
+		success: function (data) {
+			ads_type.find('button').attr('disabled', false);
+			if (data.status == 200) {
+				showAdsForm(type);
+			}
+			progressLoader(ads_type.find('button'));
+		}
+	});
+}
+function updateAdsStatus(type) {
+	var ads_placement = $('.' + type + '-advertisements');
+	progressLoader(ads_placement.find('.activate-ads'));
+	$.get(ajaxRequests(), {
+		f: 'admin_setting',
+		s: 'update_ads_status',
+		type: type
+	}, function (data) {
+		if (data.status == 200) {
+			$('.activate-ads').attr('title', '<?php echo $carovl['lang']['disable']; ?>');
+			ads_placement.find('.activate-ads').html('<i class="fa fa-times-circle icon-loader"></i>');
+		} else {
+			$('.activate-ads').attr('title', '<?php echo $carovl['lang']['enable']; ?>');
+			ads_placement.find('.activate-ads').html('<i class="fa fa-check-circle icon-loader"></i>');
+		}
+	});
+}
+</script>

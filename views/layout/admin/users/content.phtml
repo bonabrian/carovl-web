@@ -1,0 +1,167 @@
+<div class="row">
+	<div class="col-lg-3 col-xs-6">
+		<div class="widget-box bg-blue">
+			<div class="inner">
+				<h3><?php echo countUserData('males'); ?></h3>
+				<p><?php echo $carovl['lang']['males']; ?></p>
+			</div>
+			<div class="icon">
+				<i class="fa fa-male"></i>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-xs-6">
+		<div class="widget-box bg-red">
+			<div class="inner">
+				<h3><?php echo countUserData('females'); ?></h3>
+				<p><?php echo $carovl['lang']['females']; ?></p>
+			</div>
+			<div class="icon">
+				<i class="fa fa-female"></i>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-xs-6">
+		<div class="widget-box bg-green">
+			<div class="inner">
+				<h3><?php echo countUserData('active'); ?></h3>
+				<p><?php echo $carovl['lang']['active_users']; ?></p>
+			</div>
+			<div class="icon">
+				<i class="fa fa-user"></i>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-xs-6">
+		<div class="widget-box bg-yellow">
+			<div class="inner">
+				<h3><?php echo countUserData('inactive'); ?></h3>
+				<p><?php echo $carovl['lang']['inactive_users']; ?></p>
+			</div>
+			<div class="icon">
+				<i class="fa fa-envelope"></i>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card admin">
+	<div class="card-header">
+		<form method="post" class="user-filter form-inline">
+			<div class="form-group inner-addon left-addon search-loader">
+				<i class="fa fa-search icon-loader" data-icon="search"></i>
+				<input class="form-control mr-4" type="text" name="query" placeholder="<?php echo $carovl['lang']['search_users']; ?>" id="query">
+			</div>
+			<div class="form-group">
+				<select name="status" id="status" class="form-control">
+					<option value="all" selected><?php echo $carovl['lang']['status']; ?></option>
+					<option value="0"><?php echo $carovl['lang']['pending']; ?></option>
+					<option value="1"><?php echo $carovl['lang']['active']; ?></option>
+				</select>
+			</div>
+		</form>
+	</div>
+	<div class="card-block">
+		<div class="table-responsive">
+			<table class="table table-hover table-condensed">
+				<thead>
+					<tr>
+						<th><?php echo $carovl['lang']['id']; ?></th>
+						<th><?php echo $carovl['lang']['username_label']; ?></th>
+						<th><?php echo $carovl['lang']['email_label']; ?></th>
+						<th><?php echo $carovl['lang']['ip_address']; ?></th>
+						<th><?php echo $carovl['lang']['status']; ?></th>
+						<th><?php echo $carovl['lang']['action']; ?></th>
+					</tr>
+				</thead>
+				<tbody class="result user-list">
+					<?php 
+					$users = getAllUsers(10, 'manage_users');
+					if (count($users) > 0) {
+						foreach ($users as $carovl['user_list']) {
+							echo loadPage('admin/users/user-list');
+						}
+					}
+					?>
+				</tbody>
+			</table>
+		</div>
+		<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>" id="hash_id">
+		<?php if (count($users) >= 10) { ?> 
+		<div class="view-more-wrapper view-more-users">
+			<span class="text-center btn btn-white" onclick="getMoreUsers();">
+				<i class="fa fa-arrow-down icon-loader" data-icon="arrow-down"></i> <?php echo $carovl['lang']['show_more_users']; ?>
+			</span>
+		</div>
+		<?php } ?>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	view_more_wrapper = $('.view-more-users');
+	var filter_form = $('form.user-filter');
+	$('.user-filter #query').keyup(function () {
+		filter_form.submit();
+	});
+	$('#status').change(function () {
+		filter_form.submit();
+	});
+	filter_form.ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=filter_users',
+		beforeSend: function () {
+			progressLoader(filter_form.find('.search-loader'));
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				if (data.html.length != 0) {
+					$('tbody.result').hide().html(data.html).fadeIn(200);
+					view_more_wrapper.html('<span class="text-center btn btn-white" onclick="getMoreUsers();"><i class="fa fa-arrow-down icon-loader" data-icon="arrow-down"></i> <?php echo $carovl['lang']['show_more_users']; ?></span>');
+					view_more_wrapper.slideDown(200);
+				} else {
+					$('tbody.result').hide();
+					view_more_wrapper.html('<span class="text-center btn btn-white" onclick="getMoreUsers();"><?php echo $carovl['lang']['no_result']; ?></span>');
+				}
+			}
+			progressLoader(filter_form.find('.search-loader'));
+		}
+	});
+});
+<?php if (count($users) >= 10) { ?> 
+function getMoreUsers() {
+	after_user_id = $('.user-list').find('.list:last').attr('data-user-id');
+	progressLoader(view_more_wrapper.find('.btn-white'));
+	$.post(ajaxRequests() + '?f=admin_setting&s=filter_users&after_user_id=' + after_user_id, $('form.user-filter').serialize(), function (data) {
+		if (data.html.length != 0) {
+			$('tbody.result').append(data.html);
+		} else {
+			view_more_wrapper.html('<span class="text-center btn btn-white" onclick="getMoreUsers();"><?php echo $carovl['lang']['no_more_users']; ?></span>').fadeOut('slow');
+		}
+		progressLoader(view_more_wrapper.find('.btn-white'));
+	});
+}
+<?php } ?>
+function deleteUser(user_id) {
+	hash_id = $('#hash_id').val();
+	swal({
+		title: "<?php echo $carovl['lang']['delete_user_confirmation']; ?>",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#2CC990",
+		confirmButtonText: "<?php echo $carovl['lang']['delete_label']; ?>",
+		cancelButtonText: "<?php echo $carovl['lang']['nevermind_label']; ?>",
+		showLoaderOnConfirm: true,
+		closeOnConfirm: false,
+	}, function () {
+		$.get(ajaxRequests() + '?f=admin_setting&s=delete_user', {
+			user_id: user_id,
+			hash_id: hash_id
+		}, function (data) {
+			if (data.status == 200) {
+				$('#user_id_' + user_id).fadeOut(300, function () {
+					$(this).remove();
+				});
+				swal.close();
+			}
+		});
+	});
+}
+</script>

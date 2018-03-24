@@ -1,0 +1,34 @@
+<div class="col-md-6">
+	<div class="card article-content">
+		<div class="article-wrapper">
+			<div class="card-header">
+				<div class="card-title">
+					<a href="<?php echo $carovl['article']['url']; ?>" data-redirect="?page=article&id=<?php echo $carovl['article']['id']; ?>">
+						<?php echo $carovl['article']['article_title']; ?>
+					</a>
+				</div>
+			</div>
+			<div class="article-info">
+				<i class="fa fa-clock-o"></i>
+				<span class="ajax-time" title="<?php echo date('c', $carovl['article']['time']); ?>">
+					<?php echo timeElapsedString($carovl['article']['time']); ?>
+				</span>
+				<span>
+					<i class="fa fa-eye"></i> <?php echo $carovl['article']['views']; ?>
+				</span>
+			</div>
+		</div>
+		<div class="card-block">
+			<img src="<?php echo $carovl['article']['thumbnail']; ?>" alt="<?php echo $carovl['article']['article_title']; ?>" class="img-fluid">
+			<div class="article-content">
+				<?php 
+				$content = str_replace('<br>',  '', $carovl['article']['article_content']);
+				echo mb_substr(htmlspecialchars_decode($content), 0, 150);
+				?>
+				<?php if (strlen($content) > 100) { ?> 
+				<a href="<?php echo $carovl['article']['url']; ?>" data-redirect="?page=article&id=<?php echo $carovl['article']['id']; ?>" class="read-more">Continue Reading</a>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+</div>

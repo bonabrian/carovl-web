@@ -1,0 +1,22 @@
+<div class="event-list-wrapper" data-event="<?php echo $carovl['event']['id']; ?>">
+	<div class="event-info">
+		<a href="<?php echo $carovl['event']['url']; ?>" data-redirect="?page=view-event&id=<?php echo $carovl['event']['id']; ?>">
+			<img src="<?php echo $carovl['event']['cover']; ?>" alt="<?php echo $carovl['event']['name']; ?>" class="img-fluid">
+			<div class="event-name">
+				<?php echo $carovl['event']['name']; ?>
+			</div>
+			<?php if (date('d/m/Y', strtotime($carovl['event']['end_date'])) >= date('d/m/Y', time())) { ?> 
+			<div class="event-time">
+				<i class="fa fa-calendar-o"></i> <?php echo $carovl['event']['time_remaining']; ?>
+			</div>
+			<?php } else { ?>
+			<div class="event-time">
+				<i class="fa fa-calendar-o"></i> <?php echo $carovl['lang']['event_passed']; ?>
+			</div>
+			<?php } ?>
+			<div class="event-location">
+				<i class="fa fa-map-marker"></i> <?php echo $carovl['event']['location']; ?>
+			</div>
+		</a>
+	</div>
+</div>

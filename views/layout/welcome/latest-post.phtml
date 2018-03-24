@@ -1,0 +1,152 @@
+<div class="latest_post" id="latest-post-<?php echo $carovl['latest_post']['id']; ?>" data-post-id="<?php echo $carovl['latest_post']['id']; ?>">
+	<div class="card story">
+		<h4 class="card-header">
+			<div class="media">
+				<a href="<?php echo $carovl['latest_post']['publisher']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['latest_post']['publisher']['username']; ?>">
+					<img src="<?php echo $carovl['latest_post']['publisher']['avatar']; ?>" alt="<?php echo $carovl['latest_post']['publisher']['username']; ?>" id="useravatar-<?php echo $carovl['latest_post']['publisher']['user_id']; ?>" class="d-flex mr-3">
+				</a>
+				<div class="media-body">
+					<div class="username">
+						<span class="user-preview" data-type="<?php echo $carovl['latest_post']['publisher']['type']; ?>" data-id="<?php echo $carovl['latest_post']['publisher']['user_id']; ?>">
+							<a href="<?php echo $carovl['latest_post']['publisher']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['latest_post']['publisher']['username']; ?>">
+								<?php echo $carovl['latest_post']['publisher']['username']; ?>
+							</a>
+						</span>
+						<?php if ($carovl['latest_post']['publisher']['verified'] == 1) { ?> 
+						<span class="verified-user" data-toggle="tooltip" title="<?php echo $carovl['lang']['verified_user']; ?>">
+							<i class="fa fa-check-circle"></i>
+						</span>
+						<?php } ?>
+						<div class="time">
+							<i class="fa fa-clock-o"></i>
+							<span class="ajax-time" title="<?php echo date('c', $carovl['latest_post']['time']); ?>"><?php echo timeElapsedString($carovl['latest_post']['time']); ?></span>
+							<?php if (! empty($carovl['latest_post']['post_map'])) { ?> 
+							&nbsp;-&nbsp;
+							<span class="post-info">
+								<i class="fa fa-map-marker"></i> <?php echo $carovl['latest_post']['post_map']; ?>
+							</span>
+							<?php } ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h4>
+		<div class="card-block">
+			<?php if (! empty($carovl['latest_post']['post_map']) && empty($carovl['latest_post']['post_text']) && empty($carovl['latest_post']['post_file'])) { ?> 
+			<div class="post-map">
+				<img src="https://maps.googleapis.com/maps/api/staticmap?center=<?php echo $carovl['latest_post']['post_map'];?>&zoom=13&size=600x250&maptype=roadmap&markers=color:red%7C<?php echo $carovl['latest_post']['post_map'];?>&key=<?php echo $carovl['config']['google_map_api'];?>">
+			</div>
+			<?php } ?>
+			<?php if (! empty($carovl['latest_post']['article_id'])) { ?> 
+			<div class="post-file">
+				<img src="<?php echo $carovl['latest_post']['article']['thumbnail']; ?>" alt="<?php echo $carovl['latest_post']['article']['article_title']; ?>" class="img-fluid">
+			</div>
+			<div class="post-text-content">
+				<div class="article-title">
+					<a href="<?php echo $carovl['latest_post']['article']['url']; ?>" data-redirect="?page=article&id=<?php echo $carovl['latest_post']['article_id']; ?>">
+						<?php echo $carovl['latest_post']['article']['article_title']; ?>
+					</a>
+				</div>
+				<div class="article-content">
+					<?php 
+					$article_content = htmlspecialchars_decode($carovl['latest_post']['article']['article_content']);
+					if (strlen($article_content) > 200) {
+						echo mb_substr($article_content, 0, 100) . ' <a href="' . $carovl['latest_post']['article']['url'] . '" data-redirect="?page=article&id=' . $carovl['latest_post']['article_id'] . '">' . $carovl['lang']['read_more'] . '</a>';
+					} else {
+						echo $article_content;
+					}
+					?>
+				</div>
+				<div class="article-tags">
+					<?php echo $carovl['lang']['tags']; ?>:
+					<?php
+					if (is_array($carovl['latest_post']['article']['tags'])) {
+						foreach ($carovl['latest_post']['article']['tags'] as $key => $tag) { ?>
+							<a href="<?php echo seoLink('index.php?page=hashtag&hash=' . $tag); ?>">
+								<?php echo '#' . $tag; ?>
+							</a>
+						<?php }
+					}
+					?>
+				</div>
+				<?php if (! empty($carovl['latest_post']['article']['article_source'])) { ?> 
+				<span class="float-right article-source">
+					<?php echo $carovl['lang']['source_label']; ?>: <a href="<?php echo $carovl['latest_post']['article']['article_source']; ?>" target="_blank">
+						<?php 
+						$source = parse_url($carovl['latest_post']['article']['article_source']);
+						echo $source['host'];
+						?>
+					</a>
+				</span>
+				<?php } ?>
+			</div>
+			<?php } ?>
+			<?php if (! empty($carovl['latest_post']['post_file'])) { ?> 
+			<div class="post-file">
+				<?php 
+				$media = array(
+					'type' => 'post',
+					'story_id' => $carovl['latest_post']['id'],
+					'filename' => $carovl['latest_post']['post_file'],
+					'name' => $carovl['latest_post']['post_file_name'],
+					'alt' => $carovl['latest_post']['publisher']['username']
+				);
+				echo displaySharedFile($media);
+				?>
+			</div>
+			<?php } ?>
+			<?php if (! empty($carovl['latest_post']['post_link']) && empty($carovl['latest_post']['post_file'])) { ?> 
+			<div class="post-link has_url_post">
+				<a href="<?php echo $carovl['latest_post']['post_link']; ?>" target="_blank">
+					<?php if (! empty($carovl['latest_post']['post_link_image'])) { ?> 
+					<div class="post-file">
+						<img src="<?php echo $carovl['latest_post']['post_link_image']; ?>" class="img-fluid" alt="<?php echo $carovl['latest_post']['post_link_title']; ?>">
+					</div>
+					<?php } ?>
+					<div class="post-text-content">
+						<h4 class="url-title">
+							<?php echo $carovl['latest_post']['post_link_title']; ?>
+						</h4>
+						<div class="url-description"><?php echo $carovl['latest_post']['post_link_content']; ?></div>
+						<div class="post-url">
+							<?php 
+							$url = parse_url($carovl['latest_post']['post_link']);
+							echo $url['host'];
+							?>
+						</div>
+					</div>
+				</a>
+			</div>
+			<?php } ?>
+			<div class="post-text-content <?php echo (! empty($carovl['latest_post']['post_text']) && empty($carovl['latest_post']['article_id'])) ? 'has_text' : 'no_text'; ?>">
+				<p dir="auto" class="text-content">
+					<?php if (! empty($carovl['latest_post']['post_text']) && empty($carovl['latest_post']['article_id'])) {
+						echo $carovl['latest_post']['post_text'];
+					} 
+					?>
+				</p>
+			</div>
+		</div>
+		<div class="card-footer">
+			<span class="interact-button float-right">
+				<span title="<?php echo $carovl['lang']['like']; ?>" data-toggle="modal" data-target="#login-modal">
+					<i class="fa fa-heart-o"></i>
+				</span>
+				<span title="<?php echo $carovl['lang']['comments']; ?>" data-toggle="modal" data-target="#login-modal">
+					<i class="fa fa-comments-o"></i>
+				</span>
+				<span title="<?php echo $carovl['lang']['share']; ?>" data-toggle="modal" data-target="#login-modal">
+					<i class="fa fa-share-alt"></i>
+				</span>
+				<?php if (! empty($carovl['latest_post']['post_file']) && strpos($carovl['latest_post']['post_file'], '_video') !== false) { ?> 
+				<span data-video-id="<?php echo $carovl['latest_post']['id']; ?>">
+					<?php 
+					$views = countVideoViews($carovl['latest_post']['id']);
+					echo strtolower($views['views']);
+					?>
+				</span>
+				<?php } ?>
+			</span>
+		</div>
+	</div>
+</div>

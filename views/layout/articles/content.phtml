@@ -1,0 +1,107 @@
+<?php 
+$carovl['story'] = postData(getPostIdFromArticleId($carovl['article']['id']));
+?>
+<div class="col-md-10 offset-md-1">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card article-content">
+				<div class="article-wrapper">
+					<div class="card-header">
+						<div class="card-title">
+							<?php echo $carovl['article']['article_title']; ?>
+						</div>
+					</div>
+					<div class="article-info">
+						<span>
+							<i class="fa fa-heart"></i> <?php echo $carovl['story']['post_likes']; ?> <?php echo $carovl['lang']['likes']; ?>
+						</span>
+						<i class="fa fa-clock-o"></i>
+						<span class="ajax-time" title="<?php echo date('c', $carovl['article']['time']); ?>">
+							<?php echo timeElapsedString($carovl['article']['time']); ?>
+						</span>
+					</div>
+					<div class="article-share-button">
+						<ul class="list-inline">
+							<li class="list-inline-item">
+								<a href="https://www.facebook.com/sharer.php?u=<?php echo urlencode($carovl['article']['url']); ?>" target="_blank" data-toggle="tooltip" title="<?php echo $carovl['lang']['share_on_facebook']; ?>">
+									<div class="btn-share btn-facebook">
+										<i class="fa fa-facebook"></i>
+									</div>
+								</a>
+							</li>
+							<li class="list-inline-item">
+								<a href="https://plus.google.com/share?url=<?php echo urlencode($carovl['article']['url']); ?>" target="_blank" data-toggle="tooltip" title="<?php echo $carovl['lang']['share_on_google_plus']; ?>">
+									<div class="btn-share btn-google">
+										<i class="fa fa-google-plus"></i>
+									</div>
+								</a>
+							</li>
+							<li class="list-inline-item">
+								<a href="https://twitter.com/intent/tweet?text=<?php echo $carovl['article']['article_title']; ?>&amp;url=<?php echo urlencode($carovl['article']['url']); ?>" target="_blank" data-toggle="tooltip" title="<?php echo $carovl['lang']['share_on_twitter']; ?>">
+									<div class="btn-share btn-twitter">
+										<i class="fa fa-twitter"></i>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="card-block">
+					<div class="info-wrapper">
+						<div class="media">
+							<div class="media-left">
+								<a href="<?php echo $carovl['article']['author']['url']; ?>"  data-redirect="?page=timeline&u=<?php echo $carovl['article']['author']['url']; ?>">
+									<img src="<?php echo $carovl['article']['author']['avatar']; ?>" alt="<?php echo $carovl['article']['author']['username']; ?>">
+								</a>
+							</div>
+							<div class="media-body mt-1">
+								<span class="user-preview" data-id="<?php echo $carovl['article']['author']['user_id']; ?>" data-type="<?php echo $carovl['article']['author']['type']; ?>">
+									<a href="<?php echo $carovl['article']['author']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['article']['author']['url']; ?>">
+										<?php echo $carovl['article']['author']['username']; ?>
+									</a>
+								</span>
+								<?php if (isArticleOwner($carovl['article']['id'])) { ?> 
+								<span class="float-right"><a href="<?php echo seoLink('index.php?page=edit-article&id=' . $carovl['article']['id']); ?>"><i class="fa fa-pencil"></i> <?php echo $carovl['lang']['edit_label']; ?></a></span>
+								<?php } ?>
+								<div class="author-info">
+									<?php echo countFollowers($carovl['article']['author']['user_id']) . ' ' . $carovl['lang']['followers']; ?>
+									<span class="float-right">
+										<?php echo $carovl['article']['views'] . ' ' . $carovl['lang']['views']; ?>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="article-thumbnail">
+						<img src="<?php echo $carovl['article']['thumbnail']; ?>" alt="<?php echo $carovl['article']['article_title']; ?>">
+					</div>
+					<div class="article-content">
+						<?php echo htmlspecialchars_decode($carovl['article']['article_content']); ?>
+					</div>
+					<div class="article-tags">
+						<?php
+						if (is_array($carovl['article']['tags'])) {
+							foreach ($carovl['article']['tags'] as $key => $tag) { ?>
+								<a href="<?php echo seoLink('index.php?page=hashtag&hash=' . $tag); ?>">
+									<?php echo '#' . $tag; ?>
+								</a>
+							<?php }
+						}
+						?>
+						<?php if (! empty($carovl['article']['article_source'])) { ?> 
+						<span class="article-source pull-right">
+							<?php echo $carovl['lang']['source_label']; ?>:
+							<a href="<?php echo $carovl['article']['article_source']; ?>" target="_blank">
+								<?php 
+								$source = parse_url($carovl['article']['article_source']);
+								echo $source['host'];
+								?>
+							</a>
+						</span>
+						<?php } ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

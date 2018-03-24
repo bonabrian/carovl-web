@@ -1,0 +1,24 @@
+<tr id="user_id_<?php echo $carovl['user_list']['user_id']; ?>" class="list" data-user-id="<?php echo $carovl['user_list']['user_id']; ?>">
+	<td><?php echo $carovl['user_list']['user_id']; ?></td>
+	<td>
+		<a href="<?php echo $carovl['user_list']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['user_list']['username']; ?>">
+			<img src="<?php echo $carovl['user_list']['avatar']; ?>" alt="<?php echo $carovl['user_list']['username']; ?>" class="img-fluid">
+			<?php echo $carovl['user_list']['username']; ?>
+		</a>
+	</td>
+	<td><?php echo $carovl['user_list']['email']; ?></td>
+	<td><?php echo $carovl['user_list']['ip_address']; ?></td>
+	<td>
+		<?php echo (isUserActive($carovl['user_list']['username']) === true) ? '<span class="badge badge-success">' . $carovl['lang']['active'] . '</span>' : '<span class="badge badge-danger">' . $carovl['lang']['pending'] . '</span>'; ?>
+	</td>
+	<td>
+		<span class="mr-4">
+			<a href="<?php echo seoLink('index.php?page=setting&user=' . $carovl['user_list']['username'] . '&tab=account'); ?>" target="_blank">
+				<i class="fa fa-pencil"></i>
+			</a>
+		</span>
+		<span class="pointer delete-user" onclick="deleteUser(<?php echo $carovl['user_list']['user_id']; ?>);">
+			<i class="fa fa-remove"></i>
+		</span>
+	</td>
+</tr>

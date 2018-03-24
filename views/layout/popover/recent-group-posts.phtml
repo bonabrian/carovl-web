@@ -1,0 +1,51 @@
+<?php 
+$dominantColor = getDominantColor($carovl['popover']['cover']);
+?>
+<div class="recent_posts" style="background: <?php echo $dominantColor['background']; ?>;">
+	<?php 
+	$post_data = array(
+		'limit' => 3,
+		'group_id' => $carovl['popover']['group_id']
+	);
+	$posts = getPosts($post_data);
+	if (count($posts) > 0) {
+		foreach ($posts as $carovl['story']) {
+			$class = 'is_regular';
+			if (strpos($carovl['story']['post_file'], '_audio') !== false) {
+				$class = 'is_audio';
+			} elseif (! empty($carovl['story']['post_link'])) {
+				$class = 'is_link';
+			} elseif (strpos($carovl['story']['post_file'], '_video') !== false) {
+				$class = 'is_video';
+			} elseif (strpos($carovl['story']['post_file'], '_image') !== false || $carovl['story']['post_type'] == 'profile_cover_picture' || $carovl['story']['post_type'] == 'profile_picture') {
+				$class = 'is_image';
+			} ?>
+			<div class="post post_micro <?php echo $class; ?>">
+				<i class="fa fa-play"></i>
+				<div class="post_content">
+					<div class="post_content_inner">
+						<?php if ($class == 'is_image') { ?>
+						<div class="post_thumbnail_container" style="background-image: url(<?php echo $carovl['story']['post_file']; ?>);"></div> 
+						<?php } elseif ($class == 'is_video') { ?>
+						<div class="title">
+							<?php echo $carovl['story']['post_file_name']; ?>
+						</div> 
+						<?php } elseif ($class == 'is_audio') { ?>
+						<div class="title">
+							<?php echo $carovl['story']['post_file_name']; ?>
+						</div>
+						<?php } else { ?> 
+						<p>
+							<?php echo $carovl['story']['post_text']; ?>
+						</p>
+						<?php } ?>
+					</div>
+				</div>
+				<div class="post_glass"> 
+					<a href="<?php echo $carovl['story']['url']; ?>" target="_blank" class="hover"></a>
+				</div>
+			</div>
+		<?php }
+	}
+	?>
+</div>

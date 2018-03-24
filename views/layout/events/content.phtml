@@ -1,0 +1,221 @@
+<?php 
+$color = getDominantColor($carovl['event']['cover']);
+?>
+<div class="row timeline" data-id="<?php echo $carovl['event']['id']; ?>" style="background: <?php echo $color['background']; ?>; border-radius: 3px;" id="timeline">
+	<div class="profile-container">
+		<div class="timeline-card hovercard">
+			<div class="timeline-card-header cover">
+				<div class="timeline-buttons">
+					<?php echo getGoingButton($carovl['event']['id']); ?>
+					<?php echo getInterestedButton($carovl['event']['id']); ?>
+				</div>
+				<?php if ($carovl['event']['owner']) { ?> 
+				<form method="post" class="profile-cover-changer">
+					<div class="input-group">
+						<span class="input-group-btn">
+							<span class="btn btn-no-border" onclick="getElementById('upload-cover').click()";">
+								<i class="fa fa-camera"></i>
+								<input type="file" name="cover" accept="image/*" class="hidden" onchange="updateEventCover();" id="upload-cover">
+							</span>
+						</span>
+					</div>
+					<input type="hidden" name="event_id" id="event_id" value="<?php echo $carovl['event']['id']; ?>">
+				</form>
+				<?php } ?>
+				<div class="user-cover-uploading-container"></div>
+				<div class="user-cover-uploading-progress">
+					<i class="fa fa-circle-o-notch fa-spin" data-icon="spin"></i>
+				</div>
+				<img src="<?php echo $carovl['event']['cover']; ?>" alt="<?php echo $carovl['event']['name']; ?>" id="event-cover">
+			</div>
+		</div>
+	</div>
+	<div class="content-wrapper">
+		<div class="avatar-wrapper">
+			<img src="<?php echo $carovl['event']['publisher']['avatar']; ?>" alt="<?php echo $carovl['event']['publisher']['username']; ?>" class="user-avatar" id="event-avatar" style="border: 4px solid <?php echo $color['background']; ?>;" title="<?php echo $carovl['event']['publisher']['username']; ?>" data-toggle="tooltip">
+		</div>
+		<h1 class="user-info" style="color: <?php echo $color['color']; ?>;" id="user-info">
+			<?php echo $carovl['event']['name']; ?>
+		</h1>
+		<span class="user-description" style="color: <?php echo $color['color']; ?>;">
+			<?php echo $carovl['event']['description']; ?>
+		</span>
+	</div>
+</div>
+<div class="col-md-10 offset-md-1 mt-3">
+	<div class="row">
+		<div class="col-md-8">
+			<div id="load-posts">
+				<div class="post-loading">
+					<div class="loader">
+						<div class="loader-inner">
+							<label> ●</label><label> ●</label><label> ●</label><label> ●</label><label> ●</label><label> ●</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<ul class="list-group">
+				<li class="list-group-item hidden"></li>
+				<li class="list-group-item">
+					<input type="text" class="form-control search-people" placeholder="<?php echo $carovl['lang']['invite_your_friends']; ?>">
+				</li>
+				<li class="search-people-list" style="list-style: none;"></li>
+			</ul>
+			<br>
+			<ul class="list-group">
+				<li class="list-group-item">
+					<span><i class="fa fa-calendar-o"></i> <?php echo $carovl['event']['event_time']; ?></span>
+				</li>
+				<?php if ($carovl['event']['owner']) { ?> 
+				<li class="list-group-item">
+					<a href="<?php echo seoLink('index.php?page=edit-event&id=' . $carovl['event']['id']); ?>">
+						<i class="fa fa-cog fa-fw"></i> <?php echo $carovl['lang']['edit_event']; ?>
+					</a>
+				</li>
+				<li class="list-group-item">
+					<span class="pointer" onclick="deleteEvent(<?php echo $carovl['event']['id']; ?>);">
+						<i class="fa fa-trash fa-fw"></i> <?php echo $carovl['lang']['delete_event']; ?>
+					</span>
+				</li>
+				<?php } ?>
+				<li class="list-group-item">
+					<i class="fa fa-users fa-fw"></i> <?php echo $carovl['event']['going']; ?> <?php echo $carovl['lang']['going_people']; ?>
+				</li>
+				<li class="list-group-item">
+					<i class="fa fa-star fa-fw"></i> <?php echo $carovl['event']['interested']; ?> <?php echo $carovl['lang']['interested_people']; ?>
+				</li>
+				<li class="list-group-item">
+					<iframe src="https://www.google.com/maps/embed/v1/place?key=<?php echo $carovl['config']['google_map_api']; ?>&q=<?php echo $carovl['event']['location']; ?>&language=en" width="100%" frameborder="0" style="border: 0;"></iframe>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function loadPost(event_id) {
+	$.get(ajaxRequests() + '?f=events&s=load_event_posts', {
+		event_id: event_id
+	}, function (data) {
+		$('#load-posts').html(data);
+	});
+}
+var event_id = $('.timeline').attr('data-id');
+$(function () {
+	setTimeout(function() {
+		loadPost(event_id);
+	}, 200);
+	$('.cover').hover(function () {
+		$('.profile-cover-changer').fadeIn(200);
+	}, function () {
+		$('.profile-cover-changer').fadeOut(200);
+	});
+	$('.search-people').keyup(function (event) {
+		var filter = $(this).val();
+		var event_id = $('#event_id').val();
+		if (filter.length > 1) {
+			$.ajax({
+				url: ajaxRequests(),
+				type: 'GET',
+				dataType: 'json',
+				data: {
+					f: 'events',
+					s: 'search_followers',
+					filter: filter,
+					event_id: <?php echo $_GET['id']; ?>
+				},
+			}).done(function (data) {
+				if (data['status'] == 200) {
+					$('.search-people-list').css('display', 'block').html(data['html']);
+				} else {
+					$('.search-people-list').css('display', 'block').html('<div class="card"><div class="card-header"><h5 class="card-title text-center">' + data['html'] + '</h5></div></div>');
+				}
+			}).fail(function () {
+				console.log('error');
+			});
+		} else {
+			$('.search-people-list').css('display', 'none').html('');
+		}
+	});
+	$('form.profile-cover-changer').ajaxForm({
+		url: ajaxRequests() + '?f=events&s=update_event_cover',
+		beforeSend: function () {
+			$('.user-cover-uploading-container, .user-cover-uploading-progress').fadeIn(200);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				$('[id^=event-cover]').attr('src', data.img);
+				$('[id^=timeline]').css('background', data.background);
+				$('[id^=event-avatar]').css('border', '4px solid' + data.background);
+				$('[id^=user-info]').css('color', data.color);
+				$('form.profile-cover-changer').clearForm();
+			}
+			$('.user-cover-uploading-container, .user-cover-uploading-progress').fadeOut(200);
+		}
+	});
+});
+function sendInvitation(user_id) {
+	if (! user_id) {
+		return false;
+	} else {
+		$.ajax({
+			url: ajaxRequests(),
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				f: 'events',
+				s: 'invite_user',
+				event_id: <?php echo $_GET['id']; ?>,
+				user_id: user_id
+			},
+			success: function (data) {
+				if (data['status'] == 200) {
+					$('[data-invite=' + user_id + ']').slideUp('fast');
+				} else {
+					$('[data-invite=' + user_id + ']').find('button').remove();
+				}
+			}
+		});
+	}
+}
+function deleteEvent(id) {
+	if (! id) {
+		return false;
+	} else {
+		swal({
+			title: "<?php echo $carovl['lang']['delete_event_confirmation']; ?>",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#2CC990",
+			confirmButtonText: "<?php echo $carovl['lang']['delete_label']; ?>",
+			cancelButtonText: "<?php echo $carovl['lang']['nevermind_label']; ?>",
+			showLoaderOnConfirm: true,
+			closeOnConfirm: false,
+		}, function () {
+			$.get(ajaxRequests(), {
+				f: 'events',
+				s: 'delete_event',
+				event_id: id
+			}, function (data) {
+				if (data.status == 200) {
+					<?php 
+					$deleted = str_replace('{event_name}', $carovl['event']['name'], $carovl['lang']['event_deleted']);
+					?>
+					swal({
+						title: "<?php echo $deleted; ?>",
+						type: "success",
+						showConfirmButton: false
+					});
+					window.setTimeout(function() {
+						window.location = '<?php echo $carovl['config']['site_url']; ?>';
+					}, 1000);
+				}
+			});
+		});
+	}
+}
+function updateEventCover() {
+	$('form.profile-cover-changer').submit();
+}
+</script>

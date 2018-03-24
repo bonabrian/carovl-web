@@ -1,0 +1,13 @@
+<tr id="<?php echo $carovl['langs_']; ?>" class="list">
+	<td><?php echo $carovl['langs']; ?></td>
+	<td>
+		<span class="mr-4">
+			<a href="<?php echo seoLink('index.php?page=admincp&tab=edit-language&id=' . $carovl['langs_']); ?>" data-redirect="?page=admincp&tab=edit-language&id=<?php echo $carovl['langs_']; ?>">
+				<i class="fa fa-pencil"></i>
+			</a>
+		</span>
+		<span class="pointer delete-user" onclick="deleteLang('<?php echo $carovl['langs_']; ?>');">
+			<i class="fa fa-remove"></i>
+		</span>
+	</td>
+</tr>

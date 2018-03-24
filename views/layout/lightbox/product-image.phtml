@@ -1,0 +1,16 @@
+<div class="box-bg" onclick="closeBox();"></div>
+<div class="box-content">
+	<div class="story-img">
+		<img src="<?php echo $carovl['image']['image_org']; ?>" alt="Media">
+	</div>
+	<div class="pull-right close-box" onclick="closeBox();">
+		<i class="fa fa-remove"></i>
+	</div> 
+</div>
+<script type="text/javascript">
+$(document).keydown(function (e) {
+	if (e.keyCode == 27) {
+		closeBox();
+	}
+});
+</script>

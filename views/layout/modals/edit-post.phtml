@@ -1,0 +1,34 @@
+<div class="modal edit-dialog" id="edit-dialog" tabindex="-1" role="dialog" aria-labelledby="edit-dialog" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<?php echo $carovl['lang']['edit_post']; ?>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		        	<span aria-hidden="true">&times;</span>
+		        </button>
+			</div>
+			<div class="modal-body edit-text-<?php echo $carovl['story']['id']; ?>">
+				<textarea class="form-control edit_text" placeholder="<?php echo $carovl['lang']['edit_post']; ?>" dir="auto"><?php echo $carovl['story']['original_text']; ?></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-carovl" id="edit-post" onclick="editPost(<?php echo $carovl['story']['id']; ?>);">
+					<i class="fa fa-pencil icon-loader" data-icon="pencil"></i>
+					<?php echo $carovl['lang']['edit_label']; ?>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="hidden_edit_post"></div>
+<script type="text/javascript">
+$(function () {
+	autosize($('textarea.edit_text'));
+	$('.edit_text').triggeredAutocomplete({
+		hidden: '#hidden_edit_post',
+		source: ajaxRequests() + '?f=mention',
+		trigger: '@'
+	});
+});
+</script>

@@ -1,0 +1,117 @@
+<?php 
+$facebook_yes = ($carovl['config']['facebook_login'] == 1) ? 'checked' : '';
+$google_yes = ($carovl['config']['google_login'] == 1) ? 'checked' : '';
+$twitter_yes = ($carovl['config']['twitter_login'] == 1) ? 'checked' : '';
+?>
+<div class="card admin">
+	<div class="card-header">
+		<h3 class="card-title"><?php echo $carovl['lang']['social_login']; ?></h3>
+	</div>
+	<div class="card-block">
+		<form method="post" class="admin-social-login-form">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="form-check">
+						<label class="custom-control custom-checkbox">
+						    <input type="checkbox" class="custom-control-input" name="facebook_login" <?php echo $facebook_yes; ?>>
+						    <span class="custom-control-indicator"></span>
+						    <span class="custom-control-description"><?php echo $carovl['lang']['facebook']; ?></span>
+						</label>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<div class="form-group carovl">
+						<input type="text" name="facebook_app_id" class="form-control <?php echo (! empty($carovl['config']['facebook_app_id'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['facebook_app_id']; ?>">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['facebook_app_id']; ?></label>
+					</div>
+					<div class="form-group carovl">
+						<input type="text" name="facebook_app_key" class="form-control <?php echo (! empty($carovl['config']['facebook_app_key'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['facebook_app_key']; ?>">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['facebook_app_key']; ?></label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<div class="form-check">
+						<label class="custom-control custom-checkbox">
+						    <input type="checkbox" class="custom-control-input" name="google_login" <?php echo $google_yes; ?>>
+						    <span class="custom-control-indicator"></span>
+						    <span class="custom-control-description"><?php echo $carovl['lang']['google']; ?></span>
+						</label>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<div class="form-group carovl">
+						<input type="text" name="google_app_id" class="form-control <?php echo (! empty($carovl['config']['google_app_id'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['google_app_id']; ?>">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['google_app_id']; ?></label>
+					</div>
+					<div class="form-group carovl">
+						<input type="text" name="google_app_key" class="form-control <?php echo (! empty($carovl['config']['google_app_key'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['google_app_key']; ?>">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['google_app_key']; ?></label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<div class="form-check">
+						<label class="custom-control custom-checkbox">
+						    <input type="checkbox" class="custom-control-input" name="twitter_login" <?php echo $twitter_yes; ?>>
+						    <span class="custom-control-indicator"></span>
+						    <span class="custom-control-description"><?php echo $carovl['lang']['twitter']; ?></span>
+						</label>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<div class="form-group carovl">
+						<input type="text" name="twitter_app_id" class="form-control <?php echo (! empty($carovl['config']['twitter_app_id'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['twitter_app_id']; ?>">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['twitter_app_id']; ?></label>
+					</div>
+					<div class="form-group carovl">
+						<input type="text" name="twitter_app_key" class="form-control <?php echo (! empty($carovl['config']['twitter_app_key'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['twitter_app_key']; ?>">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['twitter_app_key']; ?></label>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.admin-social-login-form').ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=update_social_login_setting',
+		beforeSend: function () {
+			progressLoader($('form.admin-social-login-form').find('button'));
+			$('form.admin-social-login-form').find('button').attr('disabled', true);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				$('form.admin-social-login-form').find('button').attr('disabled', false);
+				swal({
+					title: "<?php echo $carovl['lang']['setting_successfully_updated']; ?>",
+					type: "success",
+					confirmButtonColor: "#2CC990",
+				});
+				progressLoader($('form.admin-social-login-form').find('button'));
+			}
+		}
+	});
+});
+</script>

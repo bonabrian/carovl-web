@@ -1,0 +1,12 @@
+<div class="posts-container">
+	<div class="card no-post">
+		<div class="card-block">
+			<i class="fa fa-sticky-note-o"></i>
+			<?php if ($carovl['profile']['user_id'] == $carovl['user']['user_id']) { ?> 
+			<h4><?php echo $carovl['lang']['there_is_no_articles_yet']; ?></h4>
+			<?php } else { ?> 
+			<h4><?php echo $carovl['profile']['username']; ?> <?php echo $carovl['lang']['have_no_articles']; ?></h4>
+			<?php } ?>
+		</div>
+	</div>
+</div>

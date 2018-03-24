@@ -1,0 +1,87 @@
+<div class="card admin">
+	<div class="card-block">
+		<div class="table-responsive">
+			<table class="table table-hover table-condensed">
+				<thead>
+					<tr>
+						<th><?php echo $carovl['lang']['id']; ?></th>
+						<th><?php echo $carovl['lang']['group_name']; ?></th>
+						<th><?php echo $carovl['lang']['owner']; ?></th>
+						<th><?php echo $carovl['lang']['members']; ?></th>
+						<th><?php echo $carovl['lang']['action']; ?></th>
+					</tr>
+				</thead>
+				<tbody class="result group-list">
+					<?php 
+					$groups = getAllGroups(10);
+					if (count($groups) > 0) {
+						foreach ($groups as $carovl['group']) {
+							echo loadPage('admin/groups/group-list');
+						}
+					}
+					?>
+				</tbody>
+			</table>
+		</div>
+		<input type="hidden" name="hash_id" id="hash_id" value="<?php echo createSession(); ?>">
+		<?php if (count($groups) == 0) { ?> 
+		<div class="view-more-wrapper view-more-articles">
+			<span class="text-center btn btn-white">
+				<?php echo $carovl['lang']['no_data']; ?>
+			</span>
+		</div>
+		<?php } elseif (count($groups) >= 10) { ?> 
+		<div class="view-more-wrapper view-more-groups">
+			<span class="text-center btn btn-white" onclick="getMoreGroups();">
+				<i class="fa fa-arrow-down icon-loader" data-icon="arrow-down"></i> <?php echo $carovl['lang']['show_more_groups']; ?>
+			</span>
+		</div>
+		<?php } ?>
+	</div>
+</div>
+<script type="text/javascript">
+<?php if (count($groups) >= 10) { ?> 
+function getMoreGroups() {
+	view_more_wrapper = $('.view-more-groups');
+	after_group_id = $('.group-list').find('.list:last').attr('data-group-id');
+	progressLoader(view_more_wrapper.find('.btn-white'));
+	$.get(ajaxRequests() + '?f=admin_setting&s=get_more_groups', {
+		after_group_id: after_group_id
+	}, function (data) {
+		if (data.html.length != 0) {
+			$('tbody.result').append(data.html);
+		} else {
+			view_more_wrapper.html('<span class="text-center btn btn-white" onclick="getMoreGroups();"><?php echo $carovl['lang']['no_more_groups']; ?></span>').fadeOut('slow');
+		}
+		progressLoader(view_more_wrapper.find('.btn-white'));
+	});
+}
+<?php } ?>
+function deleteGroupAdmin(group_id) {
+	hash_id = $('#hash_id').val();
+	swal({
+		title: "<?php echo $carovl['lang']['delete_group_dialog']; ?>",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#2CC990",
+		confirmButtonText: "<?php echo $carovl['lang']['delete_label']; ?>",
+		cancelButtonText: "<?php echo $carovl['lang']['nevermind_label']; ?>",
+		showLoaderOnConfirm: true,
+		closeOnConfirm: false,
+	}, function () {
+		$.get(ajaxRequests(), {
+			f: 'admin_setting',
+			s: 'delete_group',
+			group_id: group_id,
+			hash_id: hash_id
+		}, function (data) {
+			if (data.status == 200) {
+				$('#group_id_' + group_id).fadeOut(300, function () {
+					$(this).remove();
+				});
+				swal.close();
+			}
+		});
+	});
+}
+</script>

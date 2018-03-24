@@ -1,0 +1,173 @@
+<?php 
+$reCaptcha_yes = ($carovl['config']['reCaptcha'] == 1) ? 'checked' : '';
+$reCaptcha_no = ($carovl['config']['reCaptcha'] == 0) ? 'checked' : '';
+?>
+<div class="card admin">
+	<div class="card-block">
+		<form class="admin-site-setting" method="post">
+			<div class="form-group carovl">
+				<input type="text" name="site_name" class="form-control <?php echo (! empty($carovl['config']['site_name'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['site_name']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['site_name']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="site_title" class="form-control <?php echo (! empty($carovl['config']['site_title'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['site_title']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['site_title']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="site_keywords" class="form-control <?php echo (! empty($carovl['config']['site_keywords'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['site_keywords']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['site_keywords']; ?></label>
+				<div class="help-block"><?php echo $carovl['lang']['site_keywords_desc']; ?></div>
+			</div>
+			<div class="form-group carovl">
+				<textarea name="site_desc" class="site-description form-control <?php echo (! empty($carovl['config']['site_desc'])) ? 'used' : ''; ?>" dir="auto"><?php echo $carovl['config']['site_desc']; ?></textarea>
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['site_desc']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="site_email" class="form-control <?php echo (! empty($carovl['config']['site_email'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['site_email']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['site_email']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<select class="form-control <?php echo (! empty($carovl['config']['default_lang'])) ? 'used' : ''; ?>" name="default_lang">
+					<?php 
+					foreach (langsNameFromDb() as $lang) {
+						$languages = $lang;
+						$languages_name = ucfirst(strtolower($languages));
+						$selected_lang = ($languages == $carovl['config']['default_lang']) ? 'selected' : '';
+						?>
+					<option value="<?php echo $languages; ?>" <?php echo $selected_lang; ?>><?php echo $languages_name; ?></option>
+					<?php } ?>
+				</select>
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['default_lang']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<select class="form-control <?php echo (! empty($carovl['config']['max_upload'])) ? 'used' : ''; ?>" name="max_upload">
+					<option value="2000000" <?php echo ($carovl['config']['max_upload'] == 2000000) ? 'selected' : ''; ?>>2 MB</option>
+					<option value="6000000" <?php echo ($carovl['config']['max_upload'] == 6000000) ? 'selected' : ''; ?>>6 MB</option>
+					<option value="12000000" <?php echo ($carovl['config']['max_upload'] == 12000000) ? 'selected' : ''; ?>>12 MB</option>
+					<option value="24000000" <?php echo ($carovl['config']['max_upload'] == 24000000) ? 'selected' : ''; ?>>24 MB</option>
+					<option value="48000000" <?php echo ($carovl['config']['max_upload'] == 48000000) ? 'selected' : ''; ?>>48 MB</option>
+					<option value="96000000" <?php echo ($carovl['config']['max_upload'] == 96000000) ? 'selected' : ''; ?>>96 MB</option>
+					<option value="256000000" <?php echo ($carovl['config']['max_upload'] == 256000000) ? 'selected' : ''; ?>>256 MB</option>
+					<option value="512000000" <?php echo ($carovl['config']['max_upload'] == 512000000) ? 'selected' : ''; ?>>512 MB</option>
+					<option value="1024000000" <?php echo ($carovl['config']['max_upload'] == 1024000000) ? 'selected' : ''; ?>>1 GB</option>
+				</select>
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['max_upload']; ?></label>
+				<div class="help-block" style="color: red;">
+					<?php 
+					$max_size = sizeFormat(maxSizeFileUpload());
+					$max_upload_desc = str_replace('{max_size}', $max_size, $carovl['lang']['max_upload_desc']);
+					?>
+					<?php echo $max_upload_desc; ?>
+				</div>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="allowed_extension" class="form-control <?php echo (! empty($carovl['config']['allowed_extension'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['allowed_extension']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['allowed_extension']; ?></label>
+				<div class="help-block"><?php echo $carovl['lang']['allowed_extension_desc']; ?></div>
+			</div>
+			<div class="form-group carovl">
+				<select class="form-control <?php echo (! empty($carovl['config']['max_characters'])) ? 'used' : ''; ?>" name="max_characters">
+					<option value="80" <?php echo ($carovl['config']['max_characters'] == 80) ? 'selected' : ''; ?>>80 <?php echo $carovl['lang']['characters']; ?></option>
+					<option value="160" <?php echo ($carovl['config']['max_characters'] == 160) ? 'selected' : ''; ?>>160 <?php echo $carovl['lang']['characters']; ?></option>
+					<option value="320" <?php echo ($carovl['config']['max_characters'] == 320) ? 'selected' : ''; ?>>320 <?php echo $carovl['lang']['characters']; ?></option>
+					<option value="640" <?php echo ($carovl['config']['max_characters'] == 640) ? 'selected' : ''; ?>>640 <?php echo $carovl['lang']['characters']; ?></option>
+					<option value="1280" <?php echo ($carovl['config']['max_characters'] == 1280) ? 'selected' : ''; ?>>1280 <?php echo $carovl['lang']['characters']; ?></option>
+					<option value="5000" <?php echo ($carovl['config']['max_characters'] == 5000) ? 'selected' : ''; ?>>5000 <?php echo $carovl['lang']['characters']; ?></option>
+					<option value="10000" <?php echo ($carovl['config']['max_characters'] == 10000) ? 'selected' : ''; ?>>10000 <?php echo $carovl['lang']['characters']; ?></option>
+				</select>
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['max_characters']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="censored_words" class="form-control <?php echo (! empty($carovl['config']['censored_words'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['censored_words']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['censored_words']; ?></label>
+				<div class="help-block"><?php echo $carovl['lang']['censored_words_desc']; ?></div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['reCaptcha']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="reCaptcha-0">
+							<input type="radio" name="reCaptcha" id="reCaptcha-0" value="0" <?php echo $reCaptcha_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="reCaptcha-1">
+							<input type="radio" name="reCaptcha" id="reCaptcha-1" value="1" <?php echo $reCaptcha_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group carovl">
+				<input type="text" name="google_map_api" class="form-control <?php echo (! empty($carovl['config']['google_map_api'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['google_map_api']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['google_map_api']; ?></label>
+				<div class="help-block"><?php echo $carovl['lang']['google_map_api_desc']; ?></div>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="reCaptcha_key" class="form-control <?php echo (! empty($carovl['config']['reCaptcha_key'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['reCaptcha_key']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['reCaptcha_key']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<textarea name="google_analytics" class="google-analytics form-control <?php echo (! empty($carovl['config']['google_analytics'])) ? 'used' : ''; ?>" dir="auto"><?php echo $carovl['config']['google_analytics']; ?></textarea>
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['google_analytics']; ?></label>
+			</div>
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	autosize($('textarea.site-description, textarea.google-analytics'));
+	$('form.admin-site-setting').ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=update_site_setting',
+		beforeSend: function () {
+			progressLoader($('form.admin-site-setting').find('button'));
+			$('form.admin-site-setting').find('button').attr('disabled', true);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				$('form.admin-site-setting').find('button').attr('disabled', false);
+				swal({
+					title: "<?php echo $carovl['lang']['setting_successfully_updated']; ?>",
+					type: "success",
+					confirmButtonColor: "#2CC990",
+				});
+				progressLoader($('form.admin-site-setting').find('button'));
+			}
+		}
+	});
+});
+</script>

@@ -1,0 +1,36 @@
+<div class="col-md-10 offset-md-1">
+	<div class="hash-result-wrapper">
+		<div class="hash-result-text-container">
+			<?php echo '#' . $_GET['hash']; ?>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8">
+			<div class="posts-count hashtag-count" onclick="getNewHashtagPosts();"></div>
+			<div class="hashtag-posts" id="hashtag-posts">
+				<?php 
+				$stories = getHashtagPosts($_GET['hash']);
+				if (count($stories) <= 0) {
+					echo loadPage('hashtags/no-tag-found');
+				} else {
+					foreach ($stories as $carovl['story']) {
+						echo loadPage('story/content');
+					}
+				}
+				?>
+			</div>
+			<input type="hidden" value="<?php echo $_GET['hash']; ?>" id="hashtag-name">
+			<?php if (count($stories) > 4) { ?> 
+			<div class="card load-more-hashtag" id="load-more-hashtags">
+				<div class="card-block">
+					<div class="get-more-posts pointer" id="get-more-hashtag-posts" onclick="getMoreHashtagPosts();">
+						<span>
+							<i class="fa fa-repeat icon-loader" data-icon="repeat"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			<?php } ?>
+		</div>
+	</div>
+</div>

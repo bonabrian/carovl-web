@@ -1,0 +1,131 @@
+<div class="col-md-10 offset-md-1">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card event">
+				<?php echo loadPage('events/includes/header'); ?>
+				<div class="card-block">
+					<div class="alerts"></div>
+					<form class="edit-event-form" method="post">
+						<div class="form-group carovl">
+							<input type="text" name="event_name" class="form-control <?php echo (! empty($carovl['event']['name'])) ? 'used' : ''; ?>" value="<?php echo $carovl['event']['name']; ?>">
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label><?php echo $carovl['lang']['name_label']; ?></label>
+						</div>
+						<div class="form-group carovl">
+							<input type="text" name="event_location" class="form-control <?php echo (! empty($carovl['event']['name'])) ? 'used' : ''; ?>" id="event_location" value="<?php echo $carovl['event']['location']; ?>">
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label><?php echo $carovl['lang']['location_label']; ?></label>
+						</div>
+						<div class="form-group carovl" id="preview-location">
+							<div id="place">
+								<iframe src="https://www.google.com/maps/embed/v1/place?key=<?php echo $carovl['config']['google_map_api']; ?>&q=<?php echo $carovl['event']['location']; ?>" width="100%" frameborder="0" style="border: 0;"></iframe>
+							</div>
+						</div>
+						<div class="form-group carovl">
+							<div class="row">
+								<div class="col-md-6">
+									<input type="text" name="start_date" class="form-control date used" value="<?php echo date('Y/m/d', strtotime($carovl['event']['start_date'])); ?>" id="start_date">
+									<span class="highlight"></span>
+									<span class="bar"></span>
+									<label><?php echo $carovl['lang']['start_date_label']; ?></label>	
+								</div>
+								<div class="col-md-6">
+									<input type="text" name="start_time" class="form-control time used" id="start_time" value="<?php echo date('H:i:s', strtotime($carovl['event']['start_time'])); ?>">
+									<span class="highlight"></span>
+									<span class="bar"></span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group carovl">
+							<div class="row">
+								<div class="col-md-6">
+									<input type="text" name="end_date" class="form-control date used" id="end_date" value="<?php echo date('Y/m/d', strtotime($carovl['event']['end_date']));; ?>">
+									<span class="highlight"></span>
+									<span class="bar"></span>
+									<label><?php echo $carovl['lang']['end_date_label']; ?></label>	
+								</div>
+								<div class="col-md-6">
+									<input type="text" name="end_time" class="form-control time used" id="end_time" value="<?php echo date('H:i:s', strtotime($carovl['event']['end_time'])); ?>">
+									<span class="highlight"></span>
+									<span class="bar"></span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group carovl">
+							<textarea name="event_description" id="event_description" class="form-control <?php echo (! empty($carovl['event']['description'])) ? 'used' : ''; ?>" dir="auto"><?php echo $carovl['event']['description']; ?></textarea>
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label><?php echo $carovl['lang']['description_label']; ?></label>
+						</div>
+						<div id="event-thumbnail">
+							<img src="<?php echo $carovl['event']['cover']; ?>" alt="<?php echo $carovl['event']['name']; ?>">
+						</div>
+						<div class="form-group">
+							<div class="btn btn-no-border green pointer" id="pick-thumbnail" data-toggle="tooltip" title="<?php echo $carovl['lang']['thumbnail']; ?>">
+								<i class="fa fa-camera"></i>
+							</div>
+							<input type="file" name="event_thumbnail" id="thumbnail" class="hidden" accept="image/*">
+						</div>
+						<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+						<div class="form-group">
+							<button type="submit" class="btn btn-carovl">
+								<i class="fa fa-paper-plane icon-loader" data-icon="paper-plane"></i> <?php echo $carovl['lang']['update_label']; ?>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$('#start_date, #end_date').datetimepicker({
+	timepicker: false,
+	format: 'Y/m/d'
+});
+$('#start_time, #end_time').datetimepicker({
+	datepicker: false,
+	format: 'H:i:s'
+});
+jQuery(document).ready(function ($) {
+	$('#pick-thumbnail').click(function (e) {
+		$('#thumbnail').click();
+	});
+	$('#thumbnail').change(function (e) {
+		$('#event-thumbnail').html('<img src="' + window.URL.createObjectURL(this.files[0]) + '">');
+	});
+	$('#event_location').change(function (e) {
+		if ($(this).val().length > 1) {
+			$('#preview-location #place').html('<iframe width="100%" frameborder="0" style="border:0;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $carovl['config']['google_map_api']; ?>&q=' + $("#event_location").val() + '&language=en"></iframe>');
+		} else {
+			$('#preview-location #place').html('<iframe width="100%" frameborder="0" style="border:0;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $carovl['config']['google_map_api']; ?>"&q=us&language=en></iframe>');
+		}
+	});
+	$('form.edit-event-form').ajaxForm({
+		url: ajaxRequests() + '?f=events&s=edit_event&id=<?php echo $carovl['event']['id']; ?>',
+		beforeSend: function () {
+			$('form.edit-event-form').find('button').attr('disabled', true);
+			progressLoader($('form.edit-event-form').find('button'));
+		},
+		success: function (data) {
+			scrollToTop();
+			if (data.status == 200) {
+				$('.alerts').html('<center><div class="alert alert-success">' + data.success + '</div></center>');
+				window.location = data.href;
+			} else if (data.errors) {
+				$('form.edit-event-form').find('button').attr('disabled', false);
+				var errors = data.errors.join('<br>');
+				$('.alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('form.edit-event-form').find('button'));
+		}
+	});
+});
+</script>

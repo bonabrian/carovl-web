@@ -1,0 +1,110 @@
+<div class="modal fade carovl-modal" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login_modal" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title mx-auto" id="login_modal">
+					<img src="<?php echo $carovl['config']['resource']; ?>/img/icon.png" alt="<?php echo $carovl['config']['site_name']; ?>"> <?php echo $carovl['config']['site_name']; ?>
+				</h1>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		        	<span aria-hidden="true">&times;</span>
+		        </button>
+			</div>
+			<div class="modal-body">
+				<div class="alerts"></div>
+				<h4><?php echo $carovl['lang']['sign_in_to_carovl']; ?></h4>
+				<br>
+				<form class="login-form" id="login-form" method="post">
+					<div class="form-group carovl">
+						<input type="text" name="username" class="form-control">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['username_label']; ?></label>
+					</div>
+					<div class="form-group carovl">
+						<input type="password" name="password" class="form-control">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['password_label']; ?></label>
+					</div>
+					<div class="form-group">
+						<input type="hidden" name="last_url" value="<?php echo urldecode($carovl['actual_link']); ?>">
+					</div>
+					<div class="row">
+						<div class="col-8">
+							<div class="forgot-password">
+								<a href="<?php echo seoLink('index.php?page=forgot-password'); ?>">
+									<?php echo $carovl['lang']['forgot_password']; ?>
+								</a>
+							</div>
+						</div>
+						<div class="col-4">
+							<button type="submit" class="btn btn-carovl float-right" id="login">
+								<i class="fa fa-sign-in icon-loader" data-icon="sign-in"></i> <?php echo $carovl['lang']['login_label']; ?>
+							</button>
+						</div>
+					</div>
+				</form>
+				<div class="social-buttons">
+					<?php if ($carovl['config']['facebook_login'] != 0) { ?> 
+					<a href="<?php echo $carovl['facebook_login_url']; ?>" class="btn social-btn btn-facebook">
+						<i class="fa fa-facebook"></i> <?php echo $carovl['lang']['continue_with_facebook']; ?>
+					</a>
+					<?php } ?>
+					<?php if ($carovl['config']['google_login'] != 0) { ?>
+					<a href="<?php echo $carovl['google_login_url']; ?>" class="btn social-btn btn-google">
+						<i class="fa fa-google"></i> <?php echo $carovl['lang']['continue_with_google']; ?>
+					</a>
+					<?php } ?>
+					<?php if ($carovl['config']['twitter_login'] != 0) { ?> 
+					<a href="<?php echo $carovl['twitter_login_url']; ?>" class="btn social-btn btn-twitter">
+						<i class="fa fa-twitter"></i> <?php echo $carovl['lang']['continue_with_twitter']; ?>
+					</a>
+					<?php } ?>
+					<div class="text-center">
+						<a href="<?php echo seoLink('index.php?page=register'); ?>" class="emails">
+							<?php echo $carovl['lang']['or_sign_up_with_email']; ?>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<p class="text-muted">
+					<?php
+					$login_faq = str_replace('{login_faq}', '<a href="#">' . $carovl['lang']['login_faq'] . '</a>', $carovl['lang']['to_use_carovl']);
+					echo $login_faq; ?>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.login-form').ajaxForm({
+		url: ajaxRequests() + '?f=login',
+		beforeSend: function () {
+			progressLoader($('#login'));
+			$('#login').attr('disabled', true);
+		},
+		success: function (data) {
+			if (data.status == 200 || data.status == 400) {
+				setTimeout(function() {
+					$('.modal-title').text('<?php echo $carovl['lang']['welcome_back']; ?>');
+				}, 100);
+				setTimeout(function() {
+					window.location.href = data.location;
+				}, 1000);
+			} else {
+				$('#login').attr('disabled', false);
+				var errors = data.errors.join('<br>');
+				$('.alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('#login'));
+		}
+	});
+});
+</script>

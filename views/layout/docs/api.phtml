@@ -1,0 +1,83 @@
+<div class="col-md-10 offset-md-1">
+	<div class="card">
+		<div class="card-block docs">
+			<div class="row">
+				<div class="col-md-8">
+					<h1 class="card-title"><?php echo $carovl['config']['site_name']; ?> <?php echo $carovl['lang']['api']; ?></h1>
+					<p>Welcome to Carovl API! We appreciated talented designers and engineers using Carovl to invent whole new forms of creative expression.</p>
+					<h2 id="what_you_need">What You Need</h2>
+					<p>Get an OAuth Key: <a href="<?php echo seoLink('index.php?page=home'); ?>">Register an application</a></p>
+					<p>You'll need this to get your API key, even if you don't ever need to use a fully signed OAuth request.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<h2 id="console">Console</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<h2 id="authentication">Authentication</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				</div>
+				<div class="col-md-4">
+					<div id="docs-menu">
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" href="#what_you_need">What You Need</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#console">Console</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#authentication">Authentication</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  $('a[href^="#"]').bind('click.smoothscroll',function (e) {
+    e.preventDefault();
+    var target = this.hash,
+        $target = $(target);
+
+    $('html, body').stop().animate( {
+      'scrollTop': $target.offset().top-64
+    }, 900, 'swing', function () {
+      window.location.hash = target;
+    } );
+  } );
+} );
+</script>

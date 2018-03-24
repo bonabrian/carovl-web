@@ -1,0 +1,72 @@
+<div class="card setting">
+	<?php echo loadPage('group-setting/header'); ?>
+	<div class="card-block">
+		<div class="alerts"></div>
+		<form class="group-privacy-form" method="post">
+			<div class="form-group">
+				<div class="row">
+					<label class="col-5 mt-2" for="privacy">
+						<?php echo $carovl['lang']['group_privacy']; ?>
+					</label>
+					<div class="col-7">
+						<select class="form-control" name="privacy">
+							<?php 
+							$selected_privacy_no = ($carovl['setting']['privacy'] == 0) ? 'selected' : '';
+							$selected_privacy_yes = ($carovl['setting']['privacy'] == 1) ? 'selected' : '';
+							?>
+							<option value="0" <?php echo $selected_privacy_no; ?>><?php echo $carovl['lang']['public']; ?></option>
+							<option value="1" <?php echo $selected_privacy_yes; ?>><?php echo $carovl['lang']['private']; ?></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-5 mt-2" for="join_privacy">
+						<?php echo $carovl['lang']['join_privacy_label']; ?>
+					</label>
+					<div class="col-7">
+						<select class="form-control" name="join_privacy">
+							<?php 
+							$selected_join_privacy_no = ($carovl['setting']['join_privacy'] == 0) ? 'selected' : '';
+							$selected_join_privacy_yes = ($carovl['setting']['join_privacy'] == 1) ? 'selected' : '';
+							?>
+							<option value="0" <?php echo $selected_join_privacy_no; ?>><?php echo $carovl['lang']['no']; ?></option>
+							<option value="1" <?php echo $selected_join_privacy_yes; ?>><?php echo $carovl['lang']['yes']; ?></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+				</button>
+			</div>
+			<input type="hidden" name="group_id" value="<?php echo $carovl['setting']['group_id']; ?>">
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.group-privacy-form').ajaxForm({
+		url: ajaxRequests() + '?f=group_setting&s=update_group_privacy',
+		beforeSend: function () {
+			progressLoader($('form.group-privacy-form').find('.btn-carovl'));
+			$('form.group-privacy-form').find('.btn-carovl').attr('disabled', true);
+		},
+		success: function (data) {
+			$('form.group-privacy-form').find('.btn-carovl').attr('disabled', false);
+			if (data.status == 200) {
+				$('.alerts').html('<center><div class="alert alert-success">' + data.success + '</div></center>');
+				$('.alert-success').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('form.group-privacy-form').find('.btn-carovl'));
+		}
+	});
+});
+</script>

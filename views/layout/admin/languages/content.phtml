@@ -1,0 +1,62 @@
+<div class="card admin">
+	<div class="card-header">
+		<h6 class="card-title">
+			<a href="<?php echo seoLink('index.php?page=admincp&tab=add-new-language'); ?>" data-redirect="?page=admincp&tab=add-new-language">
+				<?php echo $carovl['lang']['add_new_language']; ?>
+			</a>
+		</h6>
+	</div>
+	<div class="card-block">
+		<div class="table-responsive">
+			<table class="table table-hover table-condensed">
+				<thead>
+					<th><?php echo $carovl['lang']['language']; ?></th>
+					<th><?php echo $carovl['lang']['action']; ?></th>
+				</thead>
+				<tbody class="result lang-list">
+					<?php 
+					$langs = langsNameFromDb();
+					if (count($langs) > 0) {
+						foreach ($langs as $key => $carovl['langs']) {
+							$carovl['langs_'] = $carovl['langs'];
+							$carovl['langs'] = ucfirst($carovl['langs']);
+							echo loadPage('admin/languages/lang-list');
+						}
+					}
+					?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function deleteLang(id) {
+	if (! id) {
+		return false;
+	} else {
+		swal({
+			title: "<?php echo $carovl['lang']['delete_language_confirmation']; ?>",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#2CC990",
+			confirmButtonText: "<?php echo $carovl['lang']['delete_label']; ?>",
+			cancelButtonText: "<?php echo $carovl['lang']['nevermind_label']; ?>",
+			showLoaderOnConfirm: true,
+			closeOnConfirm: false,
+		}, function () {
+			$.get(ajaxRequests(), {
+				f: 'admin_setting',
+				s: 'delete_language',
+				id: id
+			}, function (data) {
+				if (data.status == 200) {
+					$('#' + id).fadeOut(300, function () {
+						$(this).remove();
+					});
+					swal.close();
+				}
+			});
+		});
+	}
+}
+</script>

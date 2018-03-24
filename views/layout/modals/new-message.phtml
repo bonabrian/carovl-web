@@ -1,0 +1,64 @@
+<div class="modal fade new-message" id="new-message_<?php echo $carovl['user']['user_id']; ?>" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="new-message">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<i class="fa fa-paper-plane"></i> <?php echo $carovl['lang']['direct_message']; ?>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		        	<span aria-hidden="true">&times;</span>
+		        </button>
+			</div>
+			<div class="modal-body">
+				<form method="post" class="new-message-form">
+					<div class="row mt-3">
+						<div class="col-1 mt-2">
+							<label><strong><?php echo $carovl['lang']['to_label']; ?>: </strong></label>
+						</div>
+						<div class="col">
+							<div class="form-group carovl">
+								<input type="text" name="query" id="query" autocomplete="off" class="form-control" onkeyup="getMessagesUsers(this.value);">
+								<span class="highlight"></span>
+								<span class="bar"></span>
+								<label><?php echo $carovl['lang']['name_or_username_label']; ?></label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="recipient-results"></div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function getMessagesUsers(query) {
+	check_input = $('#query').val();
+	$.get(ajaxRequests(), {
+		f: 'search',
+		s: 'recipients',
+		query: query
+	}, function (data) {
+		if (data.status == 200) {
+			if (data.html.length == 0) {
+				$('.recipient-results').html('<div class="no-result"><p>' + data.lol + '</p></div>');
+			} else {
+				if (check_input == '') {
+					$('.recipient-results').empty();
+				} else {
+					$('.recipient-results').html(data.html);
+				}
+			}
+		}
+	});
+}
+function selectUser(user_id) {
+	var modal_message = $('#new-message_<?php echo $carovl['user']['user_id']; ?>');
+	$('form.new-message-form').clearForm();
+	$('form .form-control').removeClass('used');
+	$('.recipient-results').empty();
+	modal_message.modal('hide');
+	openMessageConversation(user_id);
+}
+</script>

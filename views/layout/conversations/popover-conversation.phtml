@@ -1,0 +1,185 @@
+<div class="conversation_popover message_<?php echo $carovl['conversation']['recipient']['user_id']; ?>" id="message_<?php echo $carovl['conversation']['recipient']['user_id']; ?>">
+	<div class="messaging_conversation_wrapper">
+		<div class="messaging_conversation messaging_conversation_open">
+			<div class="conversation_header has_image">
+				<div class="conversation_header_image" style="background-image: url(<?php echo $carovl['conversation']['recipient']['cover']; ?>);"></div>
+				<div class="conversation_header_main">
+					<div class="title">
+						<a href="<?php echo $carovl['conversation']['recipient']['url']; ?>">
+							<?php echo $carovl['conversation']['recipient']['username']; ?>
+						</a>
+						<?php if (isOnline($carovl['conversation']['recipient']['user_id']) === true) { ?> 
+						<span class="user_status">
+							<i class="fa fa-circle"></i>
+						</span>
+						<?php } ?>
+					</div>
+					<div class="controls">
+						<a class="more_actions pointer" id="more_actions" onclick="showActions();">
+							<i class="fa fa-ellipsis-h"></i>
+						</a>
+						<!-- <a class="minimize pointer" id="minimize" data-user-id="<?php echo $carovl['conversation']['recipient']['user_id']; ?>">
+							<i class="fa fa-window-minimize"></i>
+						</a> -->
+						<a class="close-conversation pointer" onclick="closeConversation(<?php echo $carovl['conversation']['recipient']['user_id']; ?>);">
+							<i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="conversation_main" style="background: rgb(217, 200, 228);">
+				<div class="x-scroll conversations">
+					<?php 
+					$disabled = '';
+					$placeholder = $carovl['lang']['say_something'];
+					?>
+					<?php if ($carovl['conversation']['recipient']['message_privacy'] == 1) { ?>
+						<?php if (isFollowing($carovl['user']['user_id'], $carovl['conversation']['recipient']['user_id']) === false) { ?> 
+						<?php $disabled = 'disabled'; $placeholder = $carovl['lang']['offline']; ?>
+						<div class="disabled_conversation">
+							<div class="content">
+								<label>
+								<?php 
+								$privacy = str_replace('{username}', $carovl['conversation']['recipient']['username'], $carovl['lang']['only_allows_messages_from_users_they_follow']);
+								echo $privacy;
+								?>
+								</label>
+							</div>
+						</div>
+						<?php } else { echo loadPage('conversations/conversation'); } ?>
+					<?php } elseif ($carovl['conversation']['recipient']['message_privacy'] == 0) { echo loadPage('conversations/conversation'); } ?>
+				</div>
+			</div>
+			<div class="conversation_preview editable">
+				<div class="conversation_preview_image_container">
+					<a class="conversation_preview_remove" onclick="removePreview();">
+						<i class="fa fa-times"></i>
+					</a>
+					<div class="conversation_preview_image">
+					<!-- Image Goes Here -->	
+					</div>
+				</div>
+			</div>
+			<div class="emoticon_container emoticon_container_<?php echo $carovl['conversation']['recipient']['user_id']; ?>">
+				<div class="emoticon_wrapper">
+				<?php 
+				foreach ($carovl['emoticons'] as $code => $name) {
+					$code = $code;
+					echo '<span onclick="addEmoticonToConversation(\'' . $code . '\', ' . $carovl['conversation']['recipient']['user_id'] . ')"><i class="pointer twa-lg twa twa-' . $name . '"></i></span>';
+				}
+				?>
+				</div>
+			</div>
+			<form method="post" class="sending_message_form_<?php echo $carovl['conversation']['recipient']['user_id']; ?>">
+				<div class="conversation_compose">
+					<div class="text_input_container">
+						<textarea class="text_input" id="text_input" placeholder="<?php echo $placeholder; ?>" rows="1" name="text_input" onkeydown="submitChat(event, <?php echo $carovl['conversation']['recipient']['user_id']; ?>);" onfocus="submitChat(event, <?php echo $carovl['conversation']['recipient']['user_id']; ?>);" dir="auto" <?php echo $disabled; ?>></textarea>
+						<input type="hidden" name="user_id" id="user_id" class="conversation_user_id" value="<?php echo $carovl['conversation']['recipient']['user_id']; ?>">
+					</div>
+					<div class="compose_text_input_container">
+						<div class="conversation_compose_plugins_container">
+							<button class="conversation_compose_plugin conversation_compose_plugin_image_upload" id="image_upload" type="button" <?php echo $disabled; ?>>
+								<i class="fa fa-camera"></i>
+								<input type="file" name="messageing_image" accept="image/*" tabindex="-1" class="input_file_picker">
+							</button>
+							<input type="file" name="message_file" id="message_file" class="hidden" accept="image/*">
+							<button id="emoticon-toggle-<?php echo $carovl['conversation']['recipient']['user_id']; ?>" class="conversation_compose_plugin conversation_compose_plugin_emoticon" type="button" <?php echo $disabled; ?>>
+								<i class="fa fa-smile-o"></i>
+							</button>
+						</div>
+						<div class="submit_button">
+							<button type="submit" class="submit" onclick="submitChat(event, <?php echo $carovl['conversation']['recipient']['user_id']; ?>);" id="loader" <?php echo $disabled; ?>>
+								<i class="fa fa-paper-plane icon-loader" data-icon="paper-plane"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="popover_conversation_action info_popover popover_gradient" id="popover_conversation_action">
+		<div class="popover_inner">
+			<ul class="conversation_action">
+				<li class="pointer" data-user-id="<?php echo $carovl['conversation']['recipient']['user_id']; ?>" id="delete-conversation">
+					<a><?php echo $carovl['lang']['delete_conversation']; ?></a>
+				</li>
+				<li class="pointer" data-user-id="<?php echo $carovl['conversation']['recipient']['user_id']; ?>" id="block-user">
+					<a onclick="blockUser(<?php echo $carovl['conversation']['recipient']['user_id']; ?>);"><?php echo $carovl['lang']['block_user']; ?></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('#delete-conversation').click(function () {
+		var message_id = $('#delete-conversation').attr('data-user-id');
+		deleteConversation(message_id);
+	});
+	$('#image_upload').click(function (event) {
+    	$('#message_file').click();
+    });
+    $('#message_file').change(function (event) {
+    	$('.conversation_preview').css('display', 'flex').animate();
+    	$('.conversation_preview_image').html('<img src="' + window.URL.createObjectURL(this.files[0]) + '" alt="Picture">');
+    });
+    $('#emoticon-toggle-<?php echo $carovl['conversation']['recipient']['user_id']; ?>').click(function () {
+    	$('.emoticon_container_<?php echo $carovl['conversation']['recipient']['user_id']; ?>').fadeToggle(100);
+    });
+	var main_hash_id = $('.main_session').val();
+	var message_list_wrapper = $('.message_list_wrapper_<?php echo $carovl['conversation']['recipient']['user_id']; ?>');
+	$('form.sending_message_form_<?php echo $carovl['conversation']['recipient']['user_id']; ?>').ajaxForm({
+		url: ajaxRequests() + '?f=conversations&s=send_message&hash=' + main_hash_id,
+		beforeSend: function () {
+			var text_message = escapeHTML($('.sending_message_form_<?php echo $carovl['conversation']['recipient']['user_id']; ?> #text_input').val());
+			$('.sending_message_form_<?php echo $carovl['conversation']['recipient']['user_id']; ?>').attr('disabled', true);
+			var html_message = '<div class="message_list sended_message"><div class="conversation_msg" id="messageid_" data-message-id=""><div class="conversation_msg_text message_container"><div class="message_bubble"><div class="message">' + text_message + '<span class="has_read"></span></div></div></div></div></div>';
+			if (! text_message) {
+				$('form.sending_message_form_<?php echo $carovl['conversation']['recipient']['user_id']; ?>').find('#message_file').val('');
+				return false;
+			}
+			$('body').attr('sending-<?php echo $carovl['conversation']['recipient']['user_id']; ?>', true);
+			if (text_message && $('form.sending_message_form_<?php echo $carovl['conversation']['recipient']['user_id']; ?> #message_file').val() == '') {
+				if (message_list_wrapper.length == 0) {
+					message_list_wrapper.html(html_message);
+				} else {
+					message_list_wrapper.append(html_message);
+				}
+			}
+			setTimeout(function() {
+				$('.x-scroll.conversations').scrollTop($('.x-scroll.conversations')[0].scrollHeight);
+			}, 100);
+			$('.conversation_preview').fadeOut(200);
+			$('form.sending_message_form_<?php echo $carovl['conversation']['recipient']['user_id']; ?>').clearForm();
+		},
+		uploadProgress: function () {
+			progressLoader($('form.sending_message_form_<?php echo $carovl['conversation']['recipient']['user_id']; ?>').find('#loader'));
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				message_list_wrapper.find("span[class*=has_seen]").empty();
+				message_list_wrapper.find("div[class*='message_typing']").empty();
+				message_list_wrapper.find('.message_list.sended_message:last').html(data.html);
+			}
+			$('body').attr('sending-<?php echo $carovl['conversation']['recipient']['user_id']; ?>', false);
+			setTimeout(function() {
+				$('.x-scroll.conversations').scrollTop($('.x-scroll.conversations')[0].scrollHeight);
+			}, 700);
+			if (data.file == true) {
+				$('.conversation_preview').fadeOut(200);
+				progressLoader($('form.sending_message_form_<?php echo $carovl['conversation']['recipient']['user_id']; ?>').find('#loader'));
+			}
+		}
+	});
+});
+function escapeHTML(string) {
+	var pre = document.createElement('pre');
+	var text = document.createTextNode( string );
+	pre.appendChild(text);
+	return pre.innerHTML;
+}
+function removePreview() {
+	$('.conversation_preview').hide('fast');
+	$('#message_file').replaceWith($('#message_file').val('').clone(true));
+}
+</script>

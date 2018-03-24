@@ -1,0 +1,102 @@
+<div class="row">
+	<div class="col-md-8">
+		<form method="post" class="form-info">
+			<div class="card" data-started="getstarted_info">
+				<h3 class="card-header text-center">
+					<?php echo $carovl['lang']['update_your_information']; ?>	
+				</h3>
+				<div class="card-block">
+					<div class="form-group carovl">
+						<input type="text" name="first_name" class="form-control">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['first_name_label']; ?></label>
+					</div>
+					<div class="form-group carovl">
+						<input type="text" name="last_name" class="form-control">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['last_name_label']; ?></label>
+					</div>
+					<?php 
+					$cutoff = 1945;
+					$now = date('Y');
+					$birthday = explode('-', $carovl['user']['birthday']);
+					?>
+					<div class="form-group carovl">
+						<div class="row">
+							<div class="col-md-4">
+								<select class="form-control used" name="day">
+									<option value="" disabled selected><?php echo $carovl['lang']['day_label']; ?></option>
+									<?php 
+									for ($d = 1; $d <= 31; $d++) {
+										$birthday_d = ($birthday[2] == $d) ? 'selected' : ''; ?>
+									<option value="<?php echo $d; ?>" <?php echo $birthday_d; ?>><?php echo $d; ?></option>
+									<?php } ?>
+								</select>
+								<span class="highlight"></span>
+								<span class="bar"></span>
+								<label><?php echo $carovl['lang']['day_label']; ?></label>
+							</div>
+							<div class="col-md-4">
+								<select class="form-control used" name="month">
+									<option value="" disabled selected><?php echo $carovl['lang']['month_label']; ?></option>
+									<?php 
+									for ($m = 1; $m <= 12; $m++) {
+										$birthday_m = ($birthday[1] == $m) ? 'selected' : ''; ?>
+									<option value="<?php echo $m; ?>" <?php echo $birthday_m; ?>><?php echo $carovl['months'][$m]; ?></option>
+									<?php } ?>
+								</select>
+								<span class="highlight"></span>
+								<span class="bar"></span>
+								<label><?php echo $carovl['lang']['month_label']; ?></label>
+							</div>
+							<div class="col-md-4">
+								<select class="form-control used" name="year">
+									<option value="" disabled selected><?php echo $carovl['lang']['year_label']; ?></option>
+									<?php 
+									for ($y = $now; $y >= $cutoff; $y--) { 
+										$birthday_y = ($birthday[0] == $y) ? 'selected' : ''; ?>
+									<option value="<?php echo $y; ?>" <?php echo $birthday_y; ?>><?php echo $y; ?></option>
+									<?php } ?>
+								</select>
+								<span class="highlight"></span>
+								<span class="bar"></span>
+								<label><?php echo $carovl['lang']['year_label']; ?></label>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" name="user_id" value="<?php echo $carovl['user']['user_id']; ?>">
+				</div>
+				<div class="card-footer">
+					<div class="row">
+						<div class="col">
+							<div class="skip-step">
+								<span onclick="skipStep($('.card').attr('data-started'));"><?php echo $carovl['lang']['skip_step']; ?></span>
+							</div>
+						</div>
+						<div class="col">
+							<button class="btn btn-primary float-right" type="submit" id="save"><?php echo $carovl['lang']['save_and_continue']; ?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.form-info').ajaxForm({
+		url: ajaxRequests() + '?f=getstarted&s=update_info',
+		beforeSend: function () {
+			$('#save').attr('disabled', true);
+			$('#save').text('<?php echo $carovl['lang']['please_wait']; ?>');
+		},
+		success: function (data) {
+			setTimeout(function() {
+				window.location.href = data.location;
+			}, 1000);
+		}
+	})
+})
+</script>

@@ -1,0 +1,17 @@
+<div class="card blocked-users" id="blocked_<?php echo $carovl['member']['user_id']; ?>">
+	<div class="card-block">
+		<div class="media">
+			<a href="<?php echo $carovl['member']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['member']['username']; ?>">
+				<img src="<?php echo $carovl['member']['avatar']; ?>" alt="<?php echo $carovl['member']['username']; ?>" class="d-flex mr-2">
+			</a>
+			<div class="media-body">
+				<h5 class="mt-0">
+					<a href="<?php echo $carovl['member']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['member']['username']; ?>">
+						<?php echo $carovl['member']['username']; ?>
+					</a>
+					<a href="<?php echo $carovl['member']['url'] . $carovl['marker'] . 'block_user=unblock'; ?>" class="float-right"><?php echo $carovl['lang']['unblock']; ?></a>
+				</h5>
+			</div>
+		</div>
+	</div>
+</div>

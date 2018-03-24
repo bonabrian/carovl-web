@@ -1,0 +1,189 @@
+<?php 
+$color = getDominantColor($carovl['group_profile']['cover']);
+?>
+<div class="row timeline" data-id="<?php echo $carovl['group_profile']['id']; ?>" style="background: <?php echo $color['background']; ?>; border-radius: 3px;" data-page="<?php echo $carovl['group_profile']['type']; ?>" id="timeline">
+	<div class="profile-container">
+		<div class="timeline-card hovercard">
+			<div class="timeline-card-header cover">
+				<div class="timeline-buttons">
+					<?php if (isGroupOwner($carovl['group_profile']['id']) === true) { ?> 
+					<a href="<?php echo seoLink('index.php?page=group-setting&group=' . $carovl['group_profile']['username']); ?>" class="btn btn-no-border white">
+						<i class="fa fa-cog"></i>
+					</a>
+					<?php } ?>
+					<?php echo getJoinButton($carovl['group_profile']['id']); ?>
+				</div>
+				<?php if (isGroupOwner($carovl['group_profile']['id']) === true) { ?> 
+				<form method="post" class="profile-cover-changer">
+					<div class="input-group">
+						<span class="input-group-btn">
+							<span class="btn btn-no-border" onclick="getElementById('upload-cover').click()";">
+								<i class="fa fa-camera"></i>
+								<input type="file" name="cover" accept="image/*" class="hidden" onchange="updateGroupCover();" id="upload-cover">
+							</span>
+						</span>
+					</div>
+					<input type="hidden" name="group_id" id="group_id" value="<?php echo $carovl['group_profile']['id']; ?>">
+				</form>
+				<?php } ?>
+				<div class="user-cover-uploading-container"></div>
+				<div class="user-cover-uploading-progress">
+					<i class="fa fa-circle-o-notch fa-spin" data-icon="spin"></i>
+				</div>
+				<img src="<?php echo $carovl['group_profile']['cover']; ?>" alt="<?php echo $carovl['group_profile']['name']; ?>" id="group-cover">
+			</div>
+		</div>
+	</div>
+	<div class="content-wrapper">
+		<div class="avatar-wrapper">
+			<div class="user-avatar-uploading-container">
+				<div class="user-avatar-uploading-progress">
+					<i class="fa fa-circle-o-notch fa-spin" data-icon="spin"></i>
+				</div>
+			</div>
+			<img src="<?php echo $carovl['group_profile']['avatar']; ?>" alt="<?php echo $carovl['group_profile']['name']; ?>" class="user-avatar" style="border: 4px solid <?php echo $color['background']; ?>;" id="group-avatar">
+			<?php if (isGroupOwner($carovl['group_profile']['id']) === true) { ?> 
+			<form method="post" class="avatar-changer">
+				<div class="input-group">
+					<span class="input-group-btn">
+						<span class="btn btn-no-border" onclick="getElementById('upload-avatar').click()";">
+							<i class="fa fa-camera"></i>
+						</span>
+						<input type="file" name="avatar" accept="image/*" onchange="updateGroupAvatar();" class="hidden" id="upload-avatar">
+					</span>
+				</div>
+				<input type="hidden" name="group_id" value="<?php echo $carovl['group_profile']['id']; ?>">
+			</form>
+			<?php } ?>
+		</div>
+		<h1 class="user-info" style="color: <?php echo $color['color']; ?>;" id="user-info">
+			<a href="<?php echo $carovl['group_profile']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['group_profile']['username']; ?>" style="color: <?php echo $color['color']; ?>;">
+				<?php echo $carovl['group_profile']['name']; ?>
+			</a>
+		</h1>
+		<span class="user-description" style="color: <?php echo $color['color']; ?>;">
+			<?php echo $carovl['group_profile']['about']; ?>
+		</span>
+	</div>
+</div>
+<div class="col-md-10 offset-md-1 mt-3">
+	<div class="row">
+		<div class="col-md-8">
+			<?php if (isset($_GET['type'])) {?> 
+			<?php if ($_GET['type'] == 'members') { ?>
+			<div class="card following-header">
+				<div class="card-header">
+					<h5 class="card-title"><?php echo countGroupMembers($carovl['group_profile']['group_id']); ?> <?php echo $carovl['lang']['members']; ?></h5>
+				</div>
+			</div>
+			<div id="member-list">
+				<?php 
+				$members = getGroupMembers($carovl['group_profile']['group_id']);
+				foreach ($members as $carovl['member']) {
+					echo loadPage('groups/members/content');
+				}
+				?>
+			</div>
+			<?php } ?>
+			<?php } else { ?> 
+			<div id="load-posts">
+				<div class="post-loading">
+					<div class="loader">
+						<div class="loader-inner">
+							<label> ●</label><label> ●</label><label> ●</label><label> ●</label><label> ●</label><label> ●</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php } ?>
+		</div>
+		<div class="col-md-4">
+			<ul class="list-group">
+				<?php 
+				$group_privacy = $carovl['lang']['public'];
+				$group_icon = 'globe';
+				if ($carovl['group_profile']['privacy'] == 1) {
+					$group_privacy = $carovl['lang']['private'];
+					$group_icon = 'lock';
+				}
+				?>
+				<li class="list-group-item">
+					<i class="fa fa-<?php echo $group_icon; ?> fa-fw text-muted"></i> <?php echo $group_privacy; ?>
+				</li>
+				<li class="list-group-item">
+					<a href="<?php echo seoLink('index.php?page=timeline&u=' . $carovl['group_profile']['username'] . '&type=members'); ?>" data-redirect="?page=timeline&u=<?php echo $carovl['group_profile']['username']; ?>&type=members"><i class="fa fa-users fa-fw text-muted"></i> <?php echo countGroupMembers($carovl['group_profile']['group_id']); ?> <?php echo $carovl['lang']['members']; ?></a>
+				</li>
+				<?php if (! empty($carovl['group_profile']['about'])) { ?> 
+				<li class="list-group-item">
+					<i class="fa fa-quote-left fa-fw text-muted"></i> <?php echo $carovl['group_profile']['about']; ?>
+				</li>
+				<?php } ?>
+				<?php if ($carovl['logged_in'] == true && ! isset($_GET['type'])) { ?> 
+				<li class="list-group-item">
+					<input type="text" class="form-control search-post" placeholder="<?php echo $carovl['lang']['search_posts']; ?>" onkeyup="searchForPosts(this.value);">
+				</li>
+				<?php } ?>
+			</ul>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function loadPost(group_id) {
+	$.get(ajaxRequests() + '?f=groups&s=load_group_posts', {
+		group_id: group_id
+	}, function (data) {
+		$('#load-posts').html(data);
+	});
+}
+var group_id = $('.timeline').attr('data-id');
+$(function () {
+	setTimeout(function() {
+		loadPost(group_id);
+	}, 200);
+	$('.cover').hover(function () {
+		$('.profile-cover-changer').fadeIn(100);
+	}, function () {
+		$('.profile-cover-changer').fadeOut(100);
+	});
+	$('.avatar-wrapper').hover(function () {
+		$('.avatar-changer').fadeIn(100);
+	}, function () {
+		$('.avatar-changer').fadeOut(100);
+	});
+	$('form.avatar-changer').ajaxForm({
+		url: ajaxRequests() + '?f=groups&s=update_group_avatar',
+		beforeSend: function () {
+			$('.user-avatar-uploading-container, .user-avatar-uploading-progress').fadeIn(200);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				$('[id^=group-avatar]').attr("src", data.img);
+				$('form.avatar-changer').clearForm();
+			}
+			$('.user-avatar-uploading-container, .user-avatar-uploading-progress').fadeOut(200);
+		}
+	});
+	$('form.profile-cover-changer').ajaxForm({
+		url: ajaxRequests() + '?f=groups&s=update_group_cover',
+		beforeSend: function () {
+			$('.user-cover-uploading-container, .user-cover-uploading-progress').fadeIn(200);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				$('[id^=group-cover]').attr('src', data.img);
+				$('[id^=timeline]').css('background', data.background);
+				$('[id^=group-avatar]').css('border', '4px solid' + data.background);
+				$('[id^=user-info]').css('color', data.color);
+				$('form.profile-cover-changer').clearForm();
+			}
+			$('.user-cover-uploading-container, .user-cover-uploading-progress').fadeOut(200);
+		}
+	});
+});
+function updateGroupAvatar() {
+	$('form.avatar-changer').submit();
+}
+function updateGroupCover() {
+	$('form.profile-cover-changer').submit();
+}
+</script>

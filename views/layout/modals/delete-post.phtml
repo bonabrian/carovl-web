@@ -1,0 +1,25 @@
+<div class="modal confirm-dialog" id="delete-dialog" tabindex="-1" role="dialog" aria-labelledby="delete-dialog" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<?php 
+					if (! empty($carovl['story']['article_id'])) {
+						echo $carovl['lang']['delete_article_confirmation'];
+					} else {
+						echo $carovl['lang']['delete_post_confirmation'];
+					}
+					?>
+				</h5>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default cancel" data-dismiss="modal">
+					<?php echo $carovl['lang']['cancel_label']; ?>
+				</button>
+				<button type="button" class="btn btn-carovl" id="delete-post" onclick="deletePost(<?php echo $carovl['story']['id']; ?>);">
+					<?php echo $carovl['lang']['delete_label']; ?>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

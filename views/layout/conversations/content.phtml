@@ -1,0 +1,207 @@
+<?php 
+$tab_style = 'block';
+$tab_style_height = '';
+if (isset($_SESSION['open_conversation'])) {
+	if ($_SESSION['open_conversation'] == 0) {
+		$tab_style = 'none';
+		$tab_style_height = 'min-height:auto;';
+	}
+}
+?>
+<div class="all_conversation_container">
+	<div class="messaging_conversation_popover"></div>
+</div>
+<script type="text/javascript">
+function getConversation(id) {
+	if ($('body').attr('sending-' + id) == 'true') {
+		return false;
+	}
+	var conversation_container = $('.messaging_conversation_popover.has_open').find('.open_message_' + id);
+	var user_id = conversation_container.find('.conversation_user_id').val();
+	var message_id = conversation_container.find('.message_list_wrapper_' + id).find('.conversation_msg:last').attr('data-message-id');
+	var last_id = conversation_container.find('.conversation_msg:last').attr('data-message-id');
+	var is_seen = 1;
+	if (! $('.conversation_msg:last').find('.has_seen').is(':empty')) {
+		is_seen = 0;
+	}
+	if (typeof (user_id) === "undefined") {
+		user_id = 0;
+	}
+	if (typeof (message_id) === "undefined") {
+		message_id = 0;
+	}
+	if (typeof (last_id) === "undefined") {
+		last_id = 0;
+	}
+	$.get(ajaxRequests(), {
+		f: 'conversations',
+		s: 'get_conversation',
+		user_id: user_id,
+		message_id: message_id,
+		last_id: last_id
+	}, function (data) {
+		if (data.status == 200) {
+			conversation_container.find('.message_list_wrapper_' + id).find("div[class*='has_seen']").empty();
+			conversation_container.find('.message_list_wrapper_' + id).find("div[class*='message_typing']").empty();
+			conversation_container.find('.message_list_wrapper_' + id).find('.message_list').append(data.messages);
+			$('.x-scroll.conversations').scrollTop($('.x-scroll.conversations')[0].scrollHeight);
+		}
+		if (data.is_typing == 200) {
+			conversation_container.find('.conversation_msg:last').find('.message_typing').html('<img class="avatar_left" src="' + data.img + '"><div id="loading"><div class="typing">' + data.typing + '</div>').fadeIn(300);
+			$('.x-scroll.conversations').scrollTop($('.x-scroll.conversations')[0].scrollHeight);
+		} else {
+			conversation_container.find('conversation_msg:last').find('.message_typing').empty();
+		}
+		if (is_seen == 1 && data.can_seen == 1) {
+			conversation_container.find('.conversation_msg:last').find('.has_seen').hide().html('<i class="fa fa-eye"></i>').fadeIn(300);
+			$('.x-scroll.conversations').scrollTop($('.x-scroll.conversations')[0].scrollHeight);
+		}
+	});
+}
+$(function () {
+<?php if (isset($_SESSION['conversation_id'])) { ?> 
+setTimeout(function() {
+	openMessageConversation(<?php echo $_SESSION['conversation_id']; ?>);
+}, 2000);
+<?php } ?>
+setTimeout(function() {
+	Timeout();
+}, 5000);
+});
+function Timeout() {
+	var inputs = $('input.conversation_user_id');
+	if (inputs.length > 0) {
+		for (var i = 0; i < inputs.length; i++) {
+			getConversation($(inputs[i]).val());
+		}
+	} else {
+		getConversation(0);
+	}
+	setTimeout(function() {
+		Timeout();
+	}, 5000);
+}
+function submitChat(e, id) {
+	document.title = document_title;
+	<?php if ($carovl['config']['message_typing'] == 1) { ?> 
+	var typing_text = $('.open_message_' + id);
+	if (typing_text.find('#text_input').val().length > 1) {
+		if (typeof (typing_text.attr('data-typing')) == "undefined" || typing_text.attr('data-typing') == 'false') {
+			typing_text.attr('data-typing', 'true');
+			registerTyping(id);
+		}
+	} else if (typing_text.find('#text_input').val().length == 1) {
+		if (typeof (typing_text.attr('data-typing')) != "undefined") {
+			if (typing_text.attr('data-typing') == 'true') {
+				typing_text.attr('data-typing', 'false');
+				deleteTyping(id);
+			}
+		}
+	}
+	<?php } ?>
+	conversation_container = $('.open_message_' + id);
+	if (e.keyCode == 13 && e.shiftKey == 0) {
+		deleteTyping(id);
+		e.preventDefault();
+		$('form.sending_message_form_' + id).submit();
+		<?php if ($carovl['config']['message_typing'] == 1) { ?> 
+		typing_text.find('.conversation_msg:last').find('.message_seen').empty();
+		<?php } ?>
+	}
+}
+function registerTyping(id) {
+	recipient_id = $('.open_message_' + id).find('#user_id').val();
+	if (typeof (recipient_id) === "undefined") {
+		return false;
+	}
+	$.get(ajaxRequests(), {
+		f: 'conversations',
+		s: 'is_typing',
+		recipient_id: recipient_id
+	});
+}
+function deleteTyping(id) {
+	var conversation_container = $('.messaging_conversation_popover.has_open').find('.open_message_' + id);
+	recipient_id = $('.open_message_' + id).find('#user_id').val();
+	if (typeof (recipient_id) === "undefined") {
+		return false;
+	}
+	$.get(ajaxRequests(), {
+		f: 'conversations',
+		s: 'remove_typing',
+		recipient_id: recipient_id
+	}, function (data) {
+		if (data.status == 200) {
+			conversation_container.find('.message_list_wrapper_' + id).find("div[class*='message_typing']").empty();
+		}
+	});
+}
+function closeConversation(id) {
+	<?php if ($carovl['config']['message_typing'] == 1) { ?>
+	deleteTyping(id);
+	<?php } ?>
+	$('.open_message_' + id).fadeOut(200, function () {
+		$(this).remove();
+	});
+	$(document.body).removeAttr('data-conversation-recipient-' + id);
+	$.get(ajaxRequests(), {
+		f: 'conversations',
+		s: 'close',
+		id: id
+	});
+}
+function shareCFile(id) {
+	document.title = document_title;
+	$('form.sending_message_form_ ' + id + ' #text_input').focus();
+}
+
+function addEmoticonToConversation(code, id) {
+	input_text = $('.sending_message_form_' + id + ' textarea');
+	input_val = input_text.val();
+	$('.emoticon_container').hide();
+	if (typeof (input_text.attr('placeholder')) != "undefined") {
+		input_placeholder = input_text.attr('placeholder');
+		if (input_placeholder == input_val) {
+			input_text.val('');
+			input_val = input_text.val();
+		}
+	}
+	if (input_val.length == 0) {
+		input_text.val(code + ' ');
+	} else {
+		input_text.val(input_val + ' ' + code);
+	}
+	input_text.keyup().focus();
+}
+function deleteConversation(user_id) {
+	if (! user_id) {
+		return false;
+	} else {
+		swal({
+			title: "<?php echo $carovl['lang']['delete_conversation_confirmation']; ?>",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#2CC990",
+			confirmButtonText: "<?php echo $carovl['lang']['delete_label']; ?>",
+			cancelButtonText: "<?php echo $carovl['lang']['nevermind_label']; ?>",
+			showLoaderOnConfirm: true,
+			closeOnConfirm: false,
+		}, function () {
+			$.get(ajaxRequests(), {
+				f: 'conversations',
+				s: 'delete_conversation',
+				user_id: user_id
+			}, function (data) {
+				if (data.status == 200) {
+					swal({
+						title: data.success,
+						type: "success",
+						confirmButtonColor: "#2CC990"
+					});
+					closeConversation(user_id);
+				}
+			});
+		});
+	}
+}
+</script>

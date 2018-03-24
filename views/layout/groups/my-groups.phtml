@@ -1,0 +1,30 @@
+<div class="col-md-10 offset-md-1">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card groups">
+				<div class="card-header">
+					<h4 class="card-title">
+						<?php echo $carovl['lang']['groups']; ?>
+						<div class="float-right create-group mt-2">
+							<a href="<?php echo seoLink('index.php?page=create-group'); ?>" data-redirect="?page=create-group">
+								<?php echo $carovl['lang']['create_group']; ?>
+							</a>
+						</div>
+					</h4>
+				</div>
+			</div>
+			<div id="group-list">
+				<?php 
+				$groups = myGroups();
+				if (count($groups) > 0) {
+					foreach ($groups as $carovl['group']) {
+						echo loadPage('groups/group-list');
+					}
+				} else {
+					echo loadPage('groups/no-groups');
+				}
+				?>
+			</div>
+		</div>
+	</div>
+</div>

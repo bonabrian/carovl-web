@@ -1,0 +1,104 @@
+<div class="row">
+	<div class="col-lg-4 col-xs-6">
+		<a href="<?php echo seoLink('index.php?page=admincp&tab=users'); ?>" data-redirect="?page=admincp&tab=users">
+			<div class="widget-box bg-blue">
+				<div class="inner">
+					<h3><?php echo countAllData('users'); ?></h3>
+					<p><?php echo $carovl['lang']['users']; ?></p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-user"></i>
+				</div>
+			</div>
+		</a>
+	</div>
+	<div class="col-lg-4 col-xs-6">
+		<a href="<?php echo seoLink('index.php?page=admincp&tab=posts'); ?>" data-redirect="?page=admincp&tab=posts">
+			<div class="widget-box bg-green">
+				<div class="inner">
+					<h3><?php echo countAllData('posts'); ?></h3>
+					<p><?php echo $carovl['lang']['admin_posts']; ?></p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-pencil"></i>
+				</div>
+			</div>
+		</a>
+	</div>
+	<div class="col-lg-4 col-xs-6">
+		<a href="<?php echo seoLink('index.php?page=admincp&tab=groups'); ?>" data-redirect="?page=admincp&tab=groups">
+			<div class="widget-box bg-red">
+				<div class="inner">
+					<h3><?php echo countAllData('groups'); ?></h3>
+					<p><?php echo $carovl['lang']['groups']; ?></p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-users"></i>
+				</div>
+			</div>
+		</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-4 col-xs-6">
+		<a href="<?php echo seoLink('index.php?page=admincp&tab=online-users'); ?>" data-redirect="?page=admincp&tab=online-users">
+			<div class="widget-box bg-blue">
+				<div class="inner">
+					<h3><?php echo countOnlineUsers(); ?></h3>
+					<p><?php echo $carovl['lang']['online_users']; ?></p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-user"></i>
+				</div>
+			</div>
+		</a>
+	</div>
+	<div class="col-lg-4 col-xs-6">
+		<div class="widget-box bg-green">
+			<div class="inner">
+				<h3><?php echo countAllData('messages'); ?></h3>
+				<p><?php echo $carovl['lang']['messages']; ?></p>
+			</div>
+			<div class="icon">
+				<i class="fa fa-comments"></i>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-4 col-xs-6">
+		<div class="widget-box bg-red">
+			<div class="inner">
+				<h3><?php echo countAllData('comments'); ?></h3>
+				<p><?php echo ucfirst($carovl['lang']['comments']); ?></p>
+			</div>
+			<div class="icon">
+				<i class="fa fa-comment"></i>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="card admin latest-members">
+			<div class="card-header">
+				<h5 class="card-title">
+					<?php echo $carovl['lang']['latest_members']; ?>
+				</h5>
+			</div>
+			<div class="card-block no-padding">
+				<ul class="latest-users">
+					<?php 
+					$latest_members = getAllUsers(8);
+					foreach ($latest_members as $carovl['latest_member']) { ?>
+					<li>
+						<a href="<?php echo $carovl['latest_member']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['latest_member']['username']; ?>">
+							<img src="<?php echo $carovl['latest_member']['avatar']; ?>" alt="<?php echo $carovl['latest_member']['username']; ?>" class="img-fluid" data-toggle="tooltip" title="<?php echo $carovl['latest_member']['username']; ?>">
+							<div class="user-list-name"><?php echo $carovl['latest_member']['username']; ?></div>
+							<span class="user-list-date ajax-time" title="<?php echo date('c', $carovl['latest_member']['joined']); ?>"><?php echo timeElapsedString($carovl['latest_member']['joined']); ?></span>
+						</a>
+					</li>
+					<?php } ?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

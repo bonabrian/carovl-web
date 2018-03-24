@@ -1,0 +1,40 @@
+<div class="card groups" data-group-id="<?php echo $carovl['user']['user_id']; ?>">
+	<div class="card-header">
+		<div class="media">
+			<div class="media-left">
+				<a href="<?php echo $carovl['group']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['group']['username']; ?>">
+					<img src="<?php echo $carovl['group']['avatar']; ?>" alt="<?php echo $carovl['group']['username']; ?>">
+				</a>
+			</div>
+			<div class="media-body">
+				<?php if (isGroupOwner($carovl['group']['group_id'])) { ?> 
+				<div class="float-right">
+					<a href="<?php echo seoLink('index.php?page=group-setting&group=' . $carovl['group']['username']); ?>" data-redirect="?page=group-setting&group=<?php echo $carovl['group']['username']; ?>" class="btn btn-white">
+						<?php echo $carovl['lang']['edit_label']; ?>
+					</a>
+				</div>
+				<?php } ?>
+				<div class="groupname">
+					<span class="user-preview" data-type="<?php echo $carovl['group']['type']; ?>" data-id="<?php echo $carovl['group']['group_id']; ?>">
+						<a href="<?php echo $carovl['group']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['group']['username']; ?>">
+							<?php echo $carovl['group']['username']; ?>
+						</a>
+					</span>
+				</div>
+				<div class="group-members">
+					<?php 
+						$members = countGroupMembers($carovl['group']['group_id']);
+						if ($members == 0) {
+							$people = '';
+						} elseif ($members == 1) {
+							$people = $carovl['lang']['member'];
+						} elseif ($members > 1) {
+							$people = $carovl['lang']['members'];
+						}
+						?>
+						<?php echo $carovl['group']['group_title']; ?> (<?php echo $members . ' ' . $people; ?>)
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

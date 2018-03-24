@@ -1,0 +1,27 @@
+<ul class="list-group">
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'general-setting') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=group-setting&group=' . $carovl['setting']['username'] . '&tab=general-setting'); ?>" data-redirect="?page=group-setting&group=<?php echo $carovl['setting']['username']; ?>&tab=general-setting">
+			<?php echo $carovl['lang']['general_setting']; ?>
+		</a>
+	</li>
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'privacy-setting') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=group-setting&group=' . $carovl['setting']['username'] . '&tab=privacy-setting'); ?>" data-redirect="?page=group-setting&group=<?php echo $carovl['setting']['username']; ?>&tab=privacy-setting">
+			<?php echo $carovl['lang']['privacy_setting']; ?>
+		</a>
+	</li>
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'members') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=group-setting&group=' . $carovl['setting']['username'] . '&tab=members'); ?>" data-redirect="?page=group-setting&group=<?php echo $carovl['setting']['username']; ?>&tab=members">
+			<?php echo $carovl['lang']['members']; ?>
+		</a>
+	</li>
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'join-requests') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=group-setting&group=' . $carovl['setting']['username'] . '&tab=join-requests'); ?>" data-redirect="?page=group-setting&group=<?php echo $carovl['setting']['username']; ?>&tab=join-requests">
+			<?php echo $carovl['lang']['join_requests']; ?>
+		</a>
+	</li>
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'delete-group') ? 'active' : ''; ?>">
+		<span class="delete-group pointer" onclick="deleteGroup(<?php echo $carovl['setting']['group_id']; ?>);">
+			<?php echo $carovl['lang']['delete_group']; ?>
+		</span>
+	</li>
+</ul>

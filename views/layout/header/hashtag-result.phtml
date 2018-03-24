@@ -1,0 +1,10 @@
+<li class="dropdown-item">
+	<span class="hashtag-result">
+		<a href="<?php echo $carovl['result']['url']; ?>" data-redirect="?page=hashtag&hash=<?php echo $carovl['result']['tag']; ?>">
+			#<?php echo $carovl['result']['tag']; ?>
+			<span class="float-right">
+				<small><?php echo countHashtagPosts($carovl['result']['tag']); ?> <?php echo $carovl['lang']['posts']; ?></small>
+			</span>
+		</a>
+	</span>
+</li>

@@ -1,0 +1,11 @@
+<div class="posts-container">
+	<div class="card no-post">
+		<div class="card-block">
+			<i class="fa fa-sticky-note-o"></i>
+			<?php 
+			$text = str_replace('{query}', $_GET['query'], $carovl['lang']['posts_about_query_not_found']);
+			?>
+			<h4><?php echo $text; ?></h4>
+		</div>
+	</div>
+</div>

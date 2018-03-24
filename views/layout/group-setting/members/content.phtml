@@ -1,0 +1,15 @@
+<div class="card setting">
+	<?php echo loadPage('group-setting/header'); ?>
+	<div class="card-block">
+		<?php 
+		$members = getGroupMembers($carovl['setting']['group_id']);
+		if (count($members) > 0) {
+			foreach ($members as $carovl['member']) {
+				echo loadPage('group-setting/members/member-list');
+			}
+		} else { ?>
+		<h5><?php echo $carovl['lang']['members_not_found']; ?></h5>
+		<?php }
+		?>
+	</div>
+</div>

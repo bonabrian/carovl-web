@@ -1,0 +1,27 @@
+<div class="card join-requests" id="request_<?php echo $carovl['request']['user_id']; ?>">
+	<div class="card-block">
+		<div class="media">
+			<a href="<?php echo $carovl['request']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['request']['username']; ?>">
+				<img src="<?php echo $carovl['request']['avatar']; ?>" alt="<?php echo $carovl['request']['username']; ?>" class="d-flex mr-2">
+			</a>
+			<div class="media-body">
+				<div class="float-right">
+					<button class="btn btn-white accept" onclick="acceptJoinRequest(<?php echo $carovl['request']['user_id']; ?>, <?php echo $carovl['setting']['group_id']; ?>);">
+						<i class="fa fa-check icon-loader" data-icon="check"></i>
+					</button>
+					<button class="btn btn-white reject" onclick="rejectJoinRequest(<?php echo $carovl['request']['user_id']; ?>, <?php echo $carovl['setting']['group_id']; ?>);">
+						<i class="fa fa-remove icon-loader" data-icon="remove"></i>
+					</button>
+				</div>
+				<h5 class="mt-0">
+					<a href="<?php echo $carovl['request']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['request']['username']; ?>">
+						<?php echo $carovl['request']['username']; ?>
+					</a>
+				</h5>
+				<div class="member-lastseen">
+					<?php echo userStatus($carovl['request']['user_id'], $carovl['request']['lastseen']); ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

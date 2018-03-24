@@ -1,0 +1,99 @@
+<div class="col-md-10 offset-md-1">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card product-content">
+				<div class="product-wrapper">
+					<div class="card-header">
+						<div class="card-title">
+							<?php echo $carovl['product']['name']; ?>
+						</div>
+					</div>
+					<div class="product-info">
+						<span>
+							<i class="fa fa-clock-o"></i>
+							<span class="ajax-time" title="<?php echo date('c', $carovl['product']['time']); ?>"><?php echo timeElapsedString($carovl['product']['time']); ?></span>
+						</span>
+					</div>
+				</div>
+				<div class="card-block">
+					<div class="info-wrapper">
+						<div class="media">
+							<div class="media-left">
+								<a href="<?php echo $carovl['product']['author']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['product']['author']['username']; ?>">
+									<img src="<?php echo $carovl['product']['author']['avatar']; ?>" alt="<?php echo $carovl['product']['author']['username']; ?>">
+								</a>
+							</div>
+							<div class="media-body mt-1">
+								<span class="user-preview" data-id="<?php echo $carovl['product']['author']['user_id']; ?>" data-type="<?php echo $carovl['product']['author']['type']; ?>">
+									<a href="<?php echo $carovl['product']['author']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['product']['author']['username']; ?>">
+										<?php echo $carovl['product']['author']['username']; ?>
+									</a>
+								</span>
+								<?php if (isProductOwner($carovl['product']['id'])) { ?> 
+								<span class="float-right">
+									<a href="<?php echo seoLink('index.php?page=edit-product&id=' . $carovl['product']['id']); ?>">
+										<i class="fa fa-pencil"></i> <?php echo $carovl['lang']['edit_label']; ?>
+									</a>
+								</span>
+								<?php } ?>
+								<div class="author-info">
+									<?php echo countFollowers($carovl['product']['author']['user_id']) . ' ' . $carovl['lang']['followers']; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="product-thumbnail">
+						<?php 
+						$class = '';
+						if (count($carovl['product']['images']) == 2) {
+							$class = 'col-md-6';
+						}
+						if (count($carovl['product']['images']) > 2) {
+							$class = 'col-md-4';
+						}
+						if (count($carovl['product']['images']) == 1) { ?>
+							<img src="<?php echo $carovl['product']['images'][0]['image']; ?>" alt="<?php echo $carovl['product']['name']; ?>" class="img-fluid pointer" onclick="openImageAlbum(<?php echo $carovl['product']['images'][0]['id']; ?>, 'product');">
+						<?php } else { ?>
+						<div class="container-fluid">
+							<div class="row">
+						<?php foreach ($carovl['product']['images'] as $image) { ?>
+								<div class="<?php echo $class; ?>">
+									<img src="<?php echo $image['image_org']; ?>" alt="<?php echo $carovl['product']['name']; ?>" class="pointer img-fluid" onclick="openImageAlbum(<?php echo $image['id']; ?>, 'product');">
+								</div>
+							<?php } ?>
+							</div>
+						</div>
+						<?php } ?>
+					</div>
+					<div class="about-product">
+						<div class="product-description">
+							<?php echo htmlspecialchars_decode($carovl['product']['description']); ?>
+						</div>
+						<div class="product-status float-right">
+							<h5>
+							<?php
+							$status = ($carovl['product']['status'] == 0) ? '<span class="product-in-stock" id="product-status">' . $carovl['lang']['in_stock'] . '</span>' : '<span class="product-sold" id="product-status">' . $carovl['lang']['sold'] . '</span>';
+							echo $status;
+							?>
+							</h5>
+						</div>
+						<div class="product-type">
+							<h5>
+							<?php
+							$type = ($carovl['product']['type'] == 0) ? '<span class="new">' . $carovl['lang']['new_label'] . '</span>' : '<span>' . $carovl['lang']['used_label'] . '</span>';
+							echo $type;
+							?>
+							</h5>
+						</div>
+						<div class="product-price">
+							<?php echo $carovl['product']['price']; ?>
+						</div>
+						<div class="product-location">
+							<i class="fa fa-map-marker"></i> <?php echo $carovl['product']['location']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

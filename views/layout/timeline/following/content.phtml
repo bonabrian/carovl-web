@@ -1,0 +1,26 @@
+<div class="card following" data-user-id="<?php echo $carovl['profile']['user_id']; ?>">
+	<div class="card-header">
+		<div class="media">
+			<div class="media-left">
+				<a href="<?php echo $carovl['user_list']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['user_list']['username']; ?>">
+					<img src="<?php echo $carovl['user_list']['avatar']; ?>" alt="<?php echo $carovl[user_list]['username']; ?>">
+				</a>
+			</div>
+			<div class="media-body">
+				<div class="float-right">
+					<?php echo getFollowButton($carovl['user_list']['user_id']); ?>
+				</div>
+				<span class="user-preview" data-type="<?php echo $carovl['user_list']['type']; ?>" data-id="<?php echo $carovl['user_list']['user_id']; ?>">
+					<a href="<?php echo $carovl['user_list']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['user_list']['username']; ?>">
+						<?php echo $carovl['user_list']['username']; ?>
+					</a>
+					<?php if ($carovl['user_list']['verified'] == 1) { ?> 
+					<span class="verified-user" data-toggle="tooltip" title="<?php echo $carovl['lang']['verified_user']; ?>">
+						<i class="fa fa-check-circle"></i>
+					</span>
+					<?php } ?>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

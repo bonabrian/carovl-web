@@ -1,0 +1,159 @@
+<?php 
+$carovl['notification']['type_text'] = '';
+$carovl['notification']['icon'] = '';
+$notification_text = $carovl['notification']['text'];
+if (isset($notification_text) && ! empty($notification_text)) {
+	$notification_text = '"' . $carovl['notification']['text'] . '"';
+}
+$notification_type2 = $carovl['notification']['type2'];
+if (isset($notification_type2) && ! empty($notification_type2)) {
+	if ($notification_type2 == 'post_image') {
+		$type2 = $carovl['lang']['photo_n_label'];
+	} elseif ($notification_type2 == 'post_video') {
+		$type2 = $carovl['lang']['video_n_label'];
+	} elseif ($notification_type2 == 'post_file') {
+		$type2 = $carovl['lang']['file_n_label'];
+	} elseif ($notification_type2 == 'post_audio') {
+		$type2 = $carovl['lang']['audio_n_label'];
+	} elseif ($notification_type2 == 'post_avatar') {
+		$type2 = $carovl['lang']['avatar_n_label'];
+	} elseif ($notification_type2 == 'post_cover') {
+		$type2 = $carovl['lang']['cover_n_label'];
+	} else {
+		$type2 = '';
+	}
+} else {
+	$type2 = $carovl['lang']['post_n_label'];
+}
+$org_text = array(
+	"{post_type}",
+	"{post}"
+);
+$replaced_text = array(
+	$type2,
+	$notification_text
+);
+if (! empty($carovl['notification']['type'])) {
+	if ($carovl['notification']['type'] == 'following') {
+		$carovl['notification']['type_text'] .= $carovl['lang']['following_you'];
+		$carovl['notification']['icon'] .= 'user-plus';
+	}
+	if ($carovl['notification']['type'] == 'comment_mention') {
+		$carovl['notification']['type_text'] .= $carovl['lang']['comment_mention'];
+		$carovl['notification']['icon'] .= 'at';
+	}
+	if ($carovl['notification']['type'] == 'post_mention') {
+		$carovl['notification']['type_text'] .= $carovl['lang']['post_mention'];
+		$carovl['notification']['icon'] .= 'at';
+	}
+	if ($carovl['notification']['type'] == 'liked_post') {
+		$carovl['notification']['type_text'] = str_replace($org_text, $replaced_text, $carovl['lang']['liked_post']);
+		$carovl['notification']['icon'] .= 'thumbs-up';
+	}
+	if ($carovl['notification']['type'] == 'share_post') {
+		$carovl['notification']['type_text'] = str_replace($org_text, $replaced_text, $carovl['lang']['shared_post']);
+		$carovl['notification']['icon'] .= 'share';
+	}
+	if ($carovl['notification']['type'] == 'comment') {
+		$carovl['notification']['type_text'] = str_replace($org_text, $replaced_text, $carovl['lang']['commented_on_post']);
+		$carovl['notification']['icon'] .= 'comment';
+	}
+	if ($carovl['notification']['type'] == 'comment_reply') {
+		$carovl['notification']['type_text'] = str_replace('{comment}', $carovl['notification']['text'], $carovl['lang']['replied_to_comment']);
+		$carovl['notification']['icon'] .= 'comment';
+	}
+	if ($carovl['notification']['type'] == 'comment_reply_mention') {
+		$carovl['notification']['type_text'] = str_replace('{comment}', $carovl['notification']['text'], $carovl['lang']['comment_reply_mention']);
+		$carovl['notification']['icon'] .= 'comment';
+	}
+	if ($carovl['notification']['type'] == 'liked_comment') {
+		$carovl['notification']['type_text'] = str_replace('{comment}', $carovl['notification']['text'], $carovl['lang']['liked_comment']);
+		$carovl['notification']['icon'] .= 'thumbs-up';
+	}
+	if ($carovl['notification']['type'] == 'liked_reply_comment') {
+		$carovl['notification']['type_text'] = str_replace('{comment}', $carovl['notification']['text'], $carovl['lang']['liked_reply_comment']);
+		$carovl['notification']['icon'] .= 'thumbs-up';
+	}
+	if ($carovl['notification']['type'] == 'visited_profile') {
+		$carovl['notification']['type_text'] = $carovl['lang']['profile_visited'];
+		$carovl['notification']['icon'] .= 'eye';
+	}
+	if ($carovl['notification']['type'] == 'going_event') {
+		$event_data = eventData($carovl['notification']['event_id']);
+		$carovl['notification']['type_text'] = str_replace('{event_name}', $event_data['name'], $carovl['lang']['is_going_to_event']);
+		$carovl['notification']['icon'] .= 'calendar-o';
+	}
+	if ($carovl['notification']['type'] == 'invited_event') {
+		$event_data = eventData($carovl['notification']['event_id']);
+		$carovl['notification']['type_text'] = str_replace('{event_name}', $event_data['name'], $carovl['lang']['invited_you_to_event']);
+		$carovl['notification']['icon'] .= 'calendar-o';
+	}
+	if ($carovl['notification']['type'] == 'interested_event') {
+		$event_data = eventData($carovl['notification']['event_id']);
+		$carovl['notification']['type_text'] = str_replace('{event_name}', $event_data['name'], $carovl['lang']['is_interested_to_event']);
+		$carovl['notification']['icon'] .= 'calendar-o';
+	}
+	if ($carovl['notification']['type'] == 'joined_group') {
+		$group = groupData($carovl['notification']['group_id']);
+		$carovl['notification']['type_text'] = str_replace('{group_name}', $group['name'], $carovl['lang']['joined_group']);
+		$carovl['notification']['icon'] .= 'users';
+	}
+	if ($carovl['notification']['type'] == 'requested_join_group') {
+		$group = groupData($carovl['notification']['group_id']);
+		$carovl['notification']['type_text'] = str_replace('{group_name}', $group['name'], $carovl['lang']['requested_join_group']);
+		$carovl['notification']['icon'] .= 'user-plus';
+	}
+	if ($carovl['notification']['type'] == 'accepted_join_request') {
+		$group_name = @end(explode('/', $carovl['notification']['url']));
+		$group = groupData(groupIdFromGroupName($group_name));
+		$carovl['notification']['type_text'] = str_replace('{group_name}', $group['name'], $carovl['lang']['accepted_join_request']);
+		$carovl['notification']['icon'] .= 'user-plus';
+	}
+	// if ($carovl['notification']['type'] == 'accepted_join_request') {
+	// 	$group_id = @end(explode('/', $carovl['notification']['url']));
+	// 	$group = groupData(groupIdFromGroupName($group_id));
+	// 	$carovl['notification']['type_text'] = str_replace('{group_name}', $group['name'], $carovl['lang']['accepted_join_request']);
+	// 	$carovl['notification']['icon'] .= 'user-plus';
+	// }
+	// if ($carovl['notification']['type'] == 'added_you_to_group') {
+	// 	$group_id = @end(explode('/', $carovl['notification']['url']));
+	// 	$group = groupData(groupIdFromGroupName($group_id));
+	// 	$carovl['notification']['type_text'] = str_replace('{group_name}', $group['name'], $carovl['lang']['added_you_to_group']);
+	// 	$carovl['notification']['icon'] .= 'user-plus';
+	// }
+	if ($carovl['notification']['type'] == 'accepted_request') {
+		$carovl['notification']['type_text'] = $carovl['lang']['accepted_follow_request'];
+		$carovl['notification']['icon'] .= 'user-plus';
+	}
+}
+?>
+<div class="card list-notifications" data-notification-id="<?php echo $carovl['notification']['id']; ?>">
+	<div class="card-header">
+		<div class="media">
+			<a href="<?php echo $carovl['notification']['notifier']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['notification']['notifier']['username']; ?>">
+				<img src="<?php echo $carovl['notification']['notifier']['avatar']; ?>" alt="<?php echo $carovl['notification']['notifier']['username']; ?>" class="d-flex mr-3">
+			</a>
+			<div class="media-body">
+				<div class="float-right">
+					<ul class="dropdown">
+						<span class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
+							<i class="fa fa-ellipsis-h"></i>
+						</span>
+						<li class="dropdown-menu">
+							<div class="dropdown-item pointer" onclick="blockUser(<?php echo $carovl['notification']['notifier']['user_id']; ?>);"><?php echo $carovl['lang']['block']; ?> <?php echo '@' . $carovl['notification']['notifier']['username']; ?></div>
+						</li>
+					</ul>
+				</div>
+				<span class="user-preview" data-type="<?php echo $carovl['notification']['notifier']['type']; ?>" data-id="<?php echo $carovl['notification']['notifier']['user_id']; ?>">
+					<a href="<?php echo $carovl['notification']['notifier']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['notification']['notifier']['username']; ?>" class="notification-username">
+						<?php echo $carovl['notification']['notifier']['username']; ?>
+					</a>
+				</span>
+				<span class="notification-text"><?php echo $carovl['notification']['type_text']; ?></span>
+				<div class="notification-time text-caption text-muted ajax-time" title="<?php echo date('c', $carovl['notification']['time']); ?>">
+					<?php echo timeElapsedString($carovl['notification']['time']); ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

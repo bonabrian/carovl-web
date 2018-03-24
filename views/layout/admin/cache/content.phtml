@@ -1,0 +1,48 @@
+<?php $folder_size = folderSize('cache'); ?>
+<div class="card admin">
+	<div class="card-header">
+		<h3 class="card-title"><?php echo $carovl['lang']['cache']; ?></h3>
+	</div>
+	<div class="card-block">
+		<?php if ($folder_size > 500000) { ?> 
+		<div class="alert alert-warning">
+			<i class="fa fa-exclamation-circle"></i> <?php echo $carovl['lang']['clear_cache_recommended']; ?>
+		</div>
+		<?php } ?>
+		<h4><?php echo $carovl['lang']['cache_size']; ?>: <span class="cache-size"><?php echo sizeFormat($folder_size); ?></span></h4>
+		<button type="button" class="btn btn-carovl" onclick="clearCache();">
+			<i class="fa fa-trash icon-loader" data-icon="trash"></i> <?php echo $carovl['lang']['clear_cache_label']; ?>
+		</button>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	setInterval(function () {
+		getCacheSize();
+	}, 3000);
+});
+function getCacheSize() {
+	$.get(ajaxRequests(), {
+		f: 'admin_setting',
+		s: 'get_cache_size'
+	}, function (data) {
+		if (data.status == 200) {
+			$('.cache-size').html(data.html);
+		}
+	});
+}
+function clearCache() {
+	progressLoader($('.card-block').find('button'));
+	$('.card-block').find('button').attr('disabled', true);
+	$.get(ajaxRequests(), {
+		f: 'admin_setting',
+		s: 'clear_cache'
+	}, function (data) {
+		if (data.status == 200) {
+			$('.cache-size').text('0 B');
+		}
+		$('.card-block').find('button').attr('disabled', false);
+		progressLoader($('.card-block').find('button'));
+	});
+}
+</script>

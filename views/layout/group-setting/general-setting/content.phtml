@@ -1,0 +1,71 @@
+<div class="card setting">
+	<?php echo loadPage('group-setting/header'); ?>
+	<div class="card-block">
+		<div class="alerts"></div>
+		<form class="general-setting-form" method="post">
+			<div class="form-group carovl">
+				<input type="text" name="group_name" class="form-control <?php echo (! empty($carovl['setting']['group_name'])) ? 'used' : ''; ?> " value="<?php echo $carovl['setting']['username']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['group_name_label']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="group_title" class="form-control <?php echo (! empty($carovl['setting']['group_title'])) ? 'used' : ''; ?> " value="<?php echo $carovl['setting']['name']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['group_title_label']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<?php 
+				$text = br2nl($carovl['setting']['about']);
+				?>
+				<textarea name="about" class="about form-control <?php echo (! empty($carovl['setting']['about'])) ? 'used' : ''; ?>" dir="auto"><?php echo $text; ?></textarea>
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['about_label']; ?></label>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+				</button>
+			</div>
+			<input type="hidden" name="group_id" value="<?php echo $carovl['setting']['group_id']; ?>">
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	autosize($('textarea.about'));
+	$('form.general-setting-form').ajaxForm({
+		url: ajaxRequests() + '?f=group_setting&s=update_general_setting',
+		beforeSend: function () {
+			progressLoader($('form.general-setting-form').find('button'));
+			$('form.general-setting-form').find('.btn-carovl').attr('disabled', true);
+		},
+		success: function (data) {
+			scrollToTop();
+			$('form.general-setting-form').find('.btn-carovl').attr('disabled', false);
+			if (data.status == 200) {
+				$('[id^=updategroupname-<?php echo $carovl['setting']['group_id']; ?>]').attr('href', data.group_name_url);
+				$('.group_name').text(data.group_name);
+				$('.alerts').html('<center><div class="alert alert-success">' + data.success + '</div></center>');
+				$('.alert-success').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			} else if (data.errors) {
+				var errors = data.errors.join('<br>');
+				$('.alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('form.general-setting-form').find('button'));
+		}
+	});
+});
+</script>

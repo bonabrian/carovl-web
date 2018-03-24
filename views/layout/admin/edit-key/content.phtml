@@ -1,0 +1,53 @@
+<div class="card admin edit-key">
+	<div class="card-header">
+		<?php echo $carovl['lang']['edit_key']; ?>: <strong><?php echo $_GET['id']; ?></strong>
+	</div>
+	<div class="card-block">
+		<form class="admin-edit-key-form" method="post">
+			<?php 
+			$langs = getLangDetails($_GET['id']);
+			if (count($langs) > 0) {
+				foreach ($langs as $key => $carovl['langs']) {
+					foreach ($carovl['langs'] as $carovl['key_'] => $carovl['lang_value']) {
+						echo loadPage('admin/edit-key/key-list');
+					}
+				}
+			} else {
+				echo '<h4>' . $carovl['lang']['no_data'] . '</h4>';
+			}
+			?>
+			<?php if (count($langs) > 0) { ?> 
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-floppy-o icon-loader" data-icon="fa-floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+				</button>
+			</div>
+			<input type="hidden" name="key_id" value="<?php echo $_GET['id']; ?>">
+			<?php } ?>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	autosize($('textarea'));
+	$('form.admin-edit-key-form').ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=update_language_keyword',
+		beforeSend: function () {
+			progressLoader($('form.admin-edit-key-form').find('button'));
+			$('form.admin-edit-key-form').find('button').attr('disabled', true);
+		},
+		success: function (data) {
+			$('form.admin-edit-key-form').find('button').attr('disabled', false);
+			if (data.status == 200) {
+				swal({
+					title: "<?php echo $carovl['lang']['keyword_updated']; ?>",
+					type: "success",
+					confirmButtonColor: "#2CC990",
+				});
+			}
+			progressLoader($('form.admin-edit-key-form').find('button'));
+		}
+	});
+});
+</script>

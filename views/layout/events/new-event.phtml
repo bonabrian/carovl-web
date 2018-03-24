@@ -1,0 +1,136 @@
+<div class="col-md-10 offset-md-1">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card event">
+				<?php echo loadPage('events/includes/header'); ?>
+				<div class="card-block">
+					<div class="alerts"></div>
+					<form class="new-event-form" method="post">
+						<div class="form-group carovl">
+							<input type="text" name="event_name" class="form-control">
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label><?php echo $carovl['lang']['name_label']; ?></label>
+						</div>
+						<div class="form-group carovl">
+							<input type="text" name="event_location" class="form-control" id="event_location">
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label><?php echo $carovl['lang']['location_label']; ?></label>
+						</div>
+						<div class="form-group carovl" id="preview-location">
+							<div id="place"></div>
+						</div>
+						<div class="form-group carovl">
+							<?php 
+							$current_date = date('Y/m/d', time() + (60 * 60 * 1));
+							$current_time = date('H:i:s', time() + (60 * 60 * 1));
+							?>
+							<div class="row">
+								<div class="col-md-6">
+									<input type="text" name="start_date" class="form-control date used" value="<?php echo $current_date; ?>" id="start_date">
+									<span class="highlight"></span>
+									<span class="bar"></span>
+									<label><?php echo $carovl['lang']['start_date_label']; ?></label>	
+								</div>
+								<div class="col-md-6">
+									<input type="text" name="start_time" class="form-control time used" id="start_time" value="<?php echo $current_time; ?>">
+									<span class="highlight"></span>
+									<span class="bar"></span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group carovl">
+							<?php 
+							$finish_date = date('Y/m/d', time() + (60 * 60 * 6));
+							$finish_time = date('H:i:s', time() + (60 * 60 * 6));
+							?>
+							<div class="row">
+								<div class="col-md-6">
+									<input type="text" name="end_date" class="form-control date used" id="end_date" value="<?php echo $finish_date; ?>">
+									<span class="highlight"></span>
+									<span class="bar"></span>
+									<label><?php echo $carovl['lang']['end_date_label']; ?></label>	
+								</div>
+								<div class="col-md-6">
+									<input type="text" name="end_time" class="form-control time used" id="end_time" value="<?php echo $finish_time; ?>">
+									<span class="highlight"></span>
+									<span class="bar"></span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group carovl">
+							<textarea name="event_description" id="event_description" class="form-control" dir="auto"></textarea>
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label><?php echo $carovl['lang']['description_label']; ?></label>
+						</div>
+						<div id="event-thumbnail"></div>
+						<div class="form-group">
+							<div class="btn btn-no-border green pointer" id="pick-thumbnail" data-toggle="tooltip" title="<?php echo $carovl['lang']['thumbnail']; ?>">
+								<i class="fa fa-camera"></i>
+							</div>
+							<input type="file" name="event_thumbnail" id="thumbnail" class="hidden" accept="image/*">
+						</div>
+						<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+						<div class="form-group">
+							<button type="submit" class="btn btn-carovl">
+								<i class="fa fa-paper-plane icon-loader" data-icon="paper-plane"></i> <?php echo $carovl['lang']['publish_label']; ?>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$('#start_date, #end_date').datetimepicker({
+	timepicker: false,
+	format: 'Y/m/d'
+});
+$('#start_time, #end_time').datetimepicker({
+	datepicker: false,
+	format: 'H:i:s'
+});
+jQuery(document).ready(function ($) {
+	autosize($('#event_description'));
+	$('#pick-thumbnail').click(function (e) {
+		$('#thumbnail').click();
+	});
+	$('#thumbnail').change(function (e) {
+		$('#event-thumbnail').html('<img src="' + window.URL.createObjectURL(this.files[0]) + '">');
+	});
+	$('#event_location').change(function (e) {
+		if ($(this).val().length > 1) {
+			$('#preview-location #place').html('<iframe width="100%" frameborder="0" style="border:0;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $carovl['config']['google_map_api']; ?>&q=' + $("#event_location").val() + '&language=en"></iframe>');
+		} else {
+			$('#preview-location #place').html('<iframe width="100%" frameborder="0" style="border:0;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $carovl['config']['google_map_api']; ?>"&q=us&language=en></iframe>');
+		}
+	});
+	$('form.new-event-form').ajaxForm({
+		url: ajaxRequests() + '?f=events&s=new_event',
+		beforeSend: function () {
+			$('form.new-event-form').find('button').attr('disabled', true);
+			progressLoader($('form.new-event-form').find('button'));
+		},
+		success: function (data) {
+			scrollToTop();
+			if (data.status == 200) {
+				$('.alerts').html('<center><div class="alert alert-success">' + data.success + '</div></center>');
+				window.location = data.href;
+			} else if (data.errors) {
+				$('form.new-event-form').find('button').attr('disabled', false);
+				var errors = data.errors.join('<br>');
+				$('.alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('form.new-event-form').find('button'));
+		}
+	});
+});
+</script>

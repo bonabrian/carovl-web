@@ -1,0 +1,85 @@
+<div class="modal post_activity" id="post-activity" tabindex="-1" role="dialog" aria-labelledby="post-activity" aria-hidden="true" data-post-id="<?php echo $carovl['story']['id']; ?>">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="post_activity_popover carovl_popover popover_activity_<?php echo $carovl['story']['id']; ?>">
+					<div class="popover_inner">
+						<div class="post_activity can_reply">
+							<div class="header_container">
+								<div class="header_container_inner">
+									<div class="post_activity_header">
+										<header>
+											<div class="header_inner">
+												<p></p>
+											</div>
+										</header>
+									</div>
+									<div class="post_activity_rolls">
+										<ol class="roll_list">
+											<li class="post_activity_roll roll_item likes_and_comments">
+												<div class="post_activity_roll_notes has_notes">
+													<ol class="roll_note_list">
+														
+													</ol>
+													<p class="roll_notes">
+														<span class="roll_notes_likes"></span>
+														<span class="roll_notes_comments"></span>
+													</p>
+												</div>
+											</li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							<div class="main_container">
+								<div class="x-scroll comments">
+									<div class="post_activity_notes has_notes x-scroll-container-v x-scroll-container">
+										<ol class="note_list">
+											<li class="post_activity_note note_item user_posted without_comment">
+												<div class="post_activity_note_avatar">
+													<a href="<?php echo $carovl['story']['publisher']['url']; ?>" class="post_activity_avatar_link" title="<?php echo $carovl['story']['publisher']['username']; ?>">
+														<img src="<?php echo $carovl['story']['publisher']['avatar']; ?>" alt="<?php echo $carovl['story']['publisher']['username']; ?>">
+													</a>
+												</div>
+												<div class="post_activity_note_content">
+													<div class="note_content_inner">
+														<p class="note_text user_posted">
+															<a href="<?php echo $carovl['story']['publisher']['url']; ?>" class="note_text_link"><?php echo $carovl['story']['publisher']['username']; ?></a> <?php echo $carovl['lang']['posted_this']; ?>
+														</p>
+													</div>
+												</div>
+											</li>
+											<span class="loading_comments"></span>
+											<?php 
+											if ($carovl['story']['post_comments'] > 5) { ?>
+												<li class="post_activity_note note_item load-more-comments" onclick="loadMoreComments(<?php echo $carovl['story']['id']; ?>);">
+													<span>
+													<i class="fa fa-repeat icon-loader" data-icon="repeat"></i> <?php echo $carovl['lang']['load_more_comments']; ?>
+													</span>
+												</li>
+											<?php } ?>
+											<span class="comment_list">
+
+											</span>
+										</ol>
+									</div>
+								</div>
+							</div>
+							<div class="footer_container">
+								<div class="post_activity_reply">
+									<div class="text_input_container">
+										<div class="text_input">
+											<input type="text" name="comment" class="comment-input" placeholder="<?php echo $carovl['lang']['say_something_nice']; ?>" onkeydown="registerComment(this.value, <?php echo $carovl['story']['id']; ?>, <?php echo $carovl['story']['publisher']['user_id']; ?>, event);">
+										</div>
+									</div>
+									<button type="button" class="submit" onclick="replyComment($('.comment-input').val(), <?php echo $carovl['story']['id']; ?>, <?php echo $carovl['story']['publisher']['user_id']; ?>);"><?php echo $carovl['lang']['reply']; ?></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="hidden_mention_comment"></div>
+</div>

@@ -1,0 +1,17 @@
+<?php 
+$query = $carovl['story']['id'];
+$image = getMedia($carovl['story']['post_file']);
+if (strpos($carovl['story']['post_file'], ',') !== false) {
+	$explode = @explode(',', $carovl['story']['post_file']);
+	$image = getMedia($explode[0]);
+}
+?>
+<div class="box-bg" onclick="closeBox();"></div>
+<div class="box-content" id="post-<?php echo $carovl['story']['id']; ?>" data-post-id="<?php echo $carovl['story']['id']; ?>">
+	<div class="story-img">
+		<img src="<?php echo $image; ?>" alt="media">
+	</div>
+	<div class="pull-right close-box" onclick="closeBox();">
+		<i class="fa fa-remove"></i>
+	</div> 
+</div>

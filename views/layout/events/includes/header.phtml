@@ -1,0 +1,59 @@
+<?php 
+$page_name = '';
+$page_icon = '';
+switch ($carovl['active']) {
+	case 1:
+		$page_name = $carovl['lang']['events'];
+		break;
+	case 2:
+		$page_name = $carovl['lang']['new_event'];
+		break;
+	case 3:
+		$page_name = $carovl['lang']['going'];
+		break;
+	case 4:
+		$page_name = $carovl['lang']['interested'];
+		break;
+	case 5:
+		$page_name = $carovl['lang']['invited'];
+		break;
+	case 6:
+		$page_name = $carovl['lang']['past'];
+		break;
+	case 7:
+		$page_name = $carovl['lang']['edit_event'];
+		break;
+}
+?>
+<div class="card-header">
+	<h4 class="card-title">
+		<i class="fa fa-calendar-o fa-fw"></i> <?php echo $page_name; ?>
+		<span class="float-right">
+			<div class="dropdown">
+				<span class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
+					<i class="fa fa-ellipsis-h"></i>
+				</span>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li class="dropdown-item">
+						<a href="<?php echo seoLink('index.php?page=events'); ?>"><?php echo $carovl['lang']['events']; ?></a>
+					</li>
+					<li class="dropdown-item">
+						<a href="<?php echo seoLink('index.php?page=new-event'); ?>"><?php echo $carovl['lang']['new_event']; ?></a>
+					</li>
+					<li class="dropdown-item">
+						<a href="<?php echo seoLink('index.php?page=events-going'); ?>"><?php echo $carovl['lang']['going']; ?></a>
+					</li>
+					<li class="dropdown-item">
+						<a href="<?php echo seoLink('index.php?page=events-interested'); ?>"><?php echo $carovl['lang']['interested']; ?></a>
+					</li>
+					<li class="dropdown-item">
+						<a href="<?php echo seoLink('index.php?page=events-invited'); ?>"><?php echo $carovl['lang']['invited']; ?></a>
+					</li>
+					<li class="dropdown-item">
+						<a href="<?php echo seoLink('index.php?page=events-past'); ?>"><?php echo $carovl['lang']['past']; ?></a>
+					</li>
+				</ul>
+			</div>
+		</span>
+	</h4>
+</div>

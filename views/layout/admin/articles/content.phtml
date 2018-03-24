@@ -1,0 +1,89 @@
+<div class="card admin">
+	<div class="card-block">
+		<div class="table-responsive">
+			<table class="table table-hover table-condensed">
+				<thead>
+					<tr>
+						<th><?php echo $carovl['lang']['id']; ?></th>
+						<th><?php echo $carovl['lang']['author']; ?></th>
+						<th><?php echo $carovl['lang']['article']; ?></th>
+						<th><?php echo $carovl['lang']['time']; ?></th>
+						<th><?php echo $carovl['lang']['action']; ?></th>
+					</tr>
+				</thead>
+				<tbody class="result article-list">
+					<?php 
+					$articles = getAllArticles(array(
+						'limit' => 10
+					));
+					if (count($articles) > 0) {
+						foreach ($articles as $carovl['article']) {
+							echo loadPage('admin/articles/article-list');
+						}
+					}
+					?>
+				</tbody>
+			</table>
+		</div>
+		<input type="hidden" name="hash_id" id="hash_id" value="<?php echo createSession(); ?>">
+		<?php if (count($articles) == 0) { ?> 
+		<div class="view-more-wrapper view-more-articles">
+			<span class="text-center btn btn-white">
+				<?php echo $carovl['lang']['no_data']; ?>
+			</span>
+		</div>
+		<?php } elseif (count($articles) >= 10) { ?> 
+		<div class="view-more-wrapper view-more-articles">
+			<span class="text-center btn btn-white" onclick="getMoreArticles();">
+				<i class="fa fa-arrow-down icon-loader" data-icon="arrow-down"></i> <?php echo $carovl['lang']['show_more_articles']; ?>
+			</span>
+		</div>
+		<?php } ?>
+	</div>
+</div>
+<script type="text/javascript">
+<?php if (count($articles) >= 10) { ?> 
+function getMoreArticles() {
+	view_more_wrapper = $('.view-more-articles');
+	after_article_id = $('.article-list').find('.list:last').attr('data-article-id');
+	progressLoader(view_more_wrapper.find('.btn-white'));
+	$.get(ajaxRequests() + '?f=admin_setting&s=get_more_articles', {
+		after_article_id: after_article_id
+	}, function (data) {
+		if (data.html.length != 0) {
+			$('tbody.result').append(data.html);
+		} else {
+			view_more_wrapper.html('<span class="text-center btn btn-white" onclick="getMoreArticles();"><?php echo $carovl['lang']['no_more_articles']; ?></span>').fadeOut('slow');
+		}
+		progressLoader(view_more_wrapper.find('.btn-white'));
+	});
+}
+<?php } ?>
+function deleteArticle(article_id) {
+	hash_id = $('#hash_id').val();
+	swal({
+		title: "<?php echo $carovl['lang']['delete_article_confirmation']; ?>",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#2CC990",
+		confirmButtonText: "<?php echo $carovl['lang']['delete_label']; ?>",
+		cancelButtonText: "<?php echo $carovl['lang']['nevermind_label']; ?>",
+		showLoaderOnConfirm: true,
+		closeOnConfirm: false,
+	}, function () {
+		$.get(ajaxRequests(), {
+			f: 'admin_setting',
+			s: 'delete_article',
+			article_id: article_id,
+			hash_id: hash_id
+		}, function (data) {
+			if (data.status == 200) {
+				$('#article_id_' + article_id).fadeOut(300, function () {
+					$(this).remove();
+				});
+				swal.close();
+			}
+		});
+	});
+}
+</script>

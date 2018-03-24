@@ -1,0 +1,57 @@
+<div class="comment comment-container" id="comment-<?php echo $carovl['comment']['id']; ?>" data-comment-id="<?php echo $carovl['comment']['id']; ?>">
+	<li class="media">
+		<div class="media-left">
+			<a href="<?php echo $carovl['comment']['publisher']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['comment']['publisher']['username']; ?>">
+				<img src="<?php echo $carovl['comment']['publisher']['avatar']; ?>" class="media-object" alt="<?php echo $carovl['comment']['publisher']['username']; ?>">
+			</a>
+		</div>
+		<div class="media-body">
+			<span class="user-preview" data-type="<?php echo $carovl['comment']['publisher']['type']; ?>" data-id="<?php echo $carovl['comment']['publisher']['id']; ?>" data-placement="search">
+				<a href="<?php echo $carovl['comment']['publisher']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['comment']['publisher']['username']; ?>" class="comment-author pull-left">
+					<?php echo $carovl['comment']['publisher']['username']; ?>
+				</a>
+			</span>
+			<?php if ($carovl['comment']['publisher']['verified'] == 1) { ?> 
+			<span class="verified-user" data-toggle="tooltip" title="<?php echo $carovl['lang']['verified_user']; ?>">
+				<i class="fa fa-check-circle"></i>
+			</span>
+			<?php } ?>
+			<div class="text-comment">
+				<?php echo $carovl['comment']['text']; ?>
+			</div>
+			<div class="comment-date">
+				<span class="time ajax-time" title="<?php echo date('c', $carovl['comment']['time']); ?>">
+					<?php echo $carovl['comment']['time']; ?>
+				</span>
+				<div class="pull-right">
+					<span class="comment-options">
+						<span class="comment-icon">
+							<span class="pointer" id="likecomment" onclick="registerCommentLike(<?php echo $carovl['comment']['id']; ?>);">
+								<?php if ($carovl['comment']['is_comment_liked'] !== true) { ?> 
+								<i class="fa fa-heart-o icon-loader" data-icon="heart-o"></i>
+								<?php } else { ?> 
+								<i class="fa fa-heart liked icon-loader" data-icon="heart"></i>
+								<?php } ?>
+							</span>
+							<span id="comment-likes" class="comment-likes">
+								<?php echo ($carovl['comment']['comment_likes'] > 0) ? $carovl['comment']['comment_likes'] : ''; ?>
+							</span>
+						</span>
+					</span>
+					<span class="pull-right options" data-show-hover="li">
+					<?php if ($carovl['comment']['owner'] === true) { ?> 
+					<span id="editcomment" onclick="openEditComment(<?php echo $carovl['comment']['id']; ?>);">
+						<i class="fa fa-pencil icon-loader" data-icon="pencil"></i>
+					</span>
+					<?php } ?>
+					<?php if ($carovl['comment']['post_owner'] === true || $carovl['comment']['owner'] === true) { ?> 
+					<span onclick="deleteComment(<?php echo $carovl['comment']['id']; ?>, <?php echo $carovl['story']['id']; ?>);">
+						<i class="fa fa-times icon-loader" data-icon="times"></i>
+					</span>
+					<?php } ?>
+				</span>
+				</div>
+			</div>
+		</div>
+	</li>
+</div>

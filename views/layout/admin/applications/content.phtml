@@ -1,0 +1,74 @@
+<div class="card admin">
+	<div class="card-header">
+		<h3 class="card-title">
+			<?php echo $carovl['lang']['applications']; ?>
+		</h3>
+	</div>
+	<div class="card-block">
+		<form class="admin-applications-setting-form" method="post">
+			<h5 class="mb-4"><?php echo $carovl['lang']['desktop_application']; ?></h5>
+			<div class="form-group carovl">
+				<input type="text" name="desktop_app_id" class="form-control <?php echo (! empty($carovl['config']['desktop_app_id'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['desktop_app_id']; ?>" id="desktop-app-id">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['application_id']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="desktop_app_key" class="form-control <?php echo (! empty($carovl['config']['desktop_app_key'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['desktop_app_key']; ?>" id="desktop-app-key">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['application_key']; ?></label>
+				<span class="help-block"><?php echo $carovl['lang']['application_key_desc']; ?></span>
+			</div>
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+			<div class="form-group carovl">
+				<button class="btn btn-carovl pointer" onclick="resetKeys();" id="reset-keys" type="button">
+					<i class="fa fa-repeat icon-loader" data-icon="repeat"></i> <?php echo $carovl['lang']['reset_keys']; ?>
+				</button>
+				<div class="help-block" style="color: red;">
+					<?php echo $carovl['lang']['reset_keys_desc']; ?>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+function resetKeys() {
+	swal({
+		title: "<?php echo $carovl['lang']['reset_keys_confirmation']; ?>",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#2CC990",
+		confirmButtonText: "<?php echo $carovl['lang']['reset_label']; ?>",
+		cancelButtonText: "<?php echo $carovl['lang']['nevermind_label']; ?>",
+		showLoaderOnConfirm: true
+	}, function () {
+		progressLoader($('form.admin-applications-setting-form').find('#reset-keys'));
+		$('form.admin-applications-setting-form').find('#reset-keys').attr('disabled', true);
+		$.get(ajaxRequests(), {
+			f: 'admin_setting',
+			s: 'reset_desktop_app_key'
+		}, function (data) {
+			$('form.admin-applications-setting-form').find('#reset-keys').attr('disabled', false);
+			if (data.status == 200) {
+				$('#desktop-app-id').val(data.desktop_app_id);
+				$('#desktop-app-key').val(data.desktop_app_key);
+				$('#desktop-app-key').addClass('used');
+				$('#desktop-app-id').addClass('used');
+				swal({
+					title: "<?php echo $carovl['lang']['setting_successfully_updated']; ?>",
+					type: "success",
+					confirmButtonColor: "#2CC990"
+				});
+			} else {
+				swal({
+					title: "<?php echo $carovl['lang']['error_while_reset_keys']; ?>",
+					type: "error",
+					confirmButtonColor: "#2CC990"
+				});
+			}
+			progressLoader($('form.admin-applications-setting-form').find('#reset-keys'));
+		});
+	});
+}
+</script>

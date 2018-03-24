@@ -1,0 +1,151 @@
+<div class="card setting">
+	<?php echo loadPage('setting/header'); ?>
+	<div class="card-block">
+		<div class="alerts"></div>
+		<form class="privacy-form" method="post">
+			<div class="form-group">
+				<div class="row">
+					<label class="col-5 mt-2" for="message_privacy">
+						<?php echo $carovl['lang']['message_privacy_label']; ?>
+					</label>
+					<div class="col-7">
+						<select class="form-control" name="message_privacy">
+							<?php 
+							$selected_message_everyone = ($carovl['setting']['message_privacy'] == 0) ? 'selected' : '';
+							$selected_message_following = ($carovl['setting']['message_privacy'] == 1) ? 'selected' : '';
+							?>
+							<option value="0" <?php echo $selected_message_everyone; ?>>
+								<?php echo $carovl['lang']['everyone']; ?>
+							</option>
+							<option value="1" <?php echo $selected_message_following; ?>>
+								<?php echo $carovl['lang']['people_i_follow']; ?>
+							</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-5 mt-2" for="follow_privacy">
+						<?php echo $carovl['lang']['follow_privacy_label']; ?>
+					</label>
+					<div class="col-7">
+						<select class="form-control" name="follow_privacy">
+							<?php 
+							$selected_follow_privacy_no = ($carovl['setting']['follow_privacy'] == 0) ? 'selected' : '';
+							$selected_follow_privacy_yes = ($carovl['setting']['follow_privacy'] == 1) ? 'selected' : '';
+							?>
+							<option value="0" <?php echo $selected_follow_privacy_no; ?>>
+								<?php echo $carovl['lang']['no']; ?>
+							</option>
+							<option value="1" <?php echo $selected_follow_privacy_yes; ?>>
+								<?php echo $carovl['lang']['yes']; ?>
+							</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<?php if ($carovl['config']['profile_visit'] == 1) { ?> 
+			<div class="form-group">
+				<div class="row">
+					<label class="col-5 mt-2" for="visit_privacy">
+						<?php echo $carovl['lang']['visit_privacy_label']; ?>
+					</label>
+					<div class="col-7">
+						<select class="form-control" name="visit_privacy">
+							<?php 
+							$selected_visit_privacy_yes = ($carovl['setting']['visit_privacy'] == 0) ? 'selected' : '';
+							$selected_visit_privacy_no = ($carovl['setting']['visit_privacy'] == 1) ? 'selected' : '';
+							?>
+							<option value="0" <?php echo $selected_visit_privacy_yes; ?>>
+								<?php echo $carovl['lang']['yes']; ?>
+							</option>
+							<option value="1" <?php echo $selected_visit_privacy_no; ?>>
+								<?php echo $carovl['lang']['no']; ?>
+							</option>
+						</select>
+						<span class="help-block">
+							<?php echo $carovl['lang']['profile_visit_help']; ?>
+						</span>
+					</div>
+				</div>
+			</div>
+			<?php } ?>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-5 mt-2" for="lastseen_privacy">
+						<?php echo $carovl['lang']['lastseen_privacy_label']; ?>
+					</label>
+					<div class="col-7">
+						<select class="form-control" name="lastseen_privacy">
+							<?php 
+							$selected_lastseen_no = ($carovl['setting']['show_lastseen'] == 0) ? 'selected' : '';
+							$selected_lastseen_yes = ($carovl['setting']['show_lastseen'] == 1) ? 'selected' : '';
+							?>
+							<option value="0" <?php echo $selected_lastseen_no; ?>>
+								<?php echo $carovl['lang']['no']; ?>
+							</option>
+							<option value="1" <?php echo $selected_lastseen_yes; ?>>
+								<?php echo $carovl['lang']['yes']; ?>
+							</option>
+						</select>
+						<span class="help-block">
+							<?php echo $carovl['lang']['lastseen_privacy_help']; ?>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-5 mt-2" for="activities_privacy">
+						<?php echo $carovl['lang']['activities_privacy_label']; ?>
+					</label>
+					<div class="col-7">
+						<select class="form-control" name="activities_privacy">
+							<?php 
+							$selected_activities_no = ($carovl['setting']['show_activities_privacy'] == 0) ? 'selected' : '';
+							$selected_activities_yes = ($carovl['setting']['show_activities_privacy'] == 1) ? 'selected' : '';
+							?>
+							<option value="0" <?php echo $selected_activities_no; ?>>
+								<?php echo $carovl['lang']['no']; ?>
+							</option>
+							<option value="1" <?php echo $selected_activities_yes; ?>>
+								<?php echo $carovl['lang']['yes']; ?>
+							</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+				</button>
+			</div>
+			<input type="hidden" name="user_id" value="<?php echo $carovl['setting']['user_id']; ?>">
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.privacy-form').ajaxForm({
+		url: ajaxRequests() + '?f=settings&s=update_user_privacy',
+		beforeSend: function () {
+			progressLoader($('form.privacy-form').find('.btn-carovl'));
+			$('form.privacy-form').find('.btn-carovl').attr('disabled', true);
+		},
+		success: function (data) {
+			$('form.privacy-form').find('.btn-carovl').attr('disabled', false);
+			if (data.status == 200) {
+				$('.alerts').html('<center><div class="alert alert-success">' + data.success + '</div></center>');
+				$('.alert-success').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('form.privacy-form').find('.btn-carovl'));
+		}
+	});
+});
+</script>

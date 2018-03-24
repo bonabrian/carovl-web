@@ -1,0 +1,10 @@
+<ul class="navbar-nav mr-auto">
+	<?php if ($carovl['page'] != 'login') { ?> 
+	<li class="nav-item">
+		<span class="nav-link pointer" data-toggle="modal" data-target="#login-modal"><?php echo $carovl['lang']['login_label']; ?></span>
+	</li>
+	<?php } ?>
+	<li class="nav-item">
+		<a href="<?php echo seoLink('index.php?page=register'); ?>" class="nav-link"><?php echo $carovl['lang']['register_label']; ?></a>
+	</li>
+</ul>

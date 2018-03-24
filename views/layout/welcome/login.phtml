@@ -1,0 +1,90 @@
+<div class="row">
+	<div class="col-md-8">
+		<div class="card">
+			<h3 class="card-header"><?php echo $carovl['lang']['login_label']; ?></h3>
+			<div class="card-block">
+				<?php if (isset($_GET['authentication']) && $_GET['authentication'] == 'true') { ?> 
+				<div class="alert alert-warning">
+					You need login to continue.
+				</div>
+				<?php } ?>
+				<div class="alerts"></div>
+				<form class="login-form" id="login-form" method="post">
+					<div class="form-group carovl">
+						<input type="text" name="username" class="form-control">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['username_label']; ?></label>
+					</div>
+					<div class="form-group carovl">
+						<input type="password" name="password" class="form-control">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['password_label']; ?></label>
+					</div>
+					<input type="hidden" name="last_url" value="<?php echo $_GET['redirect_to']; ?>">
+					<div class="social-buttons">
+						<?php if ($carovl['config']['facebook_login'] != 0) { ?> 
+						<a class="btn social-btn btn-facebook" href="<?php echo $carovl['facebook_login_url']; ?>">
+							<i class="fa fa-facebook fa-fw"></i>
+						</a>
+						<?php } ?>
+						<?php if ($carovl['config']['google_login'] != 0) { ?> 
+						<a class="btn social-btn btn-google" href="<?php echo $carovl['google_login_url']; ?>">
+							<i class="fa fa-google fa-fw"></i>
+						</a>
+						<?php } ?>
+						<?php if ($carovl['config']['twitter_login'] != 0) { ?> 
+						<a class="btn social-btn btn-twitter" href="<?php echo $carovl['twitter_login_url']; ?>">
+							<i class="fa fa-twitter fa-fw"></i>
+						</a>
+						<?php } ?>
+					</div>
+					<div class="submit-button">
+						<button type="submit" class="btn btn-carovl" id="login">
+						<i class="fa fa-sign-in icon-loader"></i> <?php echo $carovl['lang']['login_label']; ?></button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-4"><!-- Image shown here --></div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('#login-form').ajaxForm({
+		url: ajaxRequests() + '?f=login',
+		beforeSend: function () {
+			progressLoader($('#login'));
+			$('#login').attr('disabled', true);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				setTimeout(function() {
+					$('.card-header').text('<?php echo $carovl['lang']['welcome_back']; ?>');
+				}, 100);
+				setTimeout(function() {
+					window.location.href = data.location;
+				}, 1500);
+			} else if (data.status == 300) {
+				setTimeout(function() {
+					$('.card-header').text('<?php echo $carovl['lang']['welcome_back']; ?>');
+				}, 100);
+				setTimeout(function() {
+					window.location.href = data.location;
+				}, 1500);
+			} else {
+				$('#login').attr('disabled', false);
+				var errors = data.errors.join("<br>");
+				$('.alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn('fast', function () {
+					$(this).delay(2500).slideUp(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('#login'));
+		}
+	});
+});
+</script>

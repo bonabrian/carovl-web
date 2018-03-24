@@ -1,0 +1,119 @@
+<?php 
+$email_yes = ($carovl['config']['smtp_or_mail'] == 'mail') ? 'checked' : '';
+$email_no = ($carovl['config']['smtp_or_mail'] == 'smtp') ? 'checked' : '';
+?>
+<div class="card admin">
+	<div class="card-header">
+		<h3 class="card-title"><?php echo $carovl['lang']['email_setting']; ?></h3>
+	</div>
+	<div class="card-block">
+		<form class="admin-email-setting-form" method="post">
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['system_type']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="smtp_or_mail-0">
+							<input type="radio" name="smtp_or_mail" id="smtp_or_mail-0" value="mail" <?php echo $email_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['email_label']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="smtp_or_mail-1">
+							<input type="radio" name="smtp_or_mail" id="smtp_or_mail-1" value="smtp" <?php echo $email_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['smtp_label']; ?></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group carovl">
+				<input type="text" name="smtp_host" class="form-control <?php echo (! empty($carovl['config']['smtp_host'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['smtp_host']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['smtp_host']; ?></label>
+				<span class="help-block"><?php echo $carovl['lang']['smtp_host_desc']; ?></span>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="smtp_port" class="form-control <?php echo (! empty($carovl['config']['smtp_port'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['smtp_port']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['smtp_port']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="smtp_encryption" class="form-control <?php echo (! empty($carovl['config']['smtp_encryption'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['smtp_encryption']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['smtp_encryption']; ?></label>
+				<span class="help-block"><?php echo $carovl['lang']['smtp_encryption_desc']; ?></span>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="smtp_username" class="form-control <?php echo (! empty($carovl['config']['smtp_username'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['smtp_username']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['smtp_username']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="password" name="smtp_password" class="form-control <?php echo (! empty($carovl['config']['smtp_password'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['smtp_password']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['smtp_password']; ?></label>
+			</div>
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+				</button>
+				<button type="button" class="btn btn-warning test-server" onclick="testServer();">
+					<i class="fa fa-paper-plane-o icon-loader" data-icon="paper-plane-o"></i> <?php echo $carovl['lang']['test_server']; ?>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.admin-email-setting-form').ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=update_email_setting',
+		beforeSend: function () {
+			progressLoader($('form.admin-email-setting-form').find('.btn-carovl'));
+			$('form.admin-email-setting-form').find('.btn-carovl').attr('disabled', true);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				$('form.admin-email-setting-form').find('.btn-carovl').attr('disabled', false);
+				swal({
+					title: "<?php echo $carovl['lang']['setting_successfully_updated']; ?>",
+					type: "success",
+					confirmButtonColor: "#2CC990",
+				});
+				progressLoader($('form.admin-email-setting-form').find('.btn-carovl'));
+			}
+		}
+	});
+});
+function testServer() {
+	progressLoader($('form.admin-email-setting-form').find('.test-server'));
+	$('form.admin-email-setting-form').find('.test-server').attr('disabled', true);
+	$.get(ajaxRequests(), {
+		f: 'admin_setting',
+		s: 'test_server'
+	}, function (data) {
+		if (data.status == 200) {
+			swal({
+				title: "<?php echo $carovl['lang']['email_sent']; ?>",
+				type: "success",
+				confirmButtonColor: "#2CC990",
+			});
+		} else {
+			swal({
+				title: "<?php echo $carovl['lang']['error']; ?>",
+				text: data.error,
+				type: "error",
+				confirmButtonColor: "#2CC990",
+			});
+		}
+		progressLoader($('form.admin-email-setting-form').find('.test-server'));
+		$('form.admin-email-setting-form').find('.test-server').attr('disabled', false);
+	});
+}
+</script>

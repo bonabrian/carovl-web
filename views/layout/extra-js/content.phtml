@@ -1,0 +1,111 @@
+<script type="text/javascript">
+function registerFollow(id, follow_privacy) {
+	var follow_button = $('[id=follow-' + id + ']');
+	is_confirm = 0;
+	if (follow_privacy == 1) {
+		is_confirm = 1;
+	}
+	html_ = '<button type="button" onclick="registerFollow(' + id + ', ' + is_confirm + ');" class="btn btn-white following"><?php echo $carovl['lang']['unfollow']; ?></button>';
+	if (is_confirm == 1) {
+		html_ = '<button type="button" onclick="registerFollow(' + id + ', ' + is_confirm + ');" class="btn btn-white requested"><?php echo $carovl['lang']['requested']; ?></button>';
+	}
+	if (follow_button.find('button').hasClass('following') || follow_button.find('button').hasClass('requested')) {
+		html_ = '<button type="button" onclick="registerFollow(' + id + ', ' + is_confirm + ');" class="btn btn-white"><?php echo $carovl['lang']['follow']; ?></button>';
+	}
+	follow_button.html(html_);
+	$.get(ajaxRequests(), {
+		f: 'follow_user',
+		id: id
+	}, function (data) {
+		if (data.can_send == 1) {
+			//sendEmailMessage();
+		}
+	});
+}
+function registerEventGoing(id) {
+	var going_button = $('[id=going-' + id + ']');
+	html_going = '<button type="button" onclick="registerEventGoing(' + id + ');" class="btn btn-white green"><i class="fa fa-check icon-loader" data-icon="check"></i> <?php echo $carovl['lang']['not_going_label']; ?></button>';
+	if (going_button.find('button').hasClass('green')) {
+		html_going = '<button type="button" onclick="registerEventGoing(' + id + ');" class="btn btn-white"><i class="fa fa-calendar-o icon-loader" data-icon="calendar-o"></i> <?php echo $carovl['lang']['go_label']; ?></button>';
+	}
+	going_button.html(html_going);
+	$.get(ajaxRequests(), {
+		f: 'events',
+		s: 'event_going',
+		event_id: id
+	}, function (data) {
+		if (data.can_send == 1) {
+			//sendEmailMessage();
+		}
+	});
+}
+function registerEventInterested(id) {
+	var interested_button = $('[id=interested-' + id + ']');
+	html_interested = '<button type="button" onclick="registerEventInterested(' + id + ');" class="btn btn-white green"><i class="fa fa-check icon-loader" data-icon="check"></i> <?php echo $carovl['lang']['not_interested_label']; ?></button>';
+	if (interested_button.find('button').hasClass('green')) {
+		html_interested = '<button type="button" onclick="registerEventInterested(' + id + ');" class="btn btn-white"><i class="fa fa-star icon-loader" data-icon="star"></i> <?php echo $carovl['lang']['interested_label']; ?></button>';
+	}
+	interested_button.html(html_interested);
+	$.get(ajaxRequests(), {
+		f: 'events',
+		s: 'event_interested',
+		event_id: id
+	}, function (data) {
+		if (data.can_send == 1) {
+			//sendEmailMessage();
+		}
+	});
+}
+function registerGroupJoin(id, join_privacy) {
+	var join_button = $('[id=join-' + id + ']');
+	is_confirm = 0;
+	if (join_privacy == 1) {
+		is_confirm = 1;
+	}
+	html_join = '<button type="button" onclick="registerGroupJoin(' + id + ', ' + is_confirm + ');" class="btn btn-white joined"><?php echo $carovl['lang']['leave_label']; ?></button>';
+	if (is_confirm == 1) {
+		html_join = '<button type="button" onclick="registerGroupJoin(' + id + ', ' + is_confirm + ');" class="btn btn-white requested"><?php echo $carovl['lang']['requested']; ?></button>';
+	}
+	if (join_button.find('button').hasClass('joined') || join_button.find('button').hasClass('requested')) {
+		html_join = '<button type="button" onclick="registerGroupJoin(' + id + ', ' + join_privacy + ');" class="btn btn-white"><?php echo $carovl['lang']['join_label']; ?></button>';
+	}
+	join_button.html(html_join);
+	$.get(ajaxRequests(), {
+		f: 'groups',
+		s: 'join_group',
+		group_id: id
+	}, function (data) {
+		if (data.can_send == 1) {
+			//sendEmailMessage();
+		}
+	});
+}
+function blockUser(id) {
+	if (! id) {
+		return false;
+	} else {
+		swal({
+			title: "<?php echo $carovl['lang']['block_user_confirmation_message']; ?>",
+			type: "error",
+			showCancelButton: true,
+			confirmButtonColor: "#2CC990",
+			confirmButtonText: "<?php echo $carovl['lang']['block_label']; ?>",
+			cancelButtonText: "<?php echo $carovl['lang']['nevermind_label']; ?>",
+			showLoaderOnConfirm: true,
+			closeOnConfirm: false,
+		}, function () {
+			$.get(ajaxRequests(), {
+				f: 'timeline',
+				s: 'block_user',
+				user_id: id
+			}, function (data) {
+				if (data.status == 200) {
+					setTimeout(function() {
+						window.location.href = data.href;
+					}, 300);
+				}
+			});
+		});
+	}
+}
+</script>

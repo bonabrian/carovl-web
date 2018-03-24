@@ -1,0 +1,53 @@
+<div class="card admin">
+	<div class="card-header">
+		<?php echo $carovl['lang']['add_new_language']; ?>
+	</div>
+	<div class="card-block">
+		<form class="admin-add-lang-form" method="post">
+			<div class="form-group carovl">
+				<input type="text" name="lang" class="form-control">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['language_name']; ?></label>
+			</div>
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-plus icon-loader" data-icon="plus"></i> <?php echo $carovl['lang']['add_label']; ?>
+				</button>
+			</div>
+			<span class="help-block" style="color: red;"><?php echo $carovl['lang']['add_new_language_desc']; ?></span>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.admin-add-lang-form').ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=add_new_language',
+		beforeSend: function () {
+			progressLoader($('form.admin-add-lang-form').find('button'));
+			$('form.admin-add-lang-form').find('button').attr('disabled', true);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				swal({
+					title: "<?php echo $carovl['lang']['new_language_added']; ?>",
+					type: "success",
+					confirmButtonColor: "#2CC990",
+				});
+				setTimeout(function() {
+					window.location.href = data.href;
+				}, 1000);
+			} else if (data.status == 300) {
+				$('form.admin-add-lang-form').find('button').attr('disabled', false);
+				swal({
+					title: data.error,
+					type: "error",
+					confirmButtonColor: "#2CC990",
+				});
+			}
+			progressLoader($('form.admin-add-lang-form').find('button'));
+		}
+	});
+});
+</script>

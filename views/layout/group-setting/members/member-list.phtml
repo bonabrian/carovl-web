@@ -1,0 +1,29 @@
+<div class="card group-members" id="member_<?php echo $carovl['member']['user_id']; ?>">
+	<div class="card-block">
+		<div class="media">
+			<a href="<?php echo $carovl['member']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['member']['username']; ?>">
+				<img src="<?php echo $carovl['member']['avatar']; ?>" alt="<?php echo $carovl['member']['username']; ?>" class="d-flex mr-2">
+			</a>
+			<div class="media-body">
+				<?php if (isGroupOwner($carovl['setting']['group_id'], $carovl['member']['user_id']) === false) { ?> 
+				<div class="float-right">
+					<button class="btn btn-white" onclick="deleteJoinedMember(<?php echo $carovl['member']['user_id']; ?>, <?php echo $carovl['setting']['group_id']; ?>);"><i class="fa fa-remove icon-loader" data-icon="remove"></i></button>
+				</div>
+				<?php } ?>
+				<h5 class="mt-0">
+					<a href="<?php echo $carovl['member']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['member']['username']; ?>">
+						<?php echo $carovl['member']['username']; ?>
+					</a>
+					<?php if ($carovl['member']['verified'] == 1) { ?> 
+					<span class="verified-user" data-toggle="tooltip" title="<?php echo $carovl['lang']['verified_user']; ?>">
+						<i class="fa fa-check-circle"></i>
+					</span>
+					<?php } ?>
+				</h5>
+				<div class="member-lastseen">
+					<?php echo userStatus($carovl['member']['user_id'], $carovl['member']['lastseen']); ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

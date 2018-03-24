@@ -1,0 +1,20 @@
+<tr id="article_id_<?php echo $carovl['article']['id']; ?>" class="list" data-article-id="<?php echo $carovl['article']['id']; ?>">
+	<td><?php echo $carovl['article']['id']; ?></td>
+	<td>
+		<a href="<?php echo $carovl['article']['author']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['article']['author']['username']; ?>">
+			<img src="<?php echo $carovl['article']['author']['avatar']; ?>" alt="<?php echo $carovl['article']['author']['username']; ?>" class="img-fluid">
+			<?php echo $carovl['article']['author']['username']; ?>
+		</a>
+	</td>
+	<td>
+		<strong><a href="<?php echo $carovl['article']['url']; ?>" target="_blank"><?php echo $carovl['article']['article_title']; ?></a></strong>
+	</td>
+	<td>
+		<span class="ajax-time" title="<?php echo date('c', $carovl['article']['time']); ?>"><?php echo $carovl['article']['time_posted']; ?></span>
+	</td>
+	<td>
+		<span class="pointer ml-4" onclick="deleteArticle(<?php echo $carovl['article']['id']; ?>);">
+			<i class="fa fa-remove"></i>
+		</span>
+	</td>
+</tr>

@@ -1,0 +1,40 @@
+<div class="card admin backup">
+	<div class="card-header">
+		<h3 class="card-title"><?php echo $carovl['lang']['backup']; ?></h3>
+		<h5><?php echo $carovl['lang']['last_backup']; ?>: <span class="last-backup"><?php echo $carovl['config']['last_backup']; ?></span><span class="float-right directory"><?php echo $carovl['lang']['directory']; ?>: ./app_backups</span></h5>
+		<?php echo $carovl['lang']['backup_desc']; ?>
+	</div>
+	<div class="card-block">
+		<form method="get" class="admin-backup-form">
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl create-backup">
+					<i class="fa fa-hdd-o icon-loader" data-icon="hdd-o"></i> <?php echo $carovl['lang']['create_new_backup_label']; ?>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.admin-backup-form').ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=create_new_backup',
+		beforeSend: function () {
+			$('form.admin-backup-form').find('button').attr('disabled', true);
+			$('.create-backup').html('<i class="fa fa-hdd-o icon-loader" data-icon="hdd-o"></i> <?php echo $carovl['lang']['please_wait']; ?>');
+			progressLoader($('form.admin-backup-form').find('button'));
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				$('form.admin-backup-form').find('button').attr('disabled', false);
+				swal({
+					title: "<?php echo $carovl['lang']['backup_completed']; ?>",
+					type: "success",
+					confirmButtonColor: "#2CC990",
+				});
+				$('.last-backup').text('<?php echo date('d-m-Y'); ?>');
+				$('.create-backup').html('<i class="fa fa-hdd-o icon-loader" data-icon="hdd-o"></i> <?php echo $carovl['lang']['create_new_backup_label']; ?>');
+			}
+		}
+	});
+});
+</script>

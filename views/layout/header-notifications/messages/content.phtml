@@ -1,0 +1,43 @@
+<?php 
+$unread_class = '';
+$message = getMessagesHeader(array(
+	'user_id' => $carovl['message']['user_id']
+), 1);
+if (! empty($message['from_id'])) {
+	if ($message['seen'] == 0 && $carovl['message']['user_id'] == $message['from_id']) {
+		$unread_class = 'unread';
+	}
+	$message['text'] = mb_substr($message['text'], 0, 40, "utf-8");
+}
+$media_icon = '<i class="fa fa-picture-o"></i> ';
+$media_info = $carovl['lang']['send_a_photo'];
+if (strrpos($message['media'], '_image') !== false) {
+	$media_icon = '<i class="fa fa-picture-o"></i> ';
+	$media_info = $carovl['lang']['send_a_photo'];
+}
+?>
+<li class="dropdown-item <?php echo $unread_class; ?> pointer" onclick="openMessageConversation(<?php echo $carovl['message']['user_id']; ?>);">
+	<div class="media message-list" data-message-id="<?php echo $message['id']; ?>">
+		<div class="media-left">
+			<img src="<?php echo $carovl['message']['avatar']; ?>" alt="<?php echo $carovl['message']['username']; ?>">
+		</div>
+		<div class="media-body">
+			<span class="message-username">
+				<?php echo $carovl['message']['username']; ?>
+			</span>
+			<?php if ($unread_class == 'unread') { ?> 
+			<span class="new-notif"></span>
+			<?php } ?>
+			<?php if (! empty($message['from_id'])) { ?><div class="message-content">
+				<?php echo ($carovl['message']['user_id'] != $message['from_id']) ? $carovl['lang']['me'] . ': ' : ''; ?>
+				<?php echo (! empty($message['media'])) ? $media_icon . $media_info : $message['text']; ?>
+			</div>
+			<div class="message-time">
+				<div class="ajax-time" title="<?php echo date('c', $message['time']); ?>">
+					<?php echo timeElapsedString($message['time']); ?>
+				</div>
+			</div>
+			<?php } ?>
+		</div>
+	</div>
+</li>

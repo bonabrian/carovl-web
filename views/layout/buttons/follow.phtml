@@ -1,0 +1,5 @@
+<span id="follow-<?php echo $carovl['follow']['user_id']; ?>">
+	<button type="button" onclick="registerFollow(<?php echo $carovl['follow']['user_id']; ?>, <?php echo ($carovl['follow']['follow_privacy'] == 1) ? 1 : 0; ?>);" class="btn btn-white">
+		<?php echo $carovl['lang']['follow']; ?>
+	</button>
+</span>

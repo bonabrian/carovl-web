@@ -1,0 +1,24 @@
+<li class="dropdown-item">
+	<div class="media request-list follow-request_<?php echo $carovl['request']['user_id']; ?>">
+		<div class="media-left">
+			<a href="<?php echo $carovl['request']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['request']['username']; ?>">
+				<img src="<?php echo $carovl['request']['avatar']; ?>" alt="<?php echo $carovl['request']['username']; ?>">
+			</a>
+		</div>
+		<div class="media-body">
+			<div class="btn-controls float-right">
+				<button type="button" id="accept_<?php echo $carovl['request']['user_id']; ?>" onclick="acceptFollowRequest(<?php echo $carovl['request']['user_id']; ?>);" class="btn btn-no-border dark" data-toggle="tooltip" title="<?php echo $carovl['lang']['accept_request']; ?>">
+					<i class="fa fa-check icon-loader" data-icon="check"></i>
+				</button>
+				<button type="button" id="reject_<?php echo $carovl['request']['user_id']; ?>" onclick="rejectFollowRequest(<?php echo $carovl['request']['user_id']; ?>);" class="btn btn-no-border dark" data-toggle="tooltip" title="<?php echo $carovl['lang']['reject_request']; ?>">
+					<i class="fa fa-times icon-loader" data-icon="times"></i>
+				</button>
+			</div>
+			<a href="<?php echo $carovl['request']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['request']['username']; ?>">
+				<div class="request-username">
+					<?php echo $carovl['request']['username']; ?>
+				</div>
+			</a>
+		</div>
+	</div>
+</li>

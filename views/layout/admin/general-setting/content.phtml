@@ -1,0 +1,519 @@
+<?php 
+$cache_system_yes = ($carovl['config']['cache_system'] == 1) ? 'checked' : '';
+$cache_system_no = ($carovl['config']['cache_system'] == 0) ? 'checked' : '';
+
+$chat_system_yes = ($carovl['config']['chat_system'] == 1) ? 'checked' : '';
+$chat_system_no = ($carovl['config']['chat_system'] == 0) ? 'checked' : '';
+
+$email_validation_yes = ($carovl['config']['email_validation'] == 1) ? 'checked' : '';
+$email_validation_no = ($carovl['config']['email_validation'] == 0) ? 'checked' : '';
+
+$email_notification_yes = ($carovl['config']['email_notification'] == 1) ? 'checked' : '';
+$email_notification_no = ($carovl['config']['email_notification'] == 0) ? 'checked' : '';
+
+$seo_link_yes = ($carovl['config']['seo_link'] == 1) ? 'checked' : '';
+$seo_link_no = ($carovl['config']['seo_link'] == 0) ? 'checked' : '';
+
+$file_sharing_yes = ($carovl['config']['file_sharing'] == 1) ? 'checked' : '';
+$file_sharing_no = ($carovl['config']['file_sharing'] == 0) ? 'checked' : '';
+
+$use_seo_friendly_yes = ($carovl['config']['use_seo_friendly'] == 1) ? 'checked' : '';
+$use_seo_friendly_no = ($carovl['config']['use_seo_friendly'] == 0) ? 'checked' : '';
+
+$message_seen_yes = ($carovl['config']['message_seen'] == 1) ? 'checked' : '';
+$message_seen_no = ($carovl['config']['message_seen'] == 0) ? 'checked' : '';
+
+$message_typing_yes = ($carovl['config']['message_typing'] == 1) ? 'checked' : '';
+$message_typing_no = ($carovl['config']['message_typing'] == 0) ? 'checked' : '';
+
+$user_lastseen_yes = ($carovl['config']['user_lastseen'] == 1) ? 'checked' : '';
+$user_lastseen_no = ($carovl['config']['user_lastseen'] == 0) ? 'checked' : '';
+
+$delete_account_yes = ($carovl['config']['delete_account'] == 1) ? 'checked' : '';
+$delete_account_no = ($carovl['config']['delete_account'] == 0) ? 'checked' : '';
+
+$profile_visit_yes = ($carovl['config']['profile_visit'] == 1) ? 'checked' : '';
+$profile_visit_no = ($carovl['config']['profile_visit'] == 0) ? 'checked' : '';
+
+$profile_privacy_yes = ($carovl['config']['profile_privacy'] == 1) ? 'checked' : '';
+$profile_privacy_no = ($carovl['config']['profile_privacy'] == 0) ? 'checked' : '';
+
+$video_upload_yes = ($carovl['config']['video_upload'] == 1) ? 'checked' : '';
+$video_upload_no = ($carovl['config']['video_upload'] == 0) ? 'checked' : '';
+
+$audio_upload_yes = ($carovl['config']['audio_upload'] == 1) ? 'checked' : '';
+$audio_upload_no = ($carovl['config']['audio_upload'] == 0) ? 'checked' : '';
+
+$sms_or_email_mail = ($carovl['config']['sms_or_email'] == 'mail') ? 'checked' : '';
+$sms_or_email_sms = ($carovl['config']['sms_or_email'] == 'sms') ? 'checked' : '';
+
+$smooth_loading_yes = ($carovl['config']['smooth_loading'] == 1) ? 'checked' : '';
+$smooth_loading_no = ($carovl['config']['smooth_loading'] == 0) ? 'checked' : '';
+
+$groups_yes = ($carovl['config']['groups'] == 1) ? 'checked' : '';
+$groups_no = ($carovl['config']['groups'] == 0) ? 'checked' : '';
+
+$event_yes = ($carovl['config']['events'] == 1) ? 'checked' : '';
+$events_no = ($carovl['config']['events'] == 0) ? 'checked' : '';
+
+$developers_page_yes = ($carovl['config']['developers_page'] == 1) ? 'checked' : '';
+$developers_page_no = ($carovl['config']['developers_page'] == 0) ? 'checked' : '';
+
+$maintenance_mode_yes = ($carovl['config']['maintenance_mode'] == 1) ? 'checked' : '';
+$maintenance_mode_no = ($carovl['config']['maintenance_mode'] == 0) ? 'checked' : '';
+?>
+<div class="card admin">
+	<div class="card-block">
+		<form class="admin-general-setting-form" method="post">
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['maintenance_mode']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="maintenance_mode-0">
+							<input type="radio" name="maintenance_mode" id="maintenance_mode-0" value="0" <?php echo $maintenance_mode_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="maintenance_mode-1">
+							<input type="radio" name="maintenance_mode" id="maintenance_mode-1" value="1" <?php echo $maintenance_mode_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block"><?php echo $carovl['lang']['maintenance_mode_desc']; ?></div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['cache_system']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="cache_system-0">
+							<input type="radio" name="cache_system" id="cache_system-0" value="0" <?php echo $cache_system_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="cache_system-1">
+							<input type="radio" name="cache_system" id="cache_system-1" value="1" <?php echo $cache_system_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block"><?php echo $carovl['lang']['cache_system_desc']; ?></div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['seo_link']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="seo_link-0">
+							<input type="radio" name="seo_link" id="seo_link-0" value="0" <?php echo $seo_link_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="seo_link-1">
+							<input type="radio" name="seo_link" id="seo_link-1" value="1" <?php echo $seo_link_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php 
+							$seo_link_desc = str_replace('{site_url}', $carovl['config']['site_url'], $carovl['lang']['seo_link_desc']);
+							echo $seo_link_desc; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['smooth_redirect']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="smooth_loading-0">
+							<input type="radio" name="smooth_loading" id="smooth_loading-0" value="0" <?php echo $smooth_loading_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="smooth_loading-1">
+							<input type="radio" name="smooth_loading" id="smooth_loading-1" value="1" <?php echo $smooth_loading_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['smooth_redirect_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['profile_privacy']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="profile_privacy-0">
+							<input type="radio" name="profile_privacy" id="profile_privacy-0" value="0" <?php echo $profile_privacy_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="profile_privacy-1">
+							<input type="radio" name="profile_privacy" id="profile_privacy-1" value="1" <?php echo $profile_privacy_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['profile_privacy_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['file_sharing']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="file_sharing-0">
+							<input type="radio" name="file_sharing" id="file_sharing-0" value="0" <?php echo $file_sharing_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="file_sharing-1">
+							<input type="radio" name="file_sharing" id="file_sharing-1" value="1" <?php echo $file_sharing_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['file_sharing_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['video_upload']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="video_upload-0">
+							<input type="radio" name="video_upload" id="video_upload-0" value="0" <?php echo $video_upload_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="video_upload-1">
+							<input type="radio" name="video_upload" id="video_upload-1" value="1" <?php echo $video_upload_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['video_upload_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['audio_upload']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="audio_upload-0">
+							<input type="radio" name="audio_upload" id="audio_upload-0" value="0" <?php echo $audio_upload_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="audio_upload-1">
+							<input type="radio" name="audio_upload" id="audio_upload-1" value="1" <?php echo $audio_upload_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['audio_upload_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['use_seo_friendly']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="use_seo_friendly-0">
+							<input type="radio" name="use_seo_friendly" id="use_seo_friendly-0" value="0" <?php echo $use_seo_friendly_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="use_seo_friendly-1">
+							<input type="radio" name="use_seo_friendly" id="use_seo_friendly-1" value="1" <?php echo $use_seo_friendly_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php 
+							$use_seo_friendly_desc = str_replace('{site_url}', $carovl['config']['site_url'], $carovl['lang']['use_seo_friendly_desc']);
+							echo $use_seo_friendly_desc; 
+						?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['email_validation']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="email_validation-0">
+							<input type="radio" name="email_validation" id="email_validation-0" value="0" <?php echo $email_validation_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="email_validation-1">
+							<input type="radio" name="email_validation" id="email_validation-1" value="1" <?php echo $email_validation_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['email_validation_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['validation_type']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="sms_or_email-0">
+							<input type="radio" name="sms_or_email" id="sms_or_email-0" value="mail" <?php echo $sms_or_email_mail; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['email_label']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="sms_or_email-1">
+							<input type="radio" name="sms_or_email" id="sms_or_email-1" value="sms" <?php echo $sms_or_email_sms; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['sms_label']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['validation_type_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['email_notification']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="email_notification-0">
+							<input type="radio" name="email_notification" id="email_notification-0" value="0" <?php echo $email_notification_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="email_notification-1">
+							<input type="radio" name="email_notification" id="email_notification-1" value="1" <?php echo $email_notification_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['email_notification_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['chat_system']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="chat_system-0">
+							<input type="radio" name="chat_system" id="chat_system-0" value="0" <?php echo $chat_system_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="chat_system-1">
+							<input type="radio" name="chat_system" id="chat_system-1" value="1" <?php echo $chat_system_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['chat_system_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['message_seen']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="message_seen-0">
+							<input type="radio" name="message_seen" id="message_seen-0" value="0" <?php echo $message_seen_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="message_seen-1">
+							<input type="radio" name="message_seen" id="message_seen-1" value="1" <?php echo $message_seen_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['recommended_for_powerfull_server']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['message_typing']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="message_typing-0">
+							<input type="radio" name="message_typing" id="message_typing-0" value="0" <?php echo $message_typing_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="message_typing-1">
+							<input type="radio" name="message_typing" id="message_typing-1" value="1" <?php echo $message_typing_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['recommended_for_powerfull_server']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['user_lastseen']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="user_lastseen-0">
+							<input type="radio" name="user_lastseen" id="user_lastseen-0" value="0" <?php echo $user_lastseen_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="user_lastseen-1">
+							<input type="radio" name="user_lastseen" id="user_lastseen-1" value="1" <?php echo $user_lastseen_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['user_lastseen_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['delete_account']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="delete_account-0">
+							<input type="radio" name="delete_account" id="delete_account-0" value="0" <?php echo $delete_account_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="delete_account-1">
+							<input type="radio" name="delete_account" id="delete_account-1" value="1" <?php echo $delete_account_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['delete_account_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['profile_visit']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="profile_visit-0">
+							<input type="radio" name="profile_visit" id="profile_visit-0" value="0" <?php echo $profile_visit_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="profile_visit-1">
+							<input type="radio" name="profile_visit" id="profile_visit-1" value="1" <?php echo $profile_visit_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['profile_visit_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['groups']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="groups-0">
+							<input type="radio" name="groups" id="groups-0" value="0" <?php echo $groups_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="groups-1">
+							<input type="radio" name="groups" id="groups-1" value="1" <?php echo $groups_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['groups_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['events']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="events-0">
+							<input type="radio" name="events" id="events-0" value="0" <?php echo $events_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="events-1">
+							<input type="radio" name="events" id="events-1" value="1" <?php echo $event_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['events_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label class="col-md-3"><?php echo $carovl['lang']['developers_page']; ?></label>
+					<div class="col-md-9">
+						<label class="custom-control custom-radio" for="developers_page-0">
+							<input type="radio" name="developers_page" id="developers_page-0" value="0" <?php echo $developers_page_no; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['disable']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="developers_page-1">
+							<input type="radio" name="developers_page" id="developers_page-1" value="1" <?php echo $developers_page_yes; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['enable']; ?></span>
+						</label>
+						<div class="help-block">
+						<?php echo $carovl['lang']['developers_page_desc']; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.admin-general-setting-form').ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=update_general_setting',
+		beforeSend: function () {
+			progressLoader($('form.admin-general-setting-form').find('button'));
+			$('form.admin-general-setting-form').find('button').attr('disabled', true);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				$('form.admin-general-setting-form').find('button').attr('disabled', false);
+				swal({
+					title: "<?php echo $carovl['lang']['setting_successfully_updated']; ?>",
+					type: "success",
+					confirmButtonColor: "#2CC990",
+				});
+				progressLoader($('form.admin-general-setting-form').find('button'));
+			}
+		}
+	});
+});
+</script>

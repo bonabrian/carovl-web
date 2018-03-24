@@ -1,0 +1,38 @@
+<div class="card message-recipient" id="message-recipient" data-user-id="<?php echo $carovl['recipient']['user_id']; ?>" onclick="selectUser(<?php echo $carovl['recipient']['user_id']; ?>);">
+	<div class="card-header">
+		<div class="media">
+			<div class="media-left">
+				<img src="<?php echo $carovl['recipient']['avatar']; ?>" alt="<?php echo $carovl['recipient']['username']; ?>">
+			</div>
+			<div class="media-body">
+				<div class="float-right">
+					<?php echo getFollowButton($carovl['recipient']['user_id']); ?>
+				</div>
+				<span class="username">
+					<?php 
+					if (! empty($carovl['recipient']['first_name'])) {
+						if (! empty($carovl['recipient']['last_name'])) {
+							$name = $carovl['recipient']['first_name'] . ' ' . $carovl['recipient']['last_name']. ' (@' . $carovl['recipient']['username'] . ')';
+						} else {
+							$name = $carovl['recipient']['first_name'] . ' (@' . $carovl['recipient']['username'] . ')';
+						}
+					} else {
+						$name = '@' . $carovl['recipient']['username'];
+					}
+					echo $name;
+					?>
+					<?php if ($carovl['recipient']['verified'] == 1) { ?> 
+					<span class="verified-user" data-toggle="tooltip" title="<?php echo $carovl['lang']['verified_user']; ?>">
+						<i class="fa fa-check-circle"></i>
+					</span>
+					<?php } ?>
+				</span>
+				<?php if ($carovl['config']['user_lastseen'] == 1 && $carovl['recipient']['show_lastseen'] != 0) { ?> 
+				<div class="time">
+					<?php echo userStatus($carovl['recipient']['user_id'], $carovl['recipient']['lastseen']); ?>
+				</div>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+</div>

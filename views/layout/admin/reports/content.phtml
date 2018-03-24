@@ -1,0 +1,111 @@
+<?php updateSeenReports(); ?>
+<div class="card admin">
+	<div class="card-block">
+		<div class="table-responsive">
+			<table class="table table-hover table-condensed">
+				<thead>
+					<tr>
+						<th><?php echo $carovl['lang']['id']; ?></th>
+						<th><?php echo $carovl['lang']['publisher']; ?></th>
+						<th><?php echo $carovl['lang']['reporter']; ?></th>
+						<th><?php echo $carovl['lang']['post']; ?></th>
+						<th><?php echo $carovl['lang']['time']; ?></th>
+						<th><?php echo $carovl['lang']['action']; ?></th>
+					</tr>
+				</thead>
+				<tbody class="result report-list">
+					<?php 
+					$reports = getAllReports();
+					if (count($reports) > 0) {
+						foreach ($reports as $carovl['report']) {
+							echo loadPage('admin/reports/report-list');
+						}
+					}
+					?>
+				</tbody>
+			</table>
+		</div>
+		<div class="no-report">
+		<?php if (count($reports) == 0) { ?> 
+		<div class="view-more-wrapper view-more-reports">
+			<span class="text-center btn btn-white">
+				<?php echo $carovl['lang']['no_data']; ?>
+			</span>
+		</div>
+		<?php } ?>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function markAsSafeReportedPost(report_id) {
+	var no_report = $('.no-report');
+	var safe_button = $('#report_id_' + report_id).find('.mark_as_safe');
+	progressLoader(safe_button);
+	$.get(ajaxRequests(), {
+		f: 'admin_setting',
+		s: 'mark_as_safe',
+		report_id: report_id
+	}, function (data) {
+		if (data.status == 200) {
+			$('#report_id_' + report_id).fadeOut(300, function () {
+				$(this).remove();
+			});
+			if (data.html == 0) {
+				no_report.hide().html('<div class="view-more-wrapper view-more-reports"><span class="text-center btn btn-white"><?php echo $carovl['lang']['no_data']; ?></span></div>').fadeIn(300);
+				if (data.reports == 0) {
+					$('.unseen_reports').hide();
+				} else {
+					$('.unseen_reports').text(data.reports);
+				}
+			} else {
+				if (data.reports == 0) {
+					$('.unseen_reports').hide();
+				} else {
+					$('.unseen_reports').text(data.reports);
+				}
+			}
+		}
+	});
+}
+function deleteReportedPost(post_id, report_id) {
+	swal({
+		title: "<?php echo $carovl['lang']['delete_post_confirmation']; ?>",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#2CC990",
+		confirmButtonText: "<?php echo $carovl['lang']['delete_label']; ?>",
+		cancelButtonText: "<?php echo $carovl['lang']['nevermind_label']; ?>",
+		showLoaderOnConfirm: true,
+		closeOnConfirm: false,
+	}, function () {
+		var no_report = $('.no-report');
+		$.get(ajaxRequests(), {
+			f: 'admin_setting',
+			s: 'delete_reported_post',
+			post_id: post_id,
+			report_id: report_id
+		}, function (data) {
+			if (data.status == 200) {
+				$('#report_id_' + report_id).fadeOut(300, function () {
+					$(this).remove();
+				});
+				swal.close();
+				if (data.html == 0) {
+					no_report.hide().html('<div class="view-more-wrapper view-more-reports"><span class="text-center btn btn-white"><?php echo $carovl['lang']['no_data']; ?></span></div>').fadeIn(300);
+					if (data.reports == 0) {
+						$('.unseen_reports').hide();
+					} else {
+						$('.unseen_reports').text(data.reports);
+					}
+				} else {
+					if (data.reports == 0) {
+						$('.unseen_reports').remove();
+					} else {
+						$('.unseen_reports').text(data.reports);
+					}
+				}
+			}
+		});
+	});
+}
+</script>

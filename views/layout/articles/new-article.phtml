@@ -1,0 +1,101 @@
+<form class="article-form" method="post">
+	<div class="col-md-10 offset-md-1">
+		<div class="alerts"></div>
+		<div class="card article">
+			<div class="card-header">
+				<div class="card-title">
+					<?php echo $carovl['lang']['thumbnail']; ?>
+				</div>
+			</div>
+			<div class="article-thumbnail"></div>
+			<div class="card-block">
+				<div class="btn btn-no-border green pointer" id="select-thumbnail">
+					<i class="fa fa-camera"></i>
+				</div>
+				<input type="file" name="article_thumbnail" id="thumbnail" class="hidden" accept="image/*">
+			</div>
+		</div>
+		<div class="card article">
+			<div class="card-block">
+				<div class="form-group carovl">
+					<input type="text" name="article_title" class="form-control">
+					<span class="highlight"></span>
+					<span class="bar"></span>
+					<label><?php echo $carovl['lang']['title_label']; ?></label>
+				</div>
+				<div class="form-group carovl">
+					<textarea name="article_content" id="carovl-editor" class="form-control"></textarea>
+				</div>
+				<div class="form-group carovl">
+					<input type="text" name="article_tags" class="form-control" data-role="tagsinput" placeholder="<?php echo $carovl['lang']['tags_label']; ?>" id="article-tags">
+				</div>
+				<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+			</div>
+		</div>
+	</div>
+	<div class="offset2"></div>
+	<div class="article-footer">
+		<div class="col-md-8 offset-md-2">
+			<div class="row">
+				<div class="col-8">
+					<div class="form-group carovl">
+						<input type="text" name="article_source" class="form-control" placeholder="<?php echo $carovl['lang']['source_label']; ?>">
+					</div>
+				</div>
+				<div class="col-4 mt-1">
+					<button type="submit" class="btn btn-carovl float-right" id="publish">
+						<i class="fa fa-repeat icon-loader" data-icon="repeat"></i> <?php echo $carovl['lang']['publish_label']; ?>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+jQuery(document).ready(function ($) {
+	$('#select-thumbnail').click(function (event) {
+		$('#thumbnail').click();
+	});
+	$('#thumbnail').change(function (event) {
+		$('.article-thumbnail').html('<img src="' + window.URL.createObjectURL(this.files[0]) + '" alt="Picture">');
+	});
+	$('#article-tags').tagsinput({
+		maxTags: 15
+	});
+	$('form.article-form').ajaxForm({
+		url: ajaxRequests() + '?f=articles&s=new_article',
+		beforeSend: function () {
+			progressLoader($('form.article-form').find('button'));
+			$('form.article-form').find('button').attr('disabled', true);
+		},
+		success: function (data) {
+			scrollToTop();
+			if (data['status'] == 200) {
+				$('.alerts').html('<div class="alert alert-success">' + data['errors'] + '</div>');
+				$('.alert-success').fadeIn(100);
+				window.location.href = data.href;
+			} else if (data['errors']) {
+				$('form.article-form').find('button').attr('disabled', false);
+				$('.alerts').html('<div class="alert alert-danger">' + data['errors'] + '</div>');
+				$('.alert-danger').fadeIn(100, function () {
+					$(this).delay(1500).slideUp(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('form.article-form').find('button'));
+		}
+	});
+});
+tinymce.init({
+	selector: '#carovl-editor',
+	height: 400,
+	toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image  uploadImages |  preview media fullpage | forecolor backcolor',
+	entity_encoding: 'raw',
+	plugins: [
+      'advlist autolink link image  lists charmap  preview hr anchor pagebreak spellchecker',
+      'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+      'save table contextmenu directionality template paste textcolor'
+    ]
+});
+</script>

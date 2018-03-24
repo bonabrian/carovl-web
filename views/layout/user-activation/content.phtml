@@ -1,0 +1,163 @@
+<div class="row">
+	<div class="col-md-8">
+		<div class="card">
+			<h3 class="card-header">
+				<?php echo $carovl['lang']['user_activation']; ?>
+			</h3>
+			<div class="card-block">
+				<div class="alerts"></div>
+				<form method="post" class="activation-form">
+					<?php if ($carovl['config']['sms_or_email'] == 'mail') { ?> 
+					<div class="form-group carovl">
+						<input type="text" name="email" class="form-control">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['email_label']; ?></label>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-carovl" id="email-activation">
+							<i class="fa fa-paper-plane-o icon-loader" data-icon="paper-plane-o"></i> <?php echo $carovl['lang']['send_activation_link']; ?>
+						</button>
+					</div>
+					<?php } ?>
+					<?php if ($carovl['config']['sms_or_email'] == 'sms') { ?> 
+					<div class="form-group carovl mb-3">
+						<input type="text" name="phone_number" class="form-control">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['phone_number_label']; ?></label>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-carovl" id="phone-activation">
+							<i class="fa fa-paper-plane-o icon-loader" data-icon="paper-plane-o"></i> <?php echo $carovl['lang']['send_activation_code']; ?>
+						</button>
+					</div>
+					<?php } ?>
+				</form>
+				<div class="code_alerts"></div>
+				<form method="post" class="phone-activation-form mt-4">
+					<div class="form-group carovl mb-3">
+						<input type="text" name="activation_code" class="form-control">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['activation_code']; ?></label>
+					</div>
+					<input type="hidden" name="user_id" value="<?php echo $carovl['user']['user_id']; ?>">
+					<div class="form-group confirm-code">
+						<div class="text-center">
+							<?php echo $carovl['lang']['didnt_get_the_code']; ?> <a href="javascript:void(0);" onclick="resendCode();"><i class="fa fa-repeat"></i> <?php echo $carovl['lang']['resend_label']; ?></a>
+						</div>
+					</div>
+					<div id="code-timer" class="text-center">
+						<?php echo $carovl['lang']['activation_code_should_receive_within']; ?> <h2><span></span></h2>
+					</div>
+					<button type="submit" class="btn btn-carovl" id="submit-code">
+						<i class="fa fa-check icon-loader" data-icon="check"></i> <?php echo $carovl['lang']['confirm_label']; ?>
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.activation-form').ajaxForm({
+		url: ajaxRequests() + '?f=user_activation',
+		<?php if ($carovl['config']['sms_or_email'] == 'mail') { ?> 
+		beforeSend: function () {
+
+			progressLoader($('#email-activation'));
+			$('#email-activation').attr('disabled', true);
+		},
+		success: function (data) {
+			$('#email-activation').attr('disabled', false);
+			if (data.status == 200) {
+				$('.alerts').html('<center><div class="alert alert-success">' + data.success + '</div></center>');
+				$('.alert-success').fadeIn(300);
+			} else {
+				var errors = data.errors.join("<br>");
+				$('.alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn(300);
+			}
+			progressLoader($('#email-activation'));
+		}
+		<?php } ?>
+		<?php if ($carovl['config']['sms_or_email'] == 'sms') { ?> 
+		beforeSend: function () {
+			progressLoader($('#phone-activation'));
+			$('#phone-activation').attr('disabled', true);
+		},
+		success: function (data) {
+			$('#phone-activation').attr('disabled', false);
+			if (data.status == 200) {
+				$('.alerts').html('<center><div class="alert alert-success">' + data.success + '</div></center>');
+				$('.alert-success').fadeIn(300).delay(200).fadeOut(300, function () {
+					$('.activation-form').fadeOut(300, function () {
+						$('.phone-activation-form').fadeIn(300);
+					});
+				});
+				setTimer();
+			} else {
+				var errors = data.errors.join("<br>");
+				$('.alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn(300);
+			}
+			progressLoader($('#phone-activation'));
+		}
+		<?php } ?>
+	});
+	<?php if ($carovl['config']['sms_or_email'] == 'sms') { ?> 
+	$('form.phone-activation-form').ajaxForm({
+		url: ajaxRequests() + '?f=confirm_code',
+		beforeSend: function () {
+			progressLoader($('#submit-code'));
+			$('#submit-code').attr('disabled', true);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				window.location.href = data.location;
+			} else {
+				$('#submit-code').attr('disabled', false);
+				var errors = data.errors.join("<br>");
+				$('.code_alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn(300);
+			}
+			progressLoader($('#submit-code'));
+		}
+	});
+	<?php } ?>
+});
+<?php if ($carovl['config']['sms_or_email'] == 'sms') { ?> 
+function setTimer() {
+	$('#code-timer h2 span').text('60');
+	$('#code-timer').fadeIn('fast');
+	var sec = $('#code-timer h2 span').text();
+	var timer = setInterval(function () {
+		$('#code-timer h2 span').text(--sec);
+		if (sec == 58) {
+			$('#code-timer').fadeOut('fast', function () {
+				clearInterval(timer);
+				$('.confirm-code').fadeIn('fast');
+			});
+		}
+	}, 1000);
+}
+function resendCode() {
+	$('.confirm-code').hide();
+	$('.alerts').hide();
+	setTimer();
+	$.post(ajaxRequests() + '?f=resend_code', function (data) {
+		if (data.status == 200) {
+			$('.code_alerts').html('<center><div class="alert alert-success">' + data.success + '</div></center>');
+			$('.alert-success').fadeIn('fast').delay(2000).fadeOut(300, function () {
+				$(this).remove();
+			});
+		} else {
+			var errors = data.errors.join("<br>");
+			$('.code_alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+			$('.alert-danger').fadeIn(300);
+		}
+	});
+}
+<?php } ?>
+</script>

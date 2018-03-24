@@ -1,0 +1,160 @@
+<div class="col-md-10 offset-md-1">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card products">
+				<div class="card-header">
+					<h3 class="card-title">
+						<?php echo $carovl['lang']['sell_an_product']; ?>
+					</h3>
+				</div>
+				<div class="card-block">
+					<div class="alerts"></div>
+					<form class="new-product-form" method="post">
+
+						<div class="form-group carovl">
+							<input type="text" name="name" class="form-control">
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label><?php echo $carovl['lang']['product_name_label']; ?></label>
+						</div>
+
+						<div class="form-group carovl">
+							<textarea name="description" id="product-description" class="form-control" dir="auto" rows="3"></textarea>
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label><?php echo $carovl['lang']['product_description_label']; ?></label>
+						</div>
+
+						<div class="form-group">
+							<div class="row">
+								<label class="col-4" for="category">
+									<?php echo $carovl['lang']['product_category_label']; ?>
+								</label>
+								<div class="col-8">
+									<select class="form-control" name="category">
+										<?php 
+										foreach ($carovl['product_categories'] as $key => $category) {
+											if ($key > 0) { ?>
+												<option value="<?php echo $key; ?>"><?php echo $category; ?></option>
+											<?php }
+										}
+										?>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="row">
+								<label class="col-md-4"><?php echo $carovl['lang']['product_type_label']; ?></label>
+								<div class="col-md-8">
+									<label class="custom-control custom-radio" for="type-0">
+										<input type="radio" name="type" id="type-0" value="0" class="custom-control-input" checked>
+										<span class="custom-control-indicator"></span>
+										<span class="custom-control-description"><?php echo $carovl['lang']['new_label']; ?></span>
+									</label>
+									<label class="custom-control custom-radio" for="type-1">
+										<input type="radio" name="type" id="type-1" value="1" class="custom-control-input">
+										<span class="custom-control-indicator"></span>
+										<span class="custom-control-description"><?php echo $carovl['lang']['used_label']; ?></span>
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group carovl mt-4">
+							<input type="text" name="location" class="form-control">
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label><?php echo $carovl['lang']['location_label']; ?></label>
+						</div>
+
+						<div class="form-group carovl">
+							<input type="text" name="price" class="form-control used" id="price" value="0.00">
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label><?php echo $carovl['lang']['product_price_label']; ?></label>
+						</div>
+
+						<div class="form-group">
+							<div class="btn btn-no-border green pointer" id="select-thumbnail">
+								<i class="fa fa-camera"></i>
+							</div>
+							<input type="file" name="product_image[]" id="thumbnail" class="hidden" accept="image/*" multiple="multiple">
+						</div>
+
+						<div class="form-group hidden-input" id="image-form">
+							<input type="text" class="form-control" readonly>
+						</div>
+
+						<div class="form-group">
+							<div id="progress">
+								<span id="percent">0%</span>
+								<div class="progress">
+									<div id="bar" class="progress-bar bg-carovl"></div>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" name="id" value="">
+						<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+						<div class="form-group">
+							<button type="submit" class="btn btn-carovl" id="publish-product">
+								<i class="fa fa-upload icon-loader" data-icon="upload"></i> <?php echo $carovl['lang']['publish_label']; ?>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	autosize($('#product-description'));
+	$('#select-thumbnail').click(function (e) {
+		$('#thumbnail').click();
+	});
+	$('#thumbnail').change(function () {
+		var files_count = this.files.length;
+		$('#image-form input').val(files_count + ' <?php echo $carovl['lang']['count_photos_selected']; ?>');
+		$('#image-form').slideDown(200);
+	});
+	var bar = $('#bar');
+	var percent = $('#percent');
+	$('form.new-product-form').ajaxForm({
+		url: ajaxRequests() + '?f=products&s=new_product',
+		beforeSend: function () {
+			var percentVal = '0%';
+			bar.width(percentVal);
+			percent.html(percentVal);
+			$('#publish-product').attr('disabled', true);
+			progressLoader($('#publish-product'));
+		},
+		uploadProgress: function (e, position, total, percentComplete) {
+			var percentVal = percentComplete + '%';
+			bar.width(percentVal);
+			$('#progress').slideDown(200);
+			if (percentComplete > 50) {
+				percent.addClass('white');
+			}
+			percent.html(percentVal);
+		},
+		success: function (data) {
+			scrollToTop();
+			if (data.status == 200) {
+				window.location.href = data.href;
+			} else {
+				$('#publish-product').attr('disabled', false);
+				var errors = data.errors.join("<br>");
+				$('.alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('#publish-product'));
+		}
+	});
+});
+</script>

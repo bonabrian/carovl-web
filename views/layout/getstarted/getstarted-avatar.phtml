@@ -1,0 +1,95 @@
+<div class="row">
+	<div class="col-md-8">
+		<div class="card" data-started="getstarted_image">
+			<h3 class="card-header text-center">
+				<?php echo $carovl['lang']['add_photo']; ?>	
+			</h3>
+			<div class="card-block">
+				<div class="info">
+					<h3></h3>
+					<h4></h4>
+				</div>
+				<div class="upload-image-container mx-auto">
+					<div class="upload-image" onclick="getElementById('avatar').click(); return false;">
+						<div class="upload-image-content">
+							<i class="fa fa-camera"></i> 
+							<div class="caption">
+								<?php echo $carovl['lang']['upload_your_photo']; ?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="progress">
+					<span id="percent">0%</span>
+					<div class="progress">
+						<div id="bar" class="progress-bar bg-carovl"></div>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer">
+				<div class="row">
+					<div class="col">
+						<div class="skip-step">
+							<span onclick="skipStep($('.card').attr('data-started'));"><?php echo $carovl['lang']['skip_step']; ?></span>
+						</div>
+					</div>
+					<div class="col">
+						<button class="btn btn-primary float-right" id="save" onclick="nextStep();"><?php echo $carovl['lang']['save_and_continue']; ?></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<form method="post" class="form-avatar">
+	<input type="file" name="avatar" id="avatar" accept="image/*" onchange="updateProfileAvatar();">
+	<input type="hidden" name="user_id" id="user_id" value="<?php echo $carovl['user']['user_id']; ?>">
+</form>
+<script type="text/javascript">
+var user_id = $('#user_id').val();
+$(function () {
+	$('#save').attr('disabled', true);
+	var bar = $('#bar');
+	var percent = $('#percent');
+	$('form.form-avatar').ajaxForm({
+		url: ajaxRequests() + '?f=getstarted&s=update_avatar',
+		beforeSend: function () {
+			var percentVal = '0%';
+			bar.width(percentVal);
+			percent.html(percentVal);
+		},
+		uploadProgress: function (event, position, total, percentComplete) {
+			var percentVal = percentComplete + '%';
+			bar.width(percentVal);
+			$('#progress').slideDown(100);
+			if (percentComplete > 50) {
+				percent.addClass('white');
+			}
+			percent.html(percentVal);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				$('#progress').slideUp(100);
+				$('.upload-image').html('<img src="' + data.image + '">');
+				$('.info').show();
+				$('.info h3').text(data.nice);
+				$('.info h4').text(data.cool);
+				$('.upload-image').css({'border': '0'});
+				$('[id^=profileavatar-' + user_id + ']').attr('src', data.image);
+				$('#save').attr('disabled', false);
+				$('.skip-step').hide();
+			}
+		}
+	});
+});
+function updateProfileAvatar() {
+	$('form.form-avatar').submit();
+}
+function nextStep() {
+	$('#save').attr('disabled', true);
+	$('#save').text('<?php echo $carovl['lang']['please_wait']; ?>');
+	setTimeout(function() {
+		window.location.href = '<?php echo seoLink('index.php?page=getstarted'); ?>';
+	}, 1000);
+}
+</script>

@@ -1,0 +1,376 @@
+<?php 
+$is_owner = isOwner($carovl['profile']['user_id']);
+$color = getDominantColor($carovl['profile']['cover_org']);
+?>
+<div class="user-timeline" id="user-timeline_<?php echo $carovl['profile']['user_id']; ?>" data-user-id="<?php echo $carovl['profile']['user_id']; ?>">
+	<div class="row timeline" data-page="<?php echo $carovl['profile']['type']; ?>" data-id="<?php echo $carovl['profile']['user_id']; ?>" style="background: <?php echo $color['background']; ?>; border-radius: 3px;" id="timeline">
+		<div class="profile-container">
+			<div class="timeline-card hovercard">
+				<div class="timeline-card-header cover">
+					<div class="timeline-buttons">
+						<?php 
+						if ($carovl['logged_in'] == true && $carovl['profile']['user_id'] != $carovl['user']['user_id']) {
+							echo loadPage('buttons/options');
+						} 
+						?>
+						<?php echo getFollowButton($carovl['profile']['user_id']); ?>
+					</div>
+					<?php if ($is_owner === true) { ?> 
+					<form method="post" class="profile-cover-changer">
+						<div class="input-group not-editing">
+							<span class="input-group-btn">
+								<span class="btn btn-no-border" onclick="getElementById('upload-cover').click()";">
+									<i class="fa fa-camera"></i>
+									<input type="file" name="cover" accept="image/*" class="hidden" onchange="updateProfileCover();" id="upload-cover">
+								</span>
+							</span>
+						</div>
+						<div class="input-group not-editing">
+							<span class="input-group-btn">
+								<span class="btn btn-no-border" onclick="startRepositioner();">
+									<i class="fa fa-pencil" data-icon="pencil"></i>
+								</span>
+							</span>
+						</div>
+						<div class="input-group editing">
+							<span class="input-group-btn">
+								<span class="btn btn-no-border" onclick="submitRepositioner();">
+									<i class="fa fa-check" data-icon="check"></i>
+								</span>
+							</span>
+						</div>
+						<div class="input-group editing">
+							<span class="input-group-btn">
+								<span class="btn btn-no-border" onclick="stopRepositioner();">
+									<i class="fa fa-times" data-icon="times"></i>
+								</span>
+							</span>
+						</div>
+						<input type="hidden" name="user_id" value="<?php echo $carovl['profile']['user_id']; ?>">
+					</form>
+					<form method="post" class="cover-position-form hidden">
+						<input type="hidden" name="pos" value="0" class="cover-position">
+						<input type="hidden" name="image_type" value="0" class="image_type">
+						<input type="hidden" name="cover_image" id="cover-input-image" value="<?php echo $carovl['profile']['cover_org']; ?>">
+						<input type="hidden" name="real_image" id="full-input-image" value="<?php echo getMedia($carovl['profile']['cover_full']); ?>">
+					</form>
+					<?php } ?>
+					<div class="user-cover-uploading-container"></div>
+					<div class="user-cover-uploading-progress">
+						<i class="fa fa-circle-o-notch fa-spin" data-icon="spin"></i>
+					</div>
+					<div class="user-cover-reposition-container">
+						<div class="user-cover-reposition-width">
+							<img src="<?php echo $carovl['profile']['cover']; ?>" alt="<?php echo $carovl['profile']['username']; ?>" id="coverimage" onclick="openProfileCover('<?php echo $carovl['profile']['cover_org']; ?>');" class="pointer">
+						</div>
+						<div class="user-reposition-container">
+							<img src="<?php echo getMedia($carovl['profile']['cover_full']); ?>" alt="<?php echo $carovl['profile']['username']; ?>" id="full-image">
+							<div class="user-reposition-dragable-container">
+								<i class="fa fa-bars"></i> <?php echo $carovl['lang']['drag_to_reposition']; ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content-wrapper">
+			<div class="avatar-wrapper">
+				<div class="user-avatar-uploading-container">
+					<div class="user-avatar-uploading-progress">
+						<i class="fa fa-circle-o-notch fa-spin" data-icon="spin"></i>
+					</div>
+				</div>
+				<img src="<?php echo $carovl['profile']['avatar']; ?>" alt="<?php echo $carovl['profile']['username']; ?>" class="user-avatar pointer" style="border: 4px solid <?php echo $color['background']; ?>" id="useravatar-<?php echo $carovl['profile']['user_id']; ?>" onclick="openProfilePicture('<?php echo $carovl['profile']['avatar_org']; ?>');" id="user-avatar">
+				<?php if ($is_owner === true) { ?> 
+				<form method="post" class="avatar-changer">
+					<div class="input-group">
+						<span class="input-group-btn">
+							<span class="btn btn-no-border" onclick="getElementById('upload-avatar').click()";">
+								<i class="fa fa-camera"></i>
+							</span>
+							<input type="file" name="avatar" accept="image/x-png, image/jpeg" onchange="updateProfileAvatar();" class="hidden" id="upload-avatar">
+						</span>
+					</div>
+					<input type="hidden" name="user_id" value="<?php echo $carovl['profile']['user_id']; ?>">
+				</form>
+				<?php } ?>
+			</div>
+			<h1 class="user-info">
+				<a href="<?php echo $carovl['profile']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['profile']['username']; ?>" style="color: <?php echo $color['color']; ?>" id="user-info">
+					<?php echo $carovl['profile']['username']; ?> <?php if ($carovl['profile']['verified'] == 1) { ?> 
+					<span title="<?php echo $carovl['lang']['verified_user']; ?>" data-toggle="tooltip" class="timeline-verified"><i class="fa fa-check-circle"></i></span>
+					<?php } ?>
+				</a>
+			</h1>
+			<?php if (! empty($carovl['profile']['about'])) { ?> 
+			<span class="user-description" style="color: <?php echo $color['color']; ?>">
+				<?php echo $carovl['profile']['about']; ?>
+			</span>
+			<?php } ?>
+		</div>
+	</div>
+	<div class="row mt-2">
+		<div class="content-wrapper nav-menu-wrapper">
+			<ul class="nav justify-content-center">
+				<li class="nav-item <?php echo ($carovl['page'] == 'timeline' && ! isset($_GET['type'])) ? 'active' : ''; ?>">
+					<a href="<?php echo seoLink('index.php?page=timeline&u=' . $carovl['profile']['username']); ?>" data-redirect="?page=timeline&u=<?php echo $carovl['profile']['username']; ?>" class="nav-link"><?php echo $carovl['lang']['post_label']; ?></a>
+				</li>
+				<?php if ($carovl['logged_in'] == true) { ?>
+				<li class="nav-item <?php echo ($carovl['page'] == 'timeline' && isset($_GET['type']) && $_GET['type'] == 'following') ? 'active' : ''; ?>">
+					<a href="<?php echo seoLink('index.php?page=timeline&u=' . $carovl['profile']['username'] . '&type=following'); ?>" data-redirect="?page=timeline&u=<?php echo $carovl['profile']['username']; ?>&type=following" class="nav-link"><?php echo $carovl['lang']['following']; ?></a>
+				</li>
+				<li class="nav-item <?php echo ($carovl['page'] == 'timeline' && isset($_GET['type']) && $_GET['type'] == 'articles') ? 'active' : ''; ?>">
+					<a href="<?php echo seoLink('index.php?page=timeline&u=' . $carovl['profile']['username'] . '&type=articles'); ?>" data-redirect="?page=timeline&u=<?php echo $carovl['profile']['username']; ?>&type=articles" class="nav-link"><?php echo $carovl['lang']['articles']; ?></a>
+				</li>
+				<?php if ($carovl['profile']['user_id'] == $carovl['user']['user_id']) { ?> 
+				<li class="nav-item <?php echo ($carovl['page'] == 'timeline' && isset($_GET['type']) && $_GET['type'] == 'saved-posts') ? 'active' : ''; ?>">
+					<a href="<?php echo seoLink('index.php?page=timeline&u=' . $carovl['profile']['username'] . '&type=saved-posts'); ?>" data-redirect="?page=timeline&u=<?php echo $carovl['profile']['username']; ?>&type=saved-posts" class="nav-link"><?php echo $carovl['lang']['saved_posts']; ?></a>
+				</li>
+				<?php } ?>
+				<?php } //end logged_in ?>
+			</ul>
+		</div>
+	</div>
+	<div class="col-md-10 offset-md-1 mt-3">
+		<div class="row">
+			<div class="col-md-8">
+				<?php if (isset($_GET['type'])) { ?> 
+				<?php if ($carovl['logged_in'] == true) { ?> 
+				<?php if ($_GET['type'] == 'articles') { ?>
+				<div id="article-list">
+					<?php $articles = getUserArticles($carovl['profile']['user_id']); ?>
+					<div class="<?php echo (count($articles) > 0) ? 'row bg-white' : ''; ?>">
+					<?php 
+					if (count($articles) == 0) {
+						echo loadPage('timeline/articles/no-articles');
+					} else {
+						foreach ($articles as $carovl['article']) {
+							echo loadPage('timeline/articles/content');
+						}
+					}
+					?>
+					</div>
+				</div>
+				<?php } elseif ($_GET['type'] == 'followers') { ?> 
+				<div class="card following-header">
+					<div class="card-header">
+						<h5 class="card-title"><?php echo countFollowers($carovl['profile']['user_id']); ?> <?php echo $carovl['lang']['follows']; ?> <a href="<?php echo $carovl['profile']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['profile']['username']; ?>"><?php echo $carovl['profile']['username']; ?></a></h5>
+					</div>
+				</div>
+				<div id="followers-list">
+					<?php 
+						foreach (getFollowers($carovl['profile']['user_id'], 'profile', 100) as $carovl['user_list']) {
+							echo loadPage('timeline/followers/content');
+						}
+					?>
+				</div>
+				<?php } elseif ($_GET['type'] == 'following') { ?> 
+				<div class="card following-header">
+					<div class="card-header">
+						<h5 class="card-title"><?php echo countFollowing($carovl['profile']['user_id']); ?> <a href="<?php echo $carovl['profile']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['profile']['username']; ?>"><?php echo $carovl['profile']['username']; ?></a> <?php echo $carovl['lang']['follows']; ?></h5>
+					</div>
+				</div>
+				<div id="following-list">
+					<?php 
+						foreach (getFollowing($carovl['profile']['user_id'], 'profile', 100) as $carovl['user_list']) {
+							echo loadPage('timeline/following/content');
+						}
+					?>
+				</div>
+				<?php } elseif ($_GET['type'] == 'saved-posts') { ?> 
+				<?php 
+				if ($carovl['profile']['user_id'] != $carovl['user']['user_id']) {
+					header("Location: " . seoLink('index.php?page=timeline&u=' . $carovl['profile']['username']));
+					exit();
+				}
+				$stories = getSavedPosts($carovl['profile']['user_id']);
+				if (count($stories) <= 0) {
+					echo loadPage('timeline/saved-posts/no-saved-posts');
+				} else {
+					foreach ($stories as $carovl['story']) {
+						echo loadPage('story/content');
+					}
+				}
+				?>
+				<?php } ?>
+				<?php } else {
+					header("Location: " . seoLink('index.php?page=timeline&u=' . $carovl['profile']['username']));
+					exit();
+					} // end logged_in
+				?>
+				<?php } else { ?> 
+				<div id="load-posts">
+					<div class="post-loading">
+						<div class="loader">
+							<div class="loader-inner">
+								<label> ●</label><label> ●</label><label> ●</label><label> ●</label><label> ●</label><label> ●</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php } ?>
+			</div>
+			<div class="col-md-4">
+				<div class="card timeline-sidebar mb-3">
+					<div class="card-block">
+						<div class="name">
+							<?php echo $carovl['profile']['name']; ?>
+						</div>
+						<?php if ($carovl['logged_in'] == true) { ?> 
+							<?php 
+							if (isFollowing($carovl['profile']['user_id'], $carovl['user']['user_id'])) { ?>
+								<span class="follow-status">@<?php echo $carovl['profile']['username']; ?> <?php echo $carovl['lang']['follows_you']; ?></span>
+							<?php }
+							?>
+						<?php } ?>
+						<?php if (! empty($carovl['profile']['address'])) { ?> 
+						<div class="address list-info">
+							<i class="fa fa-map-marker"></i> <?php echo $carovl['profile']['address']; ?>
+						</div>
+						<?php } ?>
+						<?php if (! empty($carovl['profile']['website'])) { ?> 
+						<div class="website list-info">
+							<i class="fa fa-link"></i> <a href="<?php echo $carovl['profile']['website']; ?>" target="_blank"><?php echo $carovl['profile']['website']; ?></a>
+						</div>
+						<?php } ?>
+						<div class="joined list-info">
+							<i class="fa fa-calendar-o"></i> <?php echo $carovl['lang']['joined']; ?> <?php echo date('M Y', $carovl['profile']['joined']); ?>
+						</div>
+						<div class="total-posts list-info">
+							<i class="fa fa-pencil-square-o"></i> <?php echo countUserPosts($carovl['profile']['user_id']); ?> <?php echo $carovl['lang']['posts']; ?>
+						</div>
+						<?php if (isAdmin() || isModerator()) { ?> 
+						<div class="edit-user list-info">
+							<i class="fa fa-cog"></i> <a href="<?php echo seoLink('index.php?page=setting&user=' . $carovl['profile']['username'] . '&tab=account'); ?>" data-redirect="?page=setting&user=<?php echo $carovl['profile']['username']; ?>&tab=account">
+								<?php echo $carovl['lang']['edit_user']; ?>
+							</a>
+						</div>
+						<?php } ?>
+					</div>
+				</div>
+				<?php if (! isset($_GET['type'])) { ?> 
+				<ul class="list-group mb-3">
+					<?php if ($carovl['logged_in'] == true) { ?> 
+					<li class="list-group-item">
+						<input type="text" class="form-control search-post" placeholder="<?php echo $carovl['lang']['search_posts']; ?>" onkeyup="searchPosts(this.value);">
+					</li>
+					<?php } ?>
+				</ul>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+	<?php
+	if ($carovl['logged_in'] == true && $carovl['profile']['user_id'] != $carovl['user']['user_id']) {
+		echo loadPage('modals/block-user');
+	}
+	?>
+</div>
+<script type="text/javascript">
+function loadPost(user_id) {
+	$.get(ajaxRequests() + '?f=timeline&s=load_timeline_posts', {
+		user_id: user_id
+	}, function (data) {
+		$('#load-posts').html(data);
+	});
+}
+var user_id = $('.timeline').attr('data-id');
+$(function () {
+	setTimeout(function () {
+		loadPost(user_id)
+	}, 200);
+	$('.cover').hover(function () {
+		$('.profile-cover-changer').fadeIn(100);
+	}, function () {
+		$('.profile-cover-changer').fadeOut(100);
+	});
+	$('.avatar-wrapper').hover(function () {
+		$('.avatar-changer').fadeIn(100);
+	}, function () {
+		$('.avatar-changer').fadeOut(100);
+	});
+	$('form.cover-position-form').ajaxForm({
+		url: ajaxRequests() + '?f=reposition_cover',
+		dataType: 'json',
+		beforeSend: function () {
+			$('.user-reposition-dragable-container').hide();
+			$('.user-cover-uploading-progress').show();
+		},
+		success: function (data) {
+			console.log(data);
+			if (data.status == 200) {
+				$('.user-cover-reposition-width img').attr('src', data.url + '?time=' + Math.random()).on("load", function () {
+					$('.editing').hide();
+					$('.not-editing').show();
+					$('.user-cover-uploading-progress').hide();
+					$('.user-reposition-container').hide().find('img').css('top', 0);
+					$('input.cover-position').val(0);
+					$('.user-reposition-container img').draggable('destroy').css('cursor', 'default');
+					window.location.reload();
+				})
+			}
+		}
+	});
+	$('form.profile-cover-changer').ajaxForm({
+		url: ajaxRequests() + '?f=update_cover_picture',
+		beforeSend: function () {
+			$('.user-cover-uploading-container, .user-cover-uploading-progress').fadeIn(100);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				getNewPosts();
+				$('[id^=timeline]').css('background', data.background);
+				$('[id^=user-avatar]').css('border', '4px solid' + data.background);
+				$('[id^=user-info]').css('color', data.color);
+				$('[id^=coverimage]').attr('onclick', 'openProfileCover("' + data.cover_org + '");');
+				$('[id^=coverimage]').attr('src', data.img);
+				$('#full-image').attr('src', data.cover_full);
+				$('#full-input-image').val(data.cover_full);
+				$('#cover-input-image').val(data.cover_org);
+				startRepositioner();
+			}
+			$('.user-cover-uploading-container, .user-cover-uploading-progress').fadeOut(100);
+		}
+	});
+	$('form.avatar-changer').ajaxForm({
+		url: ajaxRequests() + '?f=update_avatar_picture',
+		beforeSend: function () {
+			$('.user-avatar-uploading-container, .user-avatar-uploading-progress').fadeIn(100);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				getNewPosts();
+				$('[id^=useravatar-' +  user_id + ']').attr('onclick', 'openProfilePicture("' + data.img_org + '");');
+				$('[id^=useravatar-' + user_id + ']').attr('src', data.img);
+				$('[id^=profileavatar-' + user_id + ']').attr('src', data.img);
+				$('form.avatar-changer').clearForm();
+			}
+			$('.user-avatar-uploading-container, .user-avatar-uploading-progress').fadeOut(100);
+		}
+	});
+});
+function updateProfileCover() {
+	$('form.profile-cover-changer').submit();
+}
+function updateProfileAvatar() {
+	$('form.avatar-changer').submit();
+}
+function openProfileCover(image) {
+	$.post(ajaxRequests() + '?f=open_cover_image', {
+		image: image
+	}, function (data) {
+		if (data.status == 200) {
+			openImage(data.post_id);
+		}
+	});
+}
+function openProfilePicture(image) {
+	$.post(ajaxRequests() + '?f=open_avatar_image', {
+		image: image
+	}, function (data) {
+		if (data.status == 200) {
+			openImage(data.post_id);
+		}
+	});
+}
+</script>

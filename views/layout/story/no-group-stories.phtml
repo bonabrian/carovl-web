@@ -1,0 +1,12 @@
+<div class="posts-container">
+	<div class="card no-post">
+		<div class="card-block">
+			<i class="fa fa-sticky-note-o"></i>
+			<?php if ($carovl['group_profile']['privacy'] == 1) { ?> 
+			<h4>You can't see <?php echo $carovl['group_profile']['name']; ?>'s posts.</h4>
+			<?php } else { ?> 
+			<h4><?php echo $carovl['group_profile']['name']; ?> <?php echo $carovl['lang']['have_no_posts']; ?></h4>
+			<?php } ?>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,54 @@
+<?php 
+if ($carovl['story']['admin'] === true && empty($carovl['story']['product_id']) && $carovl['story']['post_type'] != 'profile_cover_picture' && $carovl['story']['post_type'] != 'profile_picture') {
+	$onclick = 'onclick="openPostEdit(' . $carovl['story']['id'] . ')"';;
+	$edit = $carovl['lang']['edit_post'];
+	$href = '';
+	$class = 'pointer';
+	if (! empty($carovl['story']['article_id'])) {
+		$onclick = '';
+		$edit = $carovl['lang']['edit_article'];
+		$href = 'href="' . seoLink('index.php?page=edit-article&id=' . $carovl['story']['article_id']) . '"';
+		$class = '';
+	} ?>
+	<a <?php echo $onclick; ?> <?php echo $href; ?> class="dropdown-item <?php echo $class; ?>">
+		<i class="fa fa-pencil icon-loader" data-icon="pencil"></i> <?php echo $edit; ?>
+	</a>
+<?php } elseif (! empty($carovl['story']['product_id'])) {
+	if ($carovl['story']['product']['status'] == 0) { ?>
+		<a class="dropdown-item pointer" id="mark-as-sold" onclick="markAsSold(<?php echo $carovl['story']['id']; ?>, <?php echo $carovl['story']['product_id']; ?>);">
+			<i class="fa fa-cart-arrow-down icon-loader" data-icon="cart-arrow-down"></i> <?php echo $carovl['lang']['mark_as_sold']; ?>
+		</a>
+		<a href="<?php echo seoLink('index.php?page=edit-product&id=' . $carovl['story']['product_id']); ?>" class="dropdown-item">
+			<i class="fa fa-pencil icon-loader" data-icon="pencil"></i> <?php echo $carovl['lang']['edit_product']; ?>
+		</a>
+	<?php }	
+} ?>
+<?php 
+$delete = $carovl['lang']['delete_post'];
+if (! empty($carovl['story']['article_id'])) {
+	$delete = $carovl['lang']['delete_article'];
+}
+?>
+<a class="dropdown-item pointer" onclick="openPostDelete(<?php echo $carovl['story']['id']; ?>);">
+	<i class="fa fa-trash-o icon-loader" data-icon="trash-o"></i> <?php echo $delete; ?>
+</a>
+<?php if (! empty($carovl['story']['album_name']) && ($carovl['story']['group_admin'] === false || $carovl['story']['admin'] === true)) { ?> 
+<a href="<?php echo seoLink('index.php?page=create-album&album=' . $carovl['story']['id']); ?>" class="dropdown-item">
+	<i class="fa fa-camera icon-loader" data-icon="camera"></i> <?php echo $carovl['lang']['add_photos']; ?>
+</a>
+<?php } ?>
+<?php 
+$link = $carovl['story']['url'];
+$open = $carovl['lang']['open_post_in_new_tab'];
+if (! empty($carovl['story']['article_id'])) {
+	$link = $carovl['story']['article']['url'];
+	$open = $carovl['lang']['open_article'];
+}
+if (! empty($carovl['story']['product_id'])) {
+	$link = $carovl['story']['product']['url'];
+	$open = $carovl['lang']['view_product'];
+}
+?>
+<a href="<?php echo $link; ?>" class="dropdown-item" target="_blank">
+	<i class="fa fa-link icon-loader" data-icon="link"></i> <?php echo $open; ?>
+</a>

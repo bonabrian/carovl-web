@@ -1,0 +1,55 @@
+<?php $color = getDominantColor($carovl['result']['cover']); ?>
+<div class="card mb-3" data-user-id="<?php echo $carovl['result']['user_id']; ?>" style="background: <?php echo $color['background']; ?>">
+	<img src="<?php echo $carovl['result']['cover']; ?>" class="card-img-top img-fluid">
+	<div class="card-block">
+		<div class="media">
+			<div class="media-left">
+				<a href="<?php echo $carovl['result']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['result']['username']; ?>">
+					<img src="<?php echo $carovl['result']['avatar']; ?>" alt="<?php echo $carovl['result']['username']; ?>">
+				</a>
+			</div>
+			<div class="media-body">
+				<div class="float-right">
+					<?php 
+					if (! empty($carovl['result']['group_id'])) {
+						echo getJoinButton($carovl['result']['group_id']);
+					} else {
+						echo getFollowButton($carovl['result']['user_id']);
+					}
+					?>
+				</div>
+				<span class="user-preview" data-type="<?php echo $carovl['result']['type']; ?>" data-id="<?php echo $carovl['result']['id']; ?>">
+					<a href="<?php echo $carovl['result']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['result']['username']; ?>" style="color: <?php echo $color['color']; ?>">
+						<?php echo $carovl['result']['username']; ?>
+					</a>
+					<?php if (empty($carovl['result']['group_id'])) { ?> 
+					<?php if ($carovl['result']['verified'] == 1) { ?> 
+					<span class="verified-user" data-toggle="tooltip" title="<?php echo $carovl['lang']['verified_user']; ?>">
+						<i class="fa fa-check-circle"></i>
+					</span>
+					<?php } ?>
+					<?php } ?>
+				</span>
+				<?php if (! empty($carovl['result']['group_id'])) { ?> 
+				<div class="group-members" style="color: <?php echo $color['color']; ?>">
+					<?php 
+					$members = countGroupMembers($carovl['result']['group_id']);
+					if ($members == 0) {
+						$people = '';
+					} elseif ($members == 1) {
+						$people = $carovl['lang']['member'];
+					} elseif ($members > 1) {
+						$people = $carovl['lang']['members'];
+					}
+					?>
+					<?php echo $carovl['result']['group_title']; ?> (<?php echo $members . ' ' . $people; ?>)
+				</div>
+				<?php } else { $followers = countFollowers($carovl['result']['user_id']); ?>
+					<div class="user-followers" style="color: <?php echo $color['color']; ?>">
+						<?php echo $followers . ' ' . $carovl['lang']['followers']; ?>
+					</div>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+</div>

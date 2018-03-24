@@ -1,0 +1,19 @@
+<?php 
+$follow_suggestions = followSuggestions(4);
+if (count($follow_suggestions) > 0) { ?>
+<div class="card suggestions mb-3">
+	<div class="card-header">
+		<h6 class="card-title">
+			<?php echo $carovl['lang']['follow_suggestions']; ?>
+		</h6>
+	</div>
+	<div class="card-block">
+		<?php 
+		foreach ($follow_suggestions as $carovl['user_list']) {
+			echo loadPage('sidebar/user-list');
+		}
+		?>
+	</div>
+</div>
+<?php } ?>
+<?php echo loadPage('footer/sidebar-footer'); ?>

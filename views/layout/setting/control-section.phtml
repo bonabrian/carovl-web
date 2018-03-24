@@ -1,0 +1,41 @@
+<ul class="list-group">
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'account') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=setting&' . $carovl['user_setting'] . 'tab=account'); ?>" data-redirect="?page=setting&<?php echo $carovl['user_setting']; ?>tab=account">
+			<?php echo $carovl['lang']['account']; ?>
+		</a>
+	</li>
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'privacy-setting') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=setting&' . $carovl['user_setting'] . 'tab=privacy-setting'); ?>" data-redirect="?page=setting&<?php echo $carovl['user_setting']; ?>tab=privacy-setting">
+			<?php echo $carovl['lang']['privacy_setting']; ?>
+		</a>
+	</li>
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'change-password') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=setting&' . $carovl['user_setting'] . 'tab=change-password'); ?>" data-redirect="?page=setting&<?php echo $carovl['user_setting']; ?>tab=change-password">
+			<?php echo $carovl['lang']['change_password']; ?>
+		</a>
+	</li>
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'social-links') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=setting&' . $carovl['user_setting'] . 'tab=social-links'); ?>" data-redirect="?page=setting&<?php echo $carovl['user_setting']; ?>tab=social-links">
+			<?php echo $carovl['lang']['social_links']; ?>
+		</a>
+	</li>
+	<?php if ($carovl['config']['email_notification'] == 1) { ?> 
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'email-notification') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=setting&' . $carovl['user_setting'] . 'tab=email-notification'); ?>" data-redirect="?page=setting&<?php echo $carovl['user_setting']; ?>tab=email-notification">
+			<?php echo $carovl['lang']['email_notification']; ?>
+		</a>
+	</li>
+	<?php } ?>
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'blocked-user') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=setting&' . $carovl['user_setting'] . 'tab=blocked-user'); ?>" data-redirect="?page=setting&<?php echo $carovl['user_setting']; ?>tab=blocked-user">
+			<?php echo $carovl['lang']['blocked_users']; ?>
+		</a>
+	</li>
+	<?php if ($carovl['config']['delete_account'] == 1) { ?> 
+	<li class="list-group-item <?php echo ($carovl['setting_page'] == 'delete-account') ? 'active' : ''; ?>">
+		<a href="<?php echo seoLink('index.php?page=setting&' . $carovl['user_setting'] . 'tab=delete-account'); ?>" data-redirect="?page=setting&<?php echo $carovl['user_setting']; ?>tab=delete-account">
+			<?php echo $carovl['lang']['delete_account']; ?>
+		</a>
+	</li>
+	<?php } ?>
+</ul>

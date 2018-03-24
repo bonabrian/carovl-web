@@ -1,0 +1,52 @@
+<div class="card setting">
+	<?php echo loadPage('setting/header'); ?>
+	<div class="card-block">
+		<div class="alerts"></div>
+		<form class="delete-account-form" method="post">
+			<div class="form-group carovl">
+				<input type="password" class="form-control current_password" name="current_password">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['current_password_label']; ?></label>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl-red" id="delete-account">
+					<i class="fa fa-times icon-loader" data-icon="times-o"></i> <?php echo $carovl['lang']['remove_account_label']; ?>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.delete-account-form').ajaxForm({
+		url: ajaxRequests() + '?f=user&s=delete_account',
+		beforeSend: function () {
+			progressLoader($('#delete-account'));
+			$('#delete-account').attr('disabled', true);
+		},
+		success: function (data) {
+			if (data.status == 200) {
+				$('.alerts').html('<center><div class="alert alert-success">' + data.success + '</div></center>');
+				$('.alert-success').fadeIn('fast', function () {
+					window.setTimeout(function() {
+						window.location.href = data.location;
+					}, 3000);
+				});
+			} else if (data.errors) {
+				$('#delete-account').attr('disabled', false);
+				$('form.delete-account-form').clearForm();
+				$('.current_password').removeClass('used');
+				var errors = data.errors.join("<br>");
+				$('.alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('#delete-account'));
+		}
+	});
+});
+</script>

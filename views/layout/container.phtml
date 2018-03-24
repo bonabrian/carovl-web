@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><?php echo $carovl['title']; ?></title>
+	<meta charset="utf-8">
+	<meta name="title" content="<?php echo $carovl['title']; ?>">
+	<meta name="description" content="<?php echo $carovl['description']; ?>">
+	<meta name="keywords" content="<?php echo $carovl['keywords']; ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<?php if ($carovl['page'] == 'admin' || $carovl['page'] == 'maintenance') { ?> 
+	<meta name="robots" content="noindex">
+	<meta name="robots" content="noindex">
+	<?php } ?>
+	<?php if ($carovl['page'] == 'welcome') { ?> 
+	<meta property="og:title" content="<?php echo $carovl['title']; ?>">
+	<meta property="og:type" content="article">
+	<meta property="og:url" content="<?php echo $carovl['config']['site_url']; ?>">
+	<meta property="og:image" content="<?php echo $carovl['config']['resource']; ?>/img/icon.png">
+	<meta property="og:image_secure_url" content="<?php echo $carovl['config']['resource']; ?>/img/icon.png">
+	<meta property="og:description" content="<?php echo $carovl['description']; ?>">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="<?php echo $carovl['title']; ?>">
+	<meta name="twitter:description" content="<?php echo $carovl['description']; ?>">
+	<meta name="twitter:image" content="<?php echo $carovl['config']['resource']; ?>/img/icon.png">
+	<?php } ?>
+	<?php 
+	if (! empty($carovl['story']['post_file'])) {
+		echo loadPage('meta/post-file-og-meta');
+	}
+	if (! empty($carovl['story']['post_link'])) {
+		echo loadPage('meta/post-link-og-meta');
+	}
+	if ($carovl['page'] == 'timeline') { ?>
+	<meta property="og:type" content="article">
+	<meta property="og:image" content="<?php echo $carovl['profile']['avatar']; ?>">
+	<meta property="og:image_secure_url" content="<?php echo $carovl['profile']['avatar']; ?>">
+	<meta property="og:description" content="<?php echo $carovl['description']; ?>">
+	<meta property="og:title" content="<?php echo $carovl['title']; ?>">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="<?php echo $carovl['title']; ?>">
+	<meta name="twitter:description" content="<?php echo $carovl['description']; ?>">
+	<meta name="twitter:image" content="<?php echo $carovl['profile']['avatar']; ?>">
+	<?php } ?>
+	<?php if ($carovl['page'] == 'article') { ?> 
+	<meta property="og:type" content="article" />
+	<meta property="og:image" content="<?php echo $carovl['article']['thumbnail']; ?>" />
+	<meta property="og:image:secure_url" content="<?php echo $carovl['article']['thumbnail']; ?>" />
+	<meta property="og:description" content="<?php echo $carovl['article']['article_content']; ?>" />
+	<meta property="og:title" content="<?php echo $carovl['article']['title']; ?>">
+	<meta property="og:url" content="<?php echo $carovl['article']['url']; ?>">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="<?php echo $carovl['article']['title']; ?>">
+	<meta name="twitter:description" content="<?php echo $carovl['article']['article_content']; ?>">
+	<meta name="twitter:image" content="<?php echo $carovl['article']['thumbnail']; ?>">
+	<?php } ?>
+	<?php if ($carovl['page'] == 'timeline') { ?> 
+	<link rel="shortcut icon" type="image/*" href="<?php echo $carovl['profile']['avatar']; ?>">
+	<?php } elseif ($carovl['page'] == 'groups') { ?> 
+	<link rel="shortcut icon" type="image/*" href="<?php echo $carovl['group_profile']['avatar']; ?>">
+	<?php } else { ?> 
+	<link rel="shortcut icon" type="image/png" href="<?php echo $carovl['config']['resource']; ?>/img/icon.png">
+	<?php } ?>
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/css/style.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/css/sweetalert.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/css/bootstrap-social.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/css/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/css/twemoji-awesome.css">
+	<?php if ($carovl['logged_in'] == true && $carovl['page'] == 'events') { ?> 
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/css/datetimepicker/datetimepicker.css">
+	<?php } ?>
+	<?php if ($carovl['page'] == 'new-article' || $carovl['page'] == 'edit-article') { ?> 
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/tinymce/tinymce.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/css/bootstrap-tagsinput.css">
+	<?php } ?>
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/sweetalert.min.js"></script>
+	<?php if ($carovl['page'] == 'events') { ?> 
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/datetimepicker.js"></script>
+	<?php } ?>
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/css/jquery.ui.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/player/Video/video-js.css">
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/player/Audio/mediaelement-and-player.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/player/Audio/mediaelementplayer.min.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $carovl['config']['resource']; ?>/player/Audio/media-style.css">
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/jquery.ui.js"></script>
+	<script type="text/javascript">
+		function ajaxRequests() {
+			return "<?php echo $carovl['config']['site_url'] . '/requests.php'; ?>";
+		}
+		<?php if ($carovl['config']['smooth_loading'] == 1 && $carovl['logged_in'] == true) { ?> 
+		function smoothRedirect() {
+			return "<?php echo $carovl['config']['site_url'] . '/smooth_redirect.php'; ?>"
+		}
+		var site_url = "<?php echo $carovl['config']['site_url']; ?>";
+		$(function () {
+			var content = $('#content');
+			$(document).on('click', 'a[data-redirect]', function (e) {
+				var url = $(this).attr('data-redirect');
+				e.preventDefault();
+				startLoad();
+				$.post(smoothRedirect() + url, {
+					url: url
+				}, function (data) {
+					json_data = JSON.parse($(data).filter('#redirect-data').val());
+					if (json_data.welcome_page == 1 || json_data.redirect == 1) {
+						window.location.href = site_url;
+						return false;
+					}
+					content.html(data);
+					$('.q-input').val(json_data.search);
+					if (json_data.page == 'home') {
+						window.history.pushState({
+							state: 'new'
+						}, '', site_url);
+					} else {
+						window.history.pushState({
+							state: 'new'
+						}, '', json_data.url);
+					}
+					window.onpopstate = function (evt) {
+						$(window).unbind('popstate');
+						window.location.href = document.location;
+					};
+					document.title = json_data.title;
+					document_title = json_data.title;
+					$("html, body").animate({
+						scrollTop: 0
+					}, 150);
+					finishLoad();
+				});
+				$('.preview, .box-container').remove();
+				$('.dropdown-item').hover(function () {
+					$(this).css('background', '#ecf0f1');
+				}, function () {
+					$(this).css('background', '#fff');
+				});
+			});
+		});
+		<?php } ?>
+	</script>
+	<?php echo (! empty($carovl['config']['google_analytics'])) ? $carovl['config']['google_analytics'] : ''; ?>
+</head>
+<body>
+	<input type="hidden" class="main_session" value="<?php echo createMainSession(); ?>">
+	<input type="hidden" class="page_url" value="<?php echo $carovl['actual_link']; ?>">
+	<header>
+		<?php echo ($carovl['page'] != 'maintenance') ? loadPage('header/content') : ''; ?>
+	</header>
+	<?php 
+	$container = 'container';
+	if ($carovl['page'] == 'welcome') {
+		$container = 'container-fluid';
+	}
+	?>
+	<div class="<?php echo $container; ?>">
+		<?php 
+		$header_ads = getAds('header', false);
+		if ($carovl['page'] != 'admin' && $carovl['page'] != 'welcome' && ! empty($header_ads)) { ?>
+		<div class="header-advertisement mb-3 mt-2">
+			<div class="col-md-10 offset-md-1">
+				<div class="row">
+					<div class="col-md-8">
+						<?php echo $header_ads; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<div id="content">
+			<?php echo $carovl['content']; ?>
+		</div>
+	</div>
+	<?php
+	if ($carovl['logged_in'] == true && $carovl['page'] != 'maintenance') 
+		if ($carovl['config']['chat_system'] == 1) {
+			echo loadPage('conversations/content');
+		}
+	?>
+	<?php
+	if ($carovl['logged_in'] == false && $carovl['page'] != 'login') {
+		echo loadPage('modals/login');
+	} 
+	?>
+	<?php 
+	if ($carovl['logged_in'] == true) {
+		if ($carovl['page'] == 'groups') {
+			if (canBeOnGroup($carovl['group_profile']['id'])) {
+				echo loadPage('modals/textbox');
+			}
+		} else {
+			echo loadPage('modals/textbox');
+		}
+	} 
+	?>
+	<?php 
+		if ($carovl['logged_in'] == true) {
+			echo loadPage('modals/new-message');
+		} 
+	?>
+	<?php if ($carovl['logged_in'] == true) { ?> 
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/carovl.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $carovl['config']['google_map_api']; ?>&libraries=places"></script>
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/jquery.limit.source.js"></script>
+	<?php if ($carovl['page'] == 'new-article' || $carovl['page'] == 'edit-article') { ?> 
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/bootstrap-tagsinput/src/bootstrap-tagsinput.js"></script>
+	<?php } ?>
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/autosize.js"></script>
+	<?php } ?>
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/jquery.form.min.js"></script>
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/tether.min.js"></script>
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/automention.js"></script>
+	<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/js/initialize.js"></script>
+	<?php echo loadPage('timeago/content'); ?>
+	<?php if ($carovl['logged_in'] == true) { echo loadPage('extra-js/content'); } ?>
+</body>
+</html>

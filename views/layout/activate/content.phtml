@@ -1,0 +1,35 @@
+<?php 
+if ($carovl['logged_in'] == true) {
+	header("Location: " . $carovl['config']['site_url']);
+	exit();
+} else {
+	if (isset($_GET['status'])) {
+		if ($_GET['status'] == 'success') {
+			# code...
+		}
+	} elseif (isset($_GET['email'], $_GET['code']) === true) {
+		$email = $_GET['email'];
+		$code = $_GET['code'];
+		if (isEmailExist($email) === false) {
+			header("Location: " . seoLink('index.php?page=welcome'));
+			exit();
+		} elseif (activateUser($email, $code) === false) {
+			header("Location: " . seoLink('index.php?page=welcome'));
+			exit();
+		} else {
+			$session = createLoginSession(userIdFromEmail($email));
+			$_SESSION['user_id'] = $session;
+			setcookie(
+				"user_id",
+				$session,
+				time() + (10 * 365 * 24 * 60 * 60)
+			);
+			header("Location: " . seoLink('index.php?page=getstarted'));
+			exit();
+		}
+	} else {
+		header("Location: " . seoLink('index.php?page=welcome'));
+		exit();
+	}
+}
+?>

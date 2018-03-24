@@ -1,0 +1,36 @@
+<div class="card admin">
+	<div class="card-header">
+		<h3 class="card-title">
+			<?php echo $carovl['lang']['edit_language']; ?>: <?php echo ucfirst($_GET['id']); ?>
+			<span class="float-right add-new">
+				<a href="<?php echo seoLink('index.php?page=admincp&tab=add-new-key'); ?>" data-redirect="?page=admincp&tab=add-new-key">
+					<?php echo $carovl['lang']['add_new_key']; ?>
+				</a>
+			</span>
+		</h3>
+	</div>
+	<div class="card-block">
+		<div class="table-responsive">
+			<table class="table table-hover table-condensed">
+				<thead>
+					<tr>
+						<th><?php echo $carovl['lang']['keyword']; ?></th>
+						<th><?php echo $carovl['lang']['value']; ?></th>
+						<th><?php echo $carovl['lang']['action']; ?></th>
+					</tr>
+				</thead>
+				<tbody class="result lang-list">
+					<?php 
+					$langs = langsFromDb($_GET['id']);
+					if (count($langs) > 0) {
+						foreach ($langs as $carovl['lang_key'] => $carovl['langs']) {
+							$carovl['langs'] = $carovl['langs'];
+							echo loadPage('admin/edit-language/lang-list');
+						}
+					}
+					?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

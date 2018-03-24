@@ -1,0 +1,13 @@
+<div class="posts-container">
+	<div class="card no-post">
+		<div class="card-block">
+			<i class="fa fa-hashtag"></i>
+			<h4>
+				<?php
+				$text = str_replace('{hashtag}', '#' . $_GET['hash'], $carovl['lang']['no_post_found']);
+				echo $text;
+				?>
+			</h4>
+		</div>
+	</div>
+</div>

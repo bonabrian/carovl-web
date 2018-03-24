@@ -1,0 +1,69 @@
+<?php 
+$post_type = '';
+$carovl['activity']['type_text'] = '';
+$user = '<span class="user-preview" data-type="' . $carovl['activity']['user']['type'] . '" data-id="' . $carovl['activity']['user']['user_id'] . '"><a href="' . $carovl['activity']['user']['url'] . '" data-redirect="?page=timeline&u=' . $carovl['activity']['user']['username'] . '">' . $carovl['activity']['user']['username'] . '</a></span>';
+$post_publisher = '<span class="user-preview" data-type="' . $carovl['activity']['post']['publisher']['type'] . '" data-id="' . $carovl['activity']['post']['publisher']['user_id'] . '"><a href="' . $carovl['activity']['post']['publisher']['url'] . '" data-redirect="?page=timeline&u=' . $carovl['activity']['post']['publisher']['username'] . '">' . $carovl['activity']['post']['publisher']['username'] . '</a>';
+$org_text = array(
+	"{user}",
+	"{publisher}",
+	"{post}"
+);
+$replaced_text = array(
+	$user,
+	$post_publisher,
+	$carovl['activity']['post']['url']
+);
+if (! empty($carovl['activity']['activity_type'])) {
+	if ($carovl['activity']['activity_type'] == 'liked_post') {
+		$carovl['activity']['type_text'] = str_replace($org_text, $replaced_text, $carovl['lang']['activity_liked_post']);
+	}
+	if ($carovl['activity']['activity_type'] == 'commented_post') {
+		$carovl['activity']['type_text'] = str_replace($org_text, $replaced_text, $carovl['lang']['activity_commented_on_post']);
+	}
+	if ($carovl['activity']['activity_type'] == 'shared_post') {
+		$carovl['activity']['type_text'] = str_replace($org_text, $replaced_text, $carovl['lang']['activity_shared_post']);
+	}
+}
+?>
+<div class="card list-activity" data-activity-id="<?php echo $carovl['activity']['id']; ?>">
+	<div class="card-header">
+		<div class="media">
+			<a href="<?php echo $carovl['activity']['user']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['activity']['user']['username']; ?>">
+				<img src="<?php echo $carovl['activity']['user']['avatar']; ?>" alt="<?php echo $carovl['activity']['user']['username']; ?>" class="d-flex mr-3">
+			</a>
+			<span class="notification-text">
+				<?php echo $carovl['activity']['type_text']; ?>
+			</span>
+			<span class="notification-time text-caption text-muted ajax-time" title="<?php echo date('c', $carovl['activity']['time']); ?>"><?php echo timeElapsedString($carovl['activity']['time']); ?></span>
+			<div class="activity-post">
+				<?php if (! empty($carovl['activity']['post']['post_file'])) { ?> 
+				<div class="post-file">
+					<?php 
+					$media = array(
+						'type' => 'post',
+						'story_id' => $carovl['activity']['post']['id'],
+						'filename' => $carovl['activity']['post']['post_file'],
+						'name' => $carovl['activity']['post']['post_file_name'],
+						'alt' => $carovl['activity']['post']['publisher']['username']
+					);
+					echo displaySharedFile($media);
+					?>	
+				</div>
+				<?php } ?>
+				<?php if (! empty($carovl['activity']['post']['post_link']) && empty($carovl['activity']['post']['post_file'])) { ?> 
+				<div class="post-file">
+					<a href="<?php echo $carovl['activity']['post']['url']; ?>">
+						<img src="<?php echo $carovl['activity']['post']['post_link_image']; ?>" class="img-fluid">
+					</a>
+				</div>
+				<?php } ?>
+				<?php if (! empty($carovl['activity']['post']['event_id'])) { ?> 
+				<div class="event-name"><i class="fa fa-calendar-o"></i> <?php echo $carovl['activity']['post']['event']['name']; ?></div>
+				<?php } ?>
+				<?php if (! empty($carovl['activity']['post']['post_text'])) { ?> 
+				<div class="post-text"><?php echo $carovl['activity']['post']['post_text']; ?></div>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+</div>

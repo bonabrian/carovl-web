@@ -1,0 +1,278 @@
+<div class="card setting">
+	<?php echo loadPage('setting/header'); ?>
+	<div class="card-block">
+		<div class="alerts"></div>
+		<form class="account-form" method="post">
+			<div class="form-group carovl">
+				<input type="text" name="username" class="form-control <?php echo (! empty($carovl['setting']['username'])) ? 'used' : ''; ?> " value="<?php echo $carovl['setting']['username']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['username_label']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<div class="row">
+					<div class="col">
+						<input type="text" name="first_name" class="form-control <?php echo (! empty($carovl['setting']['first_name'])) ? 'used' : ''; ?> " value="<?php echo $carovl['setting']['first_name']; ?>">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['first_name_label']; ?></label>
+					</div>
+					<div class="col">
+						<input type="text" name="last_name" class="form-control <?php echo (! empty($carovl['setting']['last_name'])) ? 'used' : ''; ?> " value="<?php echo $carovl['setting']['last_name']; ?>">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['last_name_label']; ?></label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group carovl">
+				<?php 
+				$text = br2nl($carovl['setting']['about']);
+				?>
+				<textarea name="bio" class="about form-control <?php echo (! empty($carovl['setting']['about'])) ? 'used' : ''; ?>" dir="auto"><?php echo $text; ?></textarea>
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['bio_label']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="email" class="form-control <?php echo (! empty($carovl['setting']['email'])) ? 'used' : ''; ?> " value="<?php echo $carovl['setting']['email']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['email_label']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="address" class="form-control <?php echo (! empty($carovl['setting']['address'])) ? 'used' : ''; ?> " value="<?php echo $carovl['setting']['address']; ?>" id="address">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['address_label']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="phone_number" class="form-control <?php echo (! empty($carovl['setting']['phone_number'])) ? 'used' : ''; ?> " value="<?php echo $carovl['setting']['phone_number']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['phone_number_label']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="website" class="form-control <?php echo (! empty($carovl['setting']['website'])) ? 'used' : ''; ?> " value="<?php echo $carovl['setting']['website']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['website_label']; ?></label>
+			</div>
+			<?php 
+			$cutoff = 1945;
+			$now = date('Y');
+			$birthday = explode('-', $carovl['setting']['birthday']);
+			?>
+			<div class="form-group carovl">
+				<div class="row">
+					<div class="col-4">
+						<select class="form-control <?php echo (! empty($birthday[2])) ? 'used' : ''; ?>" name="day">
+							<option value="" disabled selected><?php echo $carovl['lang']['day_label']; ?></option>
+							<?php 
+							for ($d=1; $d <= 31; $d++) { 
+								$birthday_d = ($birthday[2] == $d) ? 'selected' : ''; ?>
+							<option value="<?php echo $d; ?>" <?php echo $birthday_d; ?>><?php echo $d; ?></option>
+							<?php } ?>
+						</select>
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['day_label']; ?></label>
+					</div>
+					<div class="col-4">
+						<select class="form-control <?php echo (! empty($birthday[1])) ? 'used' : ''; ?>" name="month">
+							<option value="" disabled selected><?php echo $carovl['lang']['month_label']; ?></option>
+							<?php 
+							for ($m=1; $m <= 12; $m++) { 
+								$birthday_m = ($birthday[1] == $m) ? 'selected' : ''; ?>
+							<option value="<?php echo $m; ?>" <?php echo $birthday_m; ?>><?php echo $carovl['months'][$m]; ?></option>
+							<?php } ?>
+						</select>
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['month_label']; ?></label>
+					</div>
+					<div class="col-4">
+						<select class="form-control <?php echo (! empty($birthday[0])) ? 'used' : ''; ?>" name="year">
+							<option value="" disabled selected><?php echo $carovl['lang']['year_label']; ?></option>
+							<?php 
+							for ($y = $now; $y >= $cutoff; $y--) { 
+								$birthday_y = ($birthday[0] == $y) ? 'selected' : ''; ?>
+							<option value="<?php echo $y; ?>" <?php echo $birthday_y; ?>><?php echo $y; ?></option>
+							<?php } ?>
+						</select>
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label><?php echo $carovl['lang']['year_label']; ?></label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group carovl">
+				<select class="form-control <?php echo (! empty($carovl['setting']['gender'])) ? 'used' : ''; ?>" name="gender">
+					<?php $gender = $carovl['setting']['gender']; ?>
+					<option value="" disabled selected><?php echo $carovl['lang']['gender_label']; ?></option>
+					<option value="male" <?php echo ($gender == 'male') ? 'selected' : ''; ?>><?php echo $carovl['lang']['male']; ?></option>
+					<option value="female" <?php echo ($gender == 'female') ? 'selected' : ''; ?>><?php echo $carovl['lang']['female']; ?></option>
+				</select>
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['gender_label']; ?></label>
+			</div>
+			<?php if ($carovl['user']['user_id'] != $carovl['setting']['user_id'] && ($carovl['is_admin'] || $carovl['is_moderator'])) { ?> 
+			<?php if ($carovl['is_admin'] === true) { ?><hr>
+			<div class="form-group">
+				<?php 
+				$selected_type_user = ($carovl['setting']['admin'] == 0) ? 'checked' : '';
+				$selected_type_admin = ($carovl['setting']['admin'] == 1) ? 'checked' : '';
+				$selected_type_moderator = ($carovl['setting']['admin'] == 2) ? 'checked' : '';
+				?>
+				<div class="row">
+					<label class="col-3">
+						<?php echo $carovl['lang']['user_type']; ?>
+					</label>
+					<div class="col-9">
+						<label class="custom-control custom-radio" for="type-0">
+							<input type="radio" name="type" id="type-0" value="user" <?php echo $selected_type_user; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['user']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="type-1">
+							<input type="radio" name="type" id="type-1" value="admin" <?php echo $selected_type_admin; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['admin']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="type-2">
+							<input type="radio" name="type" id="type-2" value="moderator" <?php echo $selected_type_moderator; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['moderator']; ?></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<?php } ?>
+			<hr>
+			<div class="form-group">
+				<?php
+				$selected_inactive = ($carovl['setting']['active'] == 0 || $carovl['setting']['active'] == 2) ? 'checked' : '';
+				$selected_active = ($carovl['setting']['active'] == 1) ? 'checked' : '';
+				?>
+				<div class="row">
+					<label class="col-3">
+						<?php echo $carovl['lang']['user_status']; ?>
+					</label>
+					<div class="col-9">
+						<label class="custom-control custom-radio" for="active-0">
+							<input type="radio" name="active" id="active-0" value="inactive" <?php echo $selected_inactive; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['inactive']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="active-1">
+							<input type="radio" name="active" id="active-1" value="active" <?php echo $selected_active; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['active']; ?></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<?php } ?>
+			<?php if ($carovl['is_admin'] === true || $carovl['is_moderator'] === true) { ?> 
+			<hr>
+			<div class="form-group">
+				<?php 
+				$selected_unverified = ($carovl['setting']['verified'] == 0) ? 'checked' : '';
+				$selected_verified = ($carovl['setting']['verified'] == 1) ? 'checked' : '';
+				?>
+				<div class="row">
+					<label class="col-3">
+						<?php echo $carovl['lang']['verification']; ?>
+					</label>
+					<div class="col-9">
+						<label class="custom-control custom-radio" for="verified-0">
+							<input type="radio" name="verification" id="verified-0" value="unverified" <?php echo $selected_unverified; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['unverified']; ?></span>
+						</label>
+						<label class="custom-control custom-radio" for="verified-1">
+							<input type="radio" name="verification" id="verified-1" value="verified" <?php echo $selected_verified; ?> class="custom-control-input">
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description"><?php echo $carovl['lang']['verified']; ?></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<?php } ?>
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+				</button>
+			</div>
+			<input type="hidden" name="user_id" value="<?php echo $carovl['setting']['user_id']; ?>">
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	autosize($('textarea.about'));
+	$('form.account-form').ajaxForm({
+		url: ajaxRequests() + '?f=settings&s=update_user_account',
+		beforeSend: function () {
+			progressLoader($('form.account-form').find('.btn-carovl'));
+			$('form.account-form').find('.btn-carovl').attr('disabled', true);
+		},
+		success: function (data) {
+			scrollToTop();
+			$('form.account-form').find('.btn-carovl').attr('disabled', false);
+			if (data.status == 200) {
+				<?php if ($carovl['user']['user_id'] == $carovl['setting']['user_id']) { ?> 
+				<?php } ?>
+				$('[id^=updateusername-<?php echo $carovl['setting']['user_id']; ?>]').attr('href', data.username_link);
+				$('.username').text(data.username);
+				$('.alerts').html('<center><div class="alert alert-success">' + data.success + '</div></center>');
+				$('.alert-success').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			} else if (data.errors) {
+				var errors = data.errors.join('<br>');
+				$('.alerts').html('<center><div class="alert alert-danger">' + errors + '</div></center>');
+				$('.alert-danger').fadeIn('fast', function () {
+					$(this).delay(2500).fadeOut(500, function () {
+						$(this).remove();
+					});
+				});
+			}
+			progressLoader($('form.account-form').find('.btn-carovl'));
+		}
+	});
+	var pac_input = document.getElementById('address');
+	(function pacSelectFirst(input) {
+		var _addEventListener = (input.addEventListener) ? input.addEventListener : input.attachEvent;
+		function addEventListenerWrapper(type, listener) {
+			if (type == 'keydown') {
+				var org_listener = listener;
+				listener = function (event) {
+					var suggestion_selected = $(".pac-item-selected").length > 0;
+					if (event.which == 13 && ! suggestion_selected) {
+						var simulated_downarrow = $.Event("keydown", {
+							keyCode: 40,
+							which: 40
+						});
+						org_listener.apply(input, [simulated_downarrow]);
+					}
+					org_listener.apply(input, [event]);
+				};
+			}
+			_addEventListener.apply(input, [type, listener]);
+		}
+		if (input.addEventListener) {
+			input.addEventListener = addEventListenerWrapper;
+		} else if (input.attachEvent) {
+			input.attachEvent = addEventListenerWrapper;
+		}
+	})(pac_input);
+	$(function () {
+		var autocomplete = new google.maps.places.Autocomplete(pac_input);
+	});
+});
+</script>

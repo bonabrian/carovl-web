@@ -1,0 +1,230 @@
+<?php 
+$notifications_alert = countNotifications(array(
+	'unread' => true,
+	'data' => 'all'
+));
+$messages_alert = countMessages(array(
+	'new' => true
+));
+$followers_alert = countFollowRequests();
+$notifications_hidden_class = '';
+$messages_hidden_class = '';
+$followers_hidden_class = '';
+$unread_update_notifications = 'unread';
+$unread_update_messages = 'unread';
+$unread_update_followers = 'unread';
+if ($notifications_alert == 0) {
+	$notifications_hidden_class = 'hidden';
+	$unread_update_notifications = '';
+}
+if ($messages_alert == 0) {
+	$messages_hidden_class = 'hidden';
+	$unread_update_messages = '';
+}
+if ($followers_alert == 0) {
+	$followers_hidden_class = 'hidden';
+	$unread_update_followers = '';
+}
+?>
+<?php 
+$hashtag = '';
+if (isset($_GET['page']) && $_GET['page'] == 'hashtag' && ! empty($_GET['hash'])) {
+	$hashtag = '#' . $_GET['hash'];
+} elseif (isset($_GET['page']) && $_GET['page'] == 'timeline' && ! empty($_GET['u'])) {
+	if ($carovl['logged_in'] == true) {
+		if ($carovl['user']['username'] != $_GET['u']) {
+			$hashtag = $_GET['u'];
+		}
+	}
+} elseif (isset($_GET['page']) && $_GET['page'] == 'search' && ! empty($_GET['query'])) {
+	$hashtag = $_GET['query'];
+}
+?>
+<ul class="navbar-nav">
+	<li class="dropdown search-container">
+		<form class="form-inline search_query" data-toggle="dropdown" id="search_query" role="search">
+			<div class="search-form">
+				<div class="form-group inner-addon left-addon">
+					<i class="fa fa-search icon-loader" data-icon="search"></i>
+					<input class="form-control q-input" type="text" placeholder="<?php echo $carovl['lang']['search_label']; ?>" dir="auto" onkeyup="searchQuery(this.value, event);" <?php if ($carovl['logged_in'] == true) { echo 'onfocus="getRecentSearchs();"' ;} ?> value="<?php echo $hashtag; ?>">
+				</div>
+			</div>
+		</form>
+		<ul class="dropdown-menu dropdown-search-container">
+			<li class="search-result">
+				<!-- Search Result Goes Here -->
+			</li>
+			<li class="advanced-search-wrapper">
+				<span class="advanced-search-container">
+					<a href="<?php echo seoLink('index.php?page=search'); ?>" class="advanced-link" data-redirect="?page=search">
+						<?php echo $carovl['lang']['advanced_search']; ?>
+					</a>
+				</span>
+			</li>
+		</ul>
+	</li>
+</ul>
+<ul class="navbar-nav ml-auto carovl-nav">
+	<!-- Notification Follow Requests -->
+	<li class="nav-item dropdown notification-requests-container" onclick="openNotificationRequests();">
+		<a href="#" class="nav-link dropdown-toggle <?php echo $unread_update_followers; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span class="alert-notif badge badge-pill badge-unread <?php echo $followers_hidden_class; ?>" id="requests-unread">
+				<?php echo $followers_alert; ?>
+			</span>
+			<i class="fa fa-user-o"></i>
+		</a>
+		<ul class="dropdown-menu dropdown-menu-right requests_dropdown">
+			<h6 class="dropdown-header"><?php echo $carovl['lang']['follow_requests']; ?></h6>
+			<li class="requests-list" id="notification-requests">
+				<div class="animation-container">
+					<div class="animation-loader">
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</li>
+
+	<!-- Notification Messages -->
+	<li class="nav-item dropdown notification-messages-container" onclick="openNotificationMessages();">
+		<a href="#" class="nav-link dropdown-toggle <?php echo $unread_update_messages; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span class="alert-notif badge badge-pill badge-unread <?php echo $messages_hidden_class; ?>" id="messages-unread">
+				<?php echo $messages_alert; ?>
+			</span>
+			<i class="fa fa-envelope-o"></i>
+		</a>
+		<ul class="dropdown-menu dropdown-menu-right messages_dropdown">
+			<h6 class="dropdown-header">
+				<div class="row">
+					<div class="col">
+						<?php echo $carovl['lang']['messages']; ?>
+					</div>
+					<div class="col">
+						<span style="float: right;" id="new-message-btn" onclick="newMessage()" data-user-id="<?php echo $carovl['user']['user_id']; ?>" title="<?php echo $carovl['lang']['new_message']; ?>" data-toggle="tooltip"><i class="fa fa-pencil"></i></span>
+					</div>
+				</div>
+			</h6>
+			<li class="messages-list" id="notification-messages">
+				<div class="animation-container">
+					<div class="animation-loader">
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</li>
+
+	<!-- Notifications -->
+	<li class="nav-item dropdown notification-container" onclick="openNotifications();">
+		<a href="#" class="nav-link dropdown-toggle <?php echo $unread_update_notifications; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span class="alert-notif badge badge-pill badge-unread <?php echo $notifications_hidden_class; ?>" id="notification-unread">
+				<?php echo $notifications_alert; ?>
+			</span>
+			<i class="fa fa-bell-o"></i>
+		</a>
+		<ul class="dropdown-menu dropdown-menu-right notification_dropdown">
+			<h6 class="dropdown-header"><?php echo $carovl['lang']['notifications']; ?></h6>
+			<li class="notifications-list" id="notifications">
+				<div class="animation-container">
+					<div class="animation-loader">
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+						<div class="loader-dot"></div>
+					</div>
+				</div>
+			</li>
+			<li class="see-all"></li>
+		</ul>
+	</li>
+	<li class="nav-item dropdown">
+        <a href="" class="nav-link dropdown-toggle" id="<?php echo $carovl['user']['username']; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        	<div class="thumbnail-profile-container">
+        		<img src="<?php echo $carovl['user']['avatar']; ?>" id="profileavatar-<?php echo $carovl['user']['user_id']; ?>">
+        	</div>
+        </a>
+		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="<?php echo $carovl['user']['username']; ?>">
+			<h6 class="dropdown-header">
+				<div class="row">
+					<div class="col">
+						<span class="account"><?php echo strtoupper($carovl['lang']['account']); ?></span>
+					</div>
+					<div class="col">
+						<span class="logout">
+							<small>
+								<a href="<?php echo seoLink('index.php?page=logout'); ?>">
+									<?php echo $carovl['lang']['logout']; ?>
+								</a>
+							</small>
+						</span>
+					</div>
+				</div>
+			</h6>
+			<a class="dropdown-item" href="<?php echo seoLink('index.php?page=setting'); ?>" data-redirect="?page=setting">
+				<i class="fa fa-cog fa-fw"></i> <?php echo $carovl['lang']['setting']; ?>
+			</a>
+			<a class="dropdown-item" href="<?php echo seoLink('index.php?page=timeline&u=' . $carovl['user']['username'] . '&type=following'); ?>" data-redirect="?page=timeline&u=<?php echo $carovl['user']['username']; ?>&type=following">
+				<i class="fa fa-user-circle fa-fw"></i> <?php echo $carovl['lang']['following']; ?>
+			</a>
+			<a class="dropdown-item" href="#">
+				<i class="fa fa-question-circle fa-fw"></i> <?php echo $carovl['lang']['help']; ?>
+			</a>
+			<h6 class="dropdown-header"><?php echo strtoupper($carovl['config']['site_name']); ?></h6>
+			<a class="dropdown-item" href="<?php echo $carovl['user']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['user']['username']; ?>" id="updateusername-<?php echo $carovl['user']['user_id']; ?>">
+				<img src="<?php echo $carovl['user']['avatar']; ?>" alt="<?php echo $carovl['user']['username']; ?>" id="profileavatar-<?php echo $carovl['user']['user_id']; ?>">
+				<span class="user-info align-top">
+					<span class="user-info-username">
+						<?php echo $carovl['user']['username']; ?>
+					</span>
+					<br>
+					<span class="user-info-name">
+						<?php echo $carovl['user']['name']; ?>
+					</span>
+				</span>
+			</a>
+			<?php if (isAdmin() || isModerator()) { ?> 
+			<a href="<?php echo seoLink('index.php?page=admincp'); ?>" class="dropdown-item" data-redirect="?page=admincp">
+				<i class="fa fa-bar-chart"></i> <?php echo $carovl['lang']['admin_area']; ?>
+			</a>
+			<?php } ?>
+			<?php if ($carovl['config']['events'] == 1) { ?> 
+			<a href="<?php echo seoLink('index.php?page=events'); ?>" data-redirect="?page=events" class="dropdown-item">
+				<i class="fa fa-calendar fa-fw"></i> <?php echo $carovl['lang']['events']; ?>
+			</a>
+			<?php } ?>
+			<?php if ($carovl['config']['groups'] == 1) { ?> 
+			<a href="<?php echo seoLink('index.php?page=groups'); ?>" data-redirect="?page=groups" class="dropdown-item">
+				<i class="fa fa-users fa-fw"></i> <?php echo $carovl['lang']['groups']; ?>
+			</a>
+			<?php } ?>
+			<a href="<?php echo seoLink('index.php?page=timeline&u=' . $carovl['user']['username'] . '&type=articles'); ?>" data-redirect="?page=timeline&u=<?php echo $carovl['user']['username']; ?>&type=articles" class="dropdown-item">
+				<i class="fa fa-newspaper-o fa-fw"></i> <?php echo $carovl['lang']['articles']; ?>
+			</a>
+			<a href="<?php echo seoLink('index.php?page=timeline&u=' . $carovl['user']['username'] . '&type=followers'); ?>" class="dropdown-item" data-redirect="?page=timeline&u=<?php echo $carovl['user']['username']; ?>&type=followers">
+				<i class="fa fa-user-circle fa-fw"></i> <?php echo $carovl['lang']['followers']; ?>
+			</a>
+			<a href="<?php echo seoLink('index.php?page=activity'); ?>" data-redirect="?page=activity" class="dropdown-item">
+				<i class="fa fa-history fa-fw"></i> <?php echo $carovl['lang']['activity']; ?>
+			</a>
+		</div>
+    </li>
+    <?php if (($carovl['page'] == 'groups' && canBeOnGroup($carovl['group_profile']['id']) === true) || $carovl['page'] != 'groups') { ?> 
+    <li class="nav-item write-btn">
+		<span class="nav-link pointer" data-toggle="modal" data-target="#post-textbox-<?php echo $carovl['user']['user_id']; ?>">
+			<i class="fa fa-pencil"></i>
+		</span>
+	</li>
+    <?php } ?>
+</ul>

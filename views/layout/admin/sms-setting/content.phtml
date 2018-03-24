@@ -1,0 +1,134 @@
+<div class="card admin">
+	<div class="card-header">
+		<h3 class="card-title"><?php echo $carovl['lang']['sms_setting']; ?></h3>
+	</div>
+	<div class="card-block">
+		<form method="post" class="sms-setting-form mt-0">
+			<div class="row mb-2">
+				<div class="col-md-6">
+					<h5><?php echo $carovl['lang']['bulksms_setting']; ?></h5>
+					<hr>
+				</div>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="eapi" class="form-control <?php echo (! empty($carovl['config']['eapi'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['eapi']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['eapi']; ?></label>
+				<span class="help-block"><?php echo $carovl['lang']['eapi_desc']; ?></span>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="bulksms_username" class="form-control <?php echo (! empty($carovl['config']['bulksms_username'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['bulksms_username']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['bulksms_username']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="password" name="bulksms_password" class="form-control <?php echo (! empty($carovl['config']['bulksms_password'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['bulksms_password']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['bulksms_password']; ?></label>
+			</div>
+			<div class="row mb-2">
+				<div class="col-md-6">
+					<h5><?php echo $carovl['lang']['twilio_setting']; ?></h5>
+					<hr>
+				</div>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="twilio_sms_username" class="form-control <?php echo (! empty($carovl['config']['twilio_sms_username'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['twilio_sms_username']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['twilio_sms_username']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="password" name="twilio_sms_password" class="form-control <?php echo (! empty($carovl['config']['twilio_sms_password'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['twilio_sms_password']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['twilio_sms_password']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="twilio_sms_phone_number" class="form-control <?php echo (! empty($carovl['config']['twilio_sms_phone_number'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['twilio_sms_phone_number']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['twilio_sms_phone_number']; ?></label>
+			</div>
+			<div class="form-group carovl">
+				<input type="text" name="site_phone_number" class="form-control <?php echo (! empty($carovl['config']['site_phone_number'])) ? 'used' : ''; ?> " value="<?php echo $carovl['config']['site_phone_number']; ?>">
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['site_phone_number']; ?></label>
+				<span class="help-block"><?php echo $carovl['lang']['site_phone_number_desc']; ?></span>
+			</div>
+			<div class="form-group carovl">
+				<select class="form-control <?php echo (! empty($carovl['config']['sms_provider'])) ? 'used' : ''; ?>" name="sms_provider">
+					<option value="twilio" <?php echo ($carovl['config']['sms_provider'] == 'twilio') ? 'selected' : ''; ?>><?php echo $carovl['lang']['twilio']; ?></option>
+					<option value="bulksms" <?php echo ($carovl['config']['sms_provider'] == 'bulksms') ? 'selected' : ''; ?>><?php echo $carovl['lang']['bulksms']; ?></option>
+				</select>
+				<span class="highlight"></span>
+				<span class="bar"></span>
+				<label><?php echo $carovl['lang']['sms_provider']; ?></label>
+				<span class="help-block"><?php echo $carovl['lang']['sms_provider_desc']; ?></span>
+			</div>
+			<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+			<div class="mb-3">
+				<span class="help-block"><?php echo $carovl['lang']['test_sms_desc']; ?></span>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-carovl">
+					<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+				</button>
+				<button type="button" class="btn btn-warning test-server" onclick="testSMS();">
+					<i class="fa fa-paper-plane-o icon-loader" data-icon="paper-plane-o"></i> <?php echo $carovl['lang']['test_sms']; ?>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	$('form.sms-setting-form').ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=update_sms_setting',
+		beforeSend: function () {
+			progressLoader($('form.sms-setting-form').find('.btn-carovl'));
+			$('form.sms-setting-form').find('.btn-carovl').attr('disabled', true);
+		},
+		success: function (data) {
+			$('form.sms-setting-form').find('.btn-carovl').attr('disabled', false);
+			if (data.status == 200) {
+				swal({
+					title: "<?php echo $carovl['lang']['setting_successfully_updated']; ?>",
+					type: "success",
+					confirmButtonColor: "#2CC990",
+				});
+			}
+			progressLoader($('form.sms-setting-form').find('.btn-carovl'));
+		}
+	});
+});
+function testSMS() {
+	progressLoader($('form.sms-setting-form').find('.test-server'));
+	$('form.sms-setting-form').find('.test-server').attr('disabled', true);
+	$.get(ajaxRequests(), {
+		f: 'admin_setting',
+		s: 'test_sms'
+	}, function (data) {
+		if (data.status == 200) {
+			swal({
+				title: "<?php echo $carovl['lang']['sms_sent']; ?>",
+				type: "success",
+				confirmButtonColor: "#2CC990",
+			});
+		} else {
+			swal({
+				title: "<?php echo $carovl['lang']['error']; ?>",
+				text: data.error,
+				type: "error",
+				confirmButtonColor: "#2CC990",
+			});
+		}
+		progressLoader($('form.sms-setting-form').find('.test-server'));
+		$('form.sms-setting-form').find('.test-server').attr('disabled', false);
+	});
+}
+</script>

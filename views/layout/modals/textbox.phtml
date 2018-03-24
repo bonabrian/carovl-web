@@ -1,0 +1,308 @@
+<div class="modal textbox" id="post-textbox-<?php echo $carovl['user']['user_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="publisher-box" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<span class="general-post">
+						<?php 
+						if ($carovl['page'] == 'groups') {
+							echo $carovl['lang']['say_something_on_group'];
+						} elseif ($carovl['page'] == 'events') {
+							echo $carovl['lang']['say_something_about_this_event'];
+						} else {
+							echo $carovl['lang']['whats_new'];
+						}
+						?>
+					</span>
+					<?php if ($carovl['page'] != 'groups' && $carovl['page'] != 'events') { ?> 
+					<span class="divider-content"></span>
+					<span class="write-article">
+						<a href="<?php echo seoLink('index.php?page=new-article'); ?>">
+							<?php echo $carovl['lang']['write_an_article']; ?>
+						</a>
+					</span>
+					<?php } ?>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		        	<span aria-hidden="true">&times;</span>
+		        </button>
+			</div>
+			<form action="#" method="post" class="post textbox">
+				<div class="modal-body">
+					<div id="image-preview" class="preview-image"></div>
+					<div id="post-textarea">
+						<i class="fa fa-circle-o-notch fa-spin" id="loader-publisher"></i>
+						<textarea name="post_text" class="form-control post_text" placeholder="<?php echo $carovl['lang']['share_anything']; ?>" dir="auto"></textarea>
+					</div>
+					<?php if ($carovl['config']['file_sharing'] == 1) { ?> 
+					<div class="hidden-input" id="file-form">
+						<div class="inner-addon left-addon">
+							<i class="fa fa-file"></i>
+							<input type="text" name="filename" class="form-control" readonly>
+						</div>
+					</div>
+					<?php } ?>
+					<?php if ($carovl['config']['video_upload'] == 1) { ?> 
+					<div class="hidden-input" id="video-form">
+						<div class="inner-addon left-addon">
+							<i class="fa fa-video-camera"></i>
+							<input type="text" name="video-name" class="form-control" readonly>
+						</div>
+					</div>
+					<?php } ?>
+					<?php if ($carovl['config']['audio_upload'] == 1) { ?> 
+					<div class="hidden-input" id="music-form">
+						<div class="inner-addon left-addon">
+							<i class="fa fa-music"></i>
+							<input type="text" name="music-name" class="form-control" readonly>
+						</div>
+					</div>
+					<?php } ?>
+					<div class="hidden-input" id="map-form">
+						<div class="inner-addon left-addon">
+							<i class="fa fa-map-marker"></i>
+							<input type="text" name="post_map" id="search-field" class="form-control" placeholder="<?php echo $carovl['lang']['maps_placeholder']; ?>">
+						</div>
+					</div>
+					<div id="results"></div>
+					<div id="progress">
+						<span id="percent">
+							0%
+						</span>
+						<div class="progress">
+							<div id="bar" class="progress-bar bg-carovl"></div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="tools mr-auto">
+						<span onclick="getElementById('post-photos').click()";">
+							<i class="fa fa-camera"></i>
+							<input type="file" name="post_photos[]" accept="image/*" class="hidden-input" id="post-photos">
+						</span>
+						<?php if ($carovl['config']['video_upload'] == 1) { ?>
+						<span onclick="getElementById('post-video').click();;">
+							<i class="fa fa-video-camera"></i>
+							<input type="file" name="post_video" class="hidden-input" id="post-video" accept="video/*">
+						</span>
+						<?php } ?>
+						<?php if ($carovl['config']['audio_upload'] == 1) { ?> 
+						<span onclick="getElementById('post-music').click();">
+							<i class="fa fa-music"></i>
+							<input type="file" name="post_music" class="hidden-input" accept="audio/*" id="post-music">
+						</span>
+						<?php } ?>
+						<?php if ($carovl['config']['file_sharing'] == 1) { ?> <span onclick="getElementById('post-file').click();">
+							<i class="fa fa-file"></i>
+							<input type="file" name="post_file" id="post-file" class="hidden-input">
+						</span>
+						<?php } ?>
+						<?php if ($carovl['config']['products'] == 1) { ?> 
+						<span>
+							<a href="<?php echo seoLink('index.php?page=new-product'); ?>">
+								<i class="fa fa-shopping-cart"></i>
+							</a>
+						</span>
+						<?php } ?>
+						<span id="emoticon-btn">
+							<i class="fa fa-smile-o"></i>
+						</span>
+						<span id="map-btn">
+							<i class="fa fa-map-marker"></i>
+						</span>
+						<span>
+							<span id="characters-left"></span>
+						</span>
+						<?php if ($carovl['page'] == 'groups') { ?> 
+						<input type="hidden" name="group_id" value="<?php echo $carovl['group_profile']['id']; ?>">
+						<?php } ?>
+						<?php if ($carovl['page'] == 'events') { ?> 
+						<input type="hidden" name="event_id" value="<?php echo $carovl['event']['id']; ?>">
+						<?php } ?>
+						<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+					</div>
+					<div class="ml-auto">
+						<button class="btn btn-carovl btn-post" type="submit" id="post-button">
+							<i class="fa fa-pencil icon-loader" data-icon="pencil"></i> <?php echo strtoupper($carovl['lang']['post_label']); ?>
+						</button>
+					</div>
+				</div>
+				<div class="emoticon_container">
+					<div class="emoticon_wrapper">
+						<?php 
+						foreach ($carovl['emoticons'] as $code => $name) {
+							$code = $code;
+							echo  '<span onclick="addEmoticon(\'' . $code . '\',\'#post-textarea textarea\');"><i class="pointer twa-lg twa twa-' . $name . '"></i></span>';
+						}
+						?>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div id="user-mention"></div>
+<script type="text/javascript">
+$(function () {
+	$('.modal.textbox').find('.close').click(function () {
+		$('#photo-form, #video-form, #file-form, #map-form, #music-form, .emoticon_container').slideUp(100);
+		$('form.post').clearForm();
+		$('#image-preview').hide();
+		$('.post_text').attr('placeholder', '<?php echo $carovl['lang']['share_anything']; ?>');
+	});
+	$('.post_text').triggeredAutocomplete({
+		hidden: '#user-mention',
+		source: ajaxRequests() + '?f=mention',
+		trigger: '@'
+	});
+	autosize($('textarea.post_text'));
+	$('#emoticon-btn').click(function () {
+		$('.emoticon_container').fadeToggle(100);
+	});
+	$('#post-file').change(function () {
+		var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+		$('#file-form input').val(filename);
+		$('#file-form').slideDown(100);
+	});
+	$('#post-video').change(function () {
+		var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+		$('#video-form input').val(filename);
+		$('#video-form').slideDown(200);
+	});
+	$('#post-music').change(function () {
+		var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+		$('#music-form input').val(filename);
+		$('#music-form').slideDown(100);
+	});
+	$('#post-photos').change(function () {
+		$('#image-preview').show('fast');
+		$('#image-preview').html('<img src="' + window.URL.createObjectURL(this.files[0]) + '"><div class="close-image" onclick="closePreview();"><i class="fa fa-times"></i></div>');
+		$('.post_text').attr('placeholder', '<?php echo $carovl['lang']['add_caption']; ?>');
+	});
+	$('#map-btn').click(function () {
+		$('#map-form').slideToggle(100);
+	});
+	<?php if ($carovl['config']['max_characters'] != 10000) { ?> 
+	$('textarea.post_text').limit('<?php echo $carovl['config']['max_characters']; ?>', '#characters-left');
+	<?php } ?>
+
+	var bar = $('#bar');
+	var percent = $('#percent');
+	var post_button = $('#post-button');
+
+	$('form.post').ajaxForm({
+		url: ajaxRequests() + '?f=posts&s=new_post',
+		beforeSend: function () {
+			var percentVal = '0%';
+			bar.width(percentVal);
+			percent.html(percentVal);
+			post_button.attr('disabled', true);
+			progressLoader(post_button);
+		},
+		uploadProgress: function (event, position, total, percentComplete) {
+			var percentVal =  percentComplete + '%';
+			bar.width(percentVal);
+			$('#progress').slideDown(100);
+			if (percentComplete > 50) {
+				percent.addClass('white');
+			}
+			percent.html(percentVal);
+		},
+		success: function (data) {
+			var text_box = $('body').find('#post-textbox-<?php echo $carovl['user']['user_id']; ?>');
+			$('#progress').slideUp(100);
+			post_button.attr('disabled', false);
+			percent.removeClass('white');
+			$('.post_text').css('height', 'auto');
+			$('#image-preview').hide('fast');
+			$('.post_text').attr('placeholder', '<?php echo $carovl['lang']['share_anything']; ?>');
+			if (data.status == 200) {
+				if (data.html.length > 0) {
+					$('#posts, #hashtag-posts').find('.posts-container').remove();
+				}
+				$('#posts, #hashtag-posts').prepend(data.html);
+				$('#photo-form, #video-form, #file-form, #map-form, #music-form, .emoticon_container').slideUp(100);
+				$('form.post').clearForm();
+				<?php if ($carovl['config']['max_characters'] != 100000) { ?> 
+				$('#charsleft').text("<?php echo $carovl['config']['max_characters']; ?>");
+				<?php } ?>
+				text_box.modal('hide');
+			}
+			progressLoader(post_button);
+		}
+	});
+	var pac_input = document.getElementById('search-field');
+	(function pacSelectFirst(input) {
+		var _addEventListener = (input.addEventListener) ? input.addEventListener : input.attachEvent;
+		function addEventListenerWrapper(type, listener) {
+			if (type == "keydown") {
+				var org_listener = listener;
+				listener = function (event) {
+					var suggestion_selected = $('.pac-item-selected').length > 0;
+					if (event.which == 13 && ! suggestion_selected) {
+						var simulated_downarrow = $.Event("keydown", {
+							keyCode: 40,
+							which: 40
+						});
+						org_listener.apply(input, [simulated_downarrow]);
+					}
+					org_listener.apply(input, [event]);
+				};
+			}
+			_addEventListener.apply(input, [type, listener]);
+		}
+		if (input.addEventListener) {
+			input.addEventListener = addEventListenerWrapper;
+		} else if (input.attachEvent) {
+			input.attachEvent = addEventListenerWrapper;
+		}
+	})(pac_input);
+	$(function () {
+		var autocomplete = new google.maps.places.Autocomplete(pac_input);
+	});
+	var get_url = $('textarea.post_text');
+	$('textarea.post_text').on("paste keyup", function (event) {
+		var match_url = /\b(https?):\/\/([\-A-Z0-9.]+)(\/[\-A-Z0-9+&@#\/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#\/%=~_|!:,.;]*)?/i;
+		if (($('.show_fetch_url').length > 0)) {
+			return false;
+		}
+		setTimeout(function() {
+			if (match_url.test(get_url.val())) {
+				$('#results').hide();
+				$('#loader-publisher').show();
+
+				var url_result = get_url.val().match(match_url)[0];
+				$.post(ajaxRequests() + '?f=posts&s=fetch_url', {
+					'url': url_result
+				}, function (data) {
+					url_images = data.images;
+					total_images = parseInt(data.images.length - 1);
+					if (url_images != '') {
+						image_thumbnail = '<div class="extracted_image mb-3" id="extracted_image"><img src="' + data.images[total_images] + '"></div>';
+						input_image = data.images[total_images];
+					} else {
+						image_thumbnail = '';
+						input_image = '';
+					}
+					var content = '<div class="show_fetch_url"><span class="remove_fetch_url" onclick="removeFetchUrl();"><i class="fa fa-remove"></i></span>' + image_thumbnail + '<div class="fetch_url_content"></div><input type="text" name="url_title" class="form-control input_fetch_url" value="' + data.title + '" dir="auto"><textarea name="url_content" class="form-control input_fetch_url" id="url_desc" dir="auto" placeholder="<?php echo $carovl['lang']['description_label']; ?>">' + data.content + '</textarea><input type="hidden" name="url_image" value="' + input_image + '"><input type="hidden" name="url_link" value="' + data.url + '"></div>';
+					autosize($('#url_desc'));
+					$('#results').html(content);
+					$('#results').fadeIn(300);
+					$('#loader-publisher').hide();
+				}, 'json');
+			}
+		}, 100);
+	});
+});
+function closePreview() {
+	$('#image-preview').hide('fast');
+	$('#post-photos').replaceWith($('#post-photos').val('').clone(true));
+	$('.post_text').attr('placeholder', '<?php echo $carovl['lang']['share_anything']; ?>');
+}
+function removeFetchUrl() {
+	var content = $('form.textbox').find('.show_fetch_url');
+	content.slideUp(function () {
+		$(this).remove();
+	});
+}
+</script>

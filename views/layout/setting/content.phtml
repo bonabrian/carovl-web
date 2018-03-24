@@ -1,0 +1,54 @@
+<?php 
+	$user_id = $carovl['user']['user_id'];
+	$carovl['is_admin'] = isAdmin();
+	$carovl['is_moderator'] = isModerator();
+	$carovl['setting']['admin'] = false;
+	if (isset($_GET['user']) && ! empty($_GET['user']) && ($carovl['is_admin'] === true || $carovl['is_moderator'] === true)) {
+		if (isUsernameExist($_GET['user'] === false)) {
+			header("Location: " . $carovl['config']['site_url']);
+			exit();
+		}
+		$user_id = userIdFromUsername($_GET['user']);
+		$carovl['setting']['admin'] = true;
+	}
+	$carovl['setting'] = userData($user_id);
+	$carovl['setting_page'] = 'account';
+	$pages_array = array(
+		'account',
+		'privacy-setting',
+		'change-password',
+		'social-links',
+		'email-notification',
+		'blocked-user'
+	);
+	if ($carovl['setting']['user_id'] == $carovl['user']['user_id']) {
+		$pages_array = array(
+			'account',
+			'privacy-setting',
+			'change-password',
+			'social-links',
+			'email-notification',
+			'blocked-user',
+			'delete-account'
+		);
+	}
+	if (! empty($_GET['tab'])) {
+		if (in_array($_GET['tab'], $pages_array)) {
+			$carovl['setting_page'] = $_GET['tab'];
+		}
+	}
+	$carovl['user_setting'] = '';
+	if (! empty($_GET['user'])) {
+		$carovl['user_setting'] = 'user=' . $_GET['user'] . '&';
+	}
+?>
+<div class="col-md-10 offset-md-1">
+	<div class="row">
+		<div class="col-md-3">
+			<?php echo loadPage('setting/control-section'); ?>
+		</div>
+		<div class="col-md-9">
+			<?php echo loadPage('setting/' . $carovl['setting_page'] . '/content'); ?>
+		</div>
+	</div>
+</div>

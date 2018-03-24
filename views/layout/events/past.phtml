@@ -1,0 +1,24 @@
+<div class="col-md-10 offset-md-1">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card event event-list">
+				<?php echo loadPage('events/includes/header'); ?>
+				<div class="card-block">
+					<?php if (count($carovl['events']) > 0) { ?> 
+					<div id="past-events">
+						<?php
+						foreach ($carovl['events'] as $carovl['event']) {
+							echo loadPage('events/includes/event-list');
+						}
+						?>
+					</div>
+					<?php } else { ?> 
+					<div class="empty-event">
+						<h2><?php echo $carovl['lang']['events_not_found']; ?></h2>
+					</div>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,54 @@
+<?php $carovl['policy'] = getPolicy(); ?>
+<form class="admin-policy-form" method="post">
+	<div class="card admin mb-2">
+		<div class="card-header">
+			<h3 class="card-title"><?php echo $carovl['lang']['privacy_policy']; ?> <small>(<?php echo $carovl['lang']['html_allowed']; ?>)</small></h3>
+		</div>
+		<div class="card-block">
+			<div class="form-group carovl">
+				<textarea name="privacy_policy" class="form-control" dir="auto"><?php echo $carovl['policy']['privacy_policy']; ?></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="card admin mb-2">
+		<div class="card-header">
+			<h3 class="card-title"><?php echo $carovl['lang']['terms_of_service']; ?> <small>(<?php echo $carovl['lang']['html_allowed']; ?>)</small></h3>
+		</div>
+		<div class="card-block">
+			<div class="form-group carovl">
+				<textarea name="terms_of_service" class="form-control" dir="auto"><?php echo $carovl['policy']['terms_of_service']; ?></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="card card-block">
+		<input type="hidden" name="hash_id" value="<?php echo createSession(); ?>">
+		<div class="form-group mb-0">
+			<button type="submit" class="btn btn-carovl">
+				<i class="fa fa-floppy-o icon-loader" data-icon="floppy-o"></i> <?php echo $carovl['lang']['save_label']; ?>
+			</button>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+$(function () {
+	autosize($('textarea'));
+	$('form.admin-policy-form').ajaxForm({
+		url: ajaxRequests() + '?f=admin_setting&s=update_policy',
+		beforeSend: function () {
+			progressLoader($('form.admin-policy-form').find('button'));
+			$('form.admin-policy-form').find('button').attr('disabled', true);
+		},
+		success: function (data) {
+			$('form.admin-policy-form').find('button').attr('disabled', false);
+			if (data.status == 200) {
+				swal({
+					title: data.success,
+					type: "success",
+					confirmButtonColor: "#2CC990",
+				});
+			}
+			progressLoader($('form.admin-policy-form').find('button'));
+		}
+	});
+});
+</script>

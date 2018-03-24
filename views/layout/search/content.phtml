@@ -1,0 +1,28 @@
+<div class="col-md-10 offset-md-1">
+	<div class="search-result-wrapper">
+		<div class="search-result-text-container">
+			<?php echo (! empty($_GET['query'])) ? $_GET['query'] : 'Search for ?'; ?>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<?php 
+			if (! empty($_GET['query'])) {
+				$results = getSearch($_GET['query']);
+				if (count($results) == 0) {
+					echo loadPage('search/no-result');
+				} else { ?> 
+				<div class="row">
+					<div class="col-md-8">
+						<?php 
+						foreach ($results as $carovl['result']) {
+							echo loadPage('search/result');
+						}
+						?>
+					</div>
+				</div>
+				<?php } ?>
+			<?php } ?>
+		</div>
+	</div>
+</div>

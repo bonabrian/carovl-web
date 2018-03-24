@@ -1,0 +1,31 @@
+<tr id="report_id_<?php echo $carovl['report']['id']; ?>">
+	<td><?php echo $carovl['report']['id']; ?></td>
+	<td>
+		<a href="<?php echo $carovl['report']['story']['publisher']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['report']['story']['publisher']['username']; ?>">
+			<img src="<?php echo $carovl['report']['story']['publisher']['avatar']; ?>" alt="<?php echo $carovl['report']['story']['publisher']['username']; ?>" class="img-fluid">
+			<?php echo $carovl['report']['story']['publisher']['username']; ?>
+		</a>
+	</td>
+	<td>
+		<a href="<?php echo $carovl['report']['reporter']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['report']['reporter']['username']; ?>">
+			<img src="<?php echo $carovl['report']['reporter']['avatar']; ?>" alt="<?php echo $carovl['report']['reporter']['username']; ?>" class="img-fluid">
+			<?php echo $carovl['report']['reporter']['username']; ?>
+		</a>
+	</td>
+	<td>
+		<a href="<?php echo $carovl['report']['story']['url']; ?>" target="_blank"><?php echo $carovl['lang']['view_post']; ?></a>
+	</td>
+	<td>
+		<span class="ajax-time" title="<?php echo date('c', $carovl['report']['time']); ?>">
+			<?php echo timeElapsedString($carovl['report']['time']); ?>
+		</span>
+	</td>
+	<td>
+		<span class="mr-4 mark_as_safe pointer" onclick="markAsSafeReportedPost(<?php echo $carovl['report']['id']; ?>);" title="<?php echo $carovl['lang']['mark_as_safe']; ?>">
+				<i class="fa fa-check icon-loader" data-icon="check"></i>
+		</span>
+		<span class="pointer delete_report" onclick="deleteReportedPost(<?php echo $carovl['report']['story']['id']; ?>, <?php echo $carovl['report']['id']; ?>);" title="<?php echo $carovl['lang']['delete_label']; ?>">
+			<i class="fa fa-remove"></i>
+		</span>
+	</td>
+</tr>

@@ -1,0 +1,48 @@
+<div class="col-md-10 offset-md-1">
+	<div class="row">
+		<div class="col-md-8">
+			<?php if (isThereAnnouncement() === true) { ?> 
+			<?php $announcement = getHomeAnnouncements(); ?>
+			<div class="alert alert-announcement">
+				<span class="close" data-toggle="tooltip" title="<?php echo $carovl['lang']['hide']; ?>"><i class="fa fa-remove" onclick="viewAnnouncement(<?php echo $announcement['id']; ?>);"></i></span>
+				<?php echo $announcement['text']; ?>
+			</div>
+			<?php } ?>
+			<div class="posts-count" onclick="getNewPosts();"></div>
+			<div id="load-posts">
+				<div class="post-loading">
+					<div class="loader">
+						<div class="loader-inner">
+							<label> ●</label><label> ●</label><label> ●</label><label> ●</label><label> ●</label><label> ●</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<?php echo loadPage('sidebar/content'); ?>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function () {
+	setTimeout(loadPosts, 100);
+});
+function loadPosts() {
+	$.get(ajaxRequests() + '?f=home&s=load_posts', function (data) {
+		$('#load-posts').html(data);
+	});
+}
+function viewAnnouncement(id) {
+	var announcement_wrapper = $('.alert-announcement');
+	$.get(ajaxRequests() + '?f=view_announcement', {
+		id: id
+	}, function (data) {
+		if (data.status == 200) {
+			announcement_wrapper.slideUp(200, function () {
+				$(this).remove();
+			});
+		}
+	});
+}
+</script>

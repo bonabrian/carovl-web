@@ -1,0 +1,14 @@
+<div class="audio-container">
+	<audio controls preload="auto">
+		<source src="<?php echo $carovl['media']['filename']; ?>" type="audio/mpeg">
+		<source src="<?php echo $carovl['media']['filename']; ?>" type="audio/mp3">
+	</audio>
+</div>
+<style type="text/css">
+.mejs-container {
+	width: 100% !important;
+}
+</style>
+<script type="text/javascript">
+$('audio').mediaelementplayer();
+</script>

@@ -1,0 +1,124 @@
+<nav class="navbar fixed-top navbar-toggleable-xl navbar-carovl-default">
+	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#carovl-header" aria-expanded="false" aria-controls="carovl-header">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<a href="<?php echo $carovl['config']['site_url']; ?>" data-redirect="?page=home" class="navbar-brand">
+		<img src="<?php echo $carovl['config']['resource']; ?>/img/icon.png" class="d-inline-block align-middle" alt="<?php echo $carovl['config']['site_name']; ?>"> <span class="hidden-md-down"><?php echo $carovl['config']['site_name']; ?></span>
+	</a>
+	<div class="collapse navbar-collapse" id="carovl-header">
+		<?php 
+		if ($carovl['logged_in'] == true) {
+			echo loadPage('header/logged-in-header');
+		} else {
+			echo loadPage('header/main-header');
+		}
+		?>
+	</div>
+</nav>
+<div id="redirect-bar"></div>
+<script type="text/javascript">
+var search_container = $('.search-container');
+var search_input = $('.search-container .q-input');
+var search_result = $('.search-result');
+function searchQuery(query, event) {
+	var Hash = detectHash(query);
+	if (Hash) {
+		$('.advanced-search-container').hide(200);
+		hashResult(query);
+		if (event.keyCode == 13 && event.shiftKey == 0) {
+			window.location = '<?php echo seoLink('index.php?page=hashtag&hash='); ?>' + query.replace('#', '');
+		}
+	} else {
+		$('.advanced-search-container').fadeIn(200);
+		if (event.keyCode == 13 && event.shiftKey == 0) {
+			window.location = "<?php echo seoLink('index.php?page=search&query='); ?>" + query;
+		}
+		searchResult(query);
+	}
+}
+function detectHash(str) {
+	var n = str.search('#');
+	if (n != "-1") {
+		return true;
+	} else {
+		return false;
+	}
+}
+function searchResult(query) {
+	if (search_input.val() != '') {
+		progressLoader(search_container.find('.search-form'));
+		search_container.addClass('show');
+		search_container.find('.advanced-link').attr('href', '<?php echo seoLink("index.php?page=search&query="); ?>' + query);
+		search_container.find('.advanced-link').attr('data-redirect', '<?php echo seoLink("?page=search&query="); ?>' + query);
+		$.get(ajaxRequests(), {
+			f: 'search',
+			s: 'keyword',
+			query: query
+		}, function (data) {
+			if (data.status == 200) {
+				if (data.html.length == 0) {
+					search_result.html(data.no_result);
+				} else {
+					search_result.html(data.html);
+				}
+			}
+			progressLoader(search_container.find('.search-form'));
+		});
+		$(document).click(function () {
+			search_container.removeClass('show');
+		});
+	} else {
+		search_container.removeClass('show');
+	}
+}
+function hashResult(query) {
+	if (search_input.val() != '') {
+		progressLoader(search_container.find('.search-form'));
+		search_container.addClass('show');
+		search_container.find('.advanced-link').attr('href', '<?php echo seoLink("index.php?page=search&query="); ?>' + query);
+		search_container.find('.advanced-link').attr('data-redirect', '<?php echo seoLink('?page=search&query='); ?>' + query);
+		$.get(ajaxRequests(), {
+			f: 'search',
+			s: 'hash',
+			query: query
+		}, function (data) {
+			if (data.status == 200) {
+				if (data.html.length == 0) {
+					search_result.html('<span class="center-text">No Result</span>');
+				} else {
+					search_result.html(data.html);
+				}
+			}
+			progressLoader(search_container.find('.search-form'));
+		});
+		$(document).click(function () {
+			search_container.removeClass('show');
+		});
+	} else {
+		search_container.removeClass('show');
+	}
+}
+function getRecentSearchs() {
+	$.get(ajaxRequests(), {
+		f: 'search',
+		s: 'recent'
+	}, function (data) {
+		if (data.status == 200) {
+			if (data.html.length > 0) {
+				search_result.html('<div class="recent-search"><i class="fa fa-clock-o"></i> <?php echo $carovl['lang']['recent_searches']; ?> <span class="float-right clear-recent" onclick="clearRecentSearches();"><?php echo $carovl['lang']['clear']; ?></span></div>' + data.html);
+			}
+		}
+	});
+}
+function clearRecentSearches() {
+	$('.clear-recent').html('<i class="fa fa-circle-o-notch fa-spin"></i>');
+	$.get(ajaxRequests(), {
+		f: 'search',
+		s: 'clear_recent'
+	}, function (data) {
+		if (data.response == 200) {
+			location.reload();
+		}
+	});
+}
+</script>

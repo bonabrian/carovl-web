@@ -1,0 +1,28 @@
+<div class="card following" data-user-id="<?php echo $carovl['invite']['user_id']; ?>" data-invite="<?php echo $carovl['invite']['user_id']; ?>">
+	<div class="card-header">
+		<div class="media">
+			<div class="media-left">
+				<a href="<?php echo $carovl['invite']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['invite']['username']; ?>">
+					<img src="<?php echo $carovl['invite']['avatar']; ?>" alt="<?php echo $carovl['invite']['username']; ?>">
+				</a>
+			</div>
+			<div class="media-body">
+				<div class="float-right">
+					<button type="button" onclick="sendInvitation($(this).attr('data-invited-user'));" data-invited-user="<?php echo $carovl['invite']['user_id']; ?>" class="btn btn-white">
+						<?php echo $carovl['lang']['invite']; ?>
+					</button>
+				</div>
+				<span class="user-preview" data-type="<?php echo $carovl['invite']['type']; ?>" data-id="<?php echo $carovl['invite']['user_id']; ?>">
+					<a href="<?php echo $carovl['invite']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['invite']['username']; ?>">
+						<?php echo $carovl['invite']['username']; ?>
+					</a>
+					<?php if ($carovl['invite']['verified'] == 1) { ?> 
+					<span class="verified-user" data-toggle="tooltip" title="<?php echo $carovl['lang']['verified_user']; ?>">
+						<i class="fa fa-check-circle"></i>
+					</span>
+					<?php } ?>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

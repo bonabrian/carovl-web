@@ -1,0 +1,22 @@
+<tr id="event_id_<?php echo $carovl['event']['id']; ?>" class="list" data-event-id="<?php echo $carovl['event']['id']; ?>">
+	<td><?php echo $carovl['event']['id']; ?></td>
+	<td>
+		<a href="<?php echo $carovl['event']['publisher']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['event']['publisher']['username']; ?>">
+			<img src="<?php echo $carovl['event']['publisher']['avatar']; ?>" alt="<?php echo $carovl['event']['publisher']['username']; ?>" class="img-fluid">
+			<?php echo $carovl['event']['publisher']['username']; ?>
+		</a>
+	</td>
+	<td>
+		<a href="<?php echo $carovl['event']['url']; ?>" target="_blank"><?php echo $carovl['lang']['view_event']; ?></a>
+	</td>
+	<td>
+		<span class="ajax-time">
+			<?php echo $carovl['event']['event_time']; ?>
+		</span>
+	</td>
+	<td>
+		<span class="pointer ml-4" onclick="deleteEventAdmin(<?php echo $carovl['event']['id']; ?>);">
+			<i class="fa fa-remove"></i>
+		</span>
+	</td>
+</tr>

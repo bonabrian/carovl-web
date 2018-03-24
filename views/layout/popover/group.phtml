@@ -1,0 +1,59 @@
+<?php 
+$dominantColor = getDominantColor($carovl['popover']['cover']);
+?>
+<div class="popover_content_wrapper">
+	<div class="popover_inner">
+		<div class="popover_header">
+			<div class="indash_header_wrapper" style="background: <?php echo $dominantColor['background']; ?>; color: <?php echo $dominantColor['color']; ?>">
+				<div class="navigation">
+					<div class="navigation_bg"></div>
+					<div class="navigation_inner">
+						<h3 style="color: <?php echo $dominantColor['color']; ?>">
+							<a href="<?php echo $carovl['popover']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['popover']['username']; ?>">
+								<span class="name"><?php echo $carovl['popover']['username']; ?></span>
+							</a>
+						</h3>
+						<div class="header_controls">
+							<?php echo getJoinButton($carovl['popover']['group_id']); ?>
+						</div>
+					</div>
+				</div>
+				<div class="header_image_wrapper">
+					<div class="header_image" style="background: url(<?php echo $carovl['popover']['cover']; ?>); background-size: cover;">
+						<a href="<?php echo $carovl['popover']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['popover']['username']; ?>" target="_blank">
+							<img src="<?php echo $carovl['popover']['cover']; ?>" alt="<?php echo $carovl['popover']['username']; ?>">
+						</a>
+					</div>
+				</div>
+				<div class="avatar" style="background: url(<?php echo $carovl['popover']['avatar']; ?>); background-size: cover; color: <?php echo $dominantColor['background']; ?>">
+					<a href="<?php echo $carovl['popover']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['popover']['username']; ?>" target="_blank">
+						<img src="<?php echo $carovl['popover']['avatar']; ?>" alt="<?php echo $carovl['popover']['username']; ?>">
+					</a>
+				</div>
+				<div class="info_wrapper">
+					<div class="info">
+						<h1 class="title">
+							<?php echo $carovl['popover']['username']; ?>
+						</h1>
+						<?php if (! empty($carovl['popover']['about'])) { ?> 
+						<div class="description">
+							<div class="description_inner">
+								<?php echo $carovl['popover']['about']; ?>
+							</div>
+						</div>
+						<?php } ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php 
+		if ($carovl['popover']['privacy'] == 1) {
+			if (canBeOnGroup($carovl['popover']['group_id'])) {
+				echo loadPage('popover/recent-group-posts');
+			}
+		} else {
+			echo loadPage('popover/recent-group-posts');
+		}
+		?>
+	</div>
+</div>

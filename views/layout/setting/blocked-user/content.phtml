@@ -1,0 +1,15 @@
+<div class="card setting">
+	<?php echo loadPage('setting/header'); ?>
+	<div class="card-block">
+		<?php
+		$blocked_users = getBlockedUsers($carovl['setting']['user_id']); 
+		if (count($blocked_users) > 0) {
+			foreach ($blocked_users as $carovl['member']) {
+				echo loadPage('setting/blocked-user/blocked-list');
+			}
+		} else { ?>
+		<h5><?php echo $carovl['lang']['blocked_users_not_found']; ?></h5>
+		<?php }
+		?>
+	</div>
+</div>

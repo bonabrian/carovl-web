@@ -1,0 +1,7 @@
+<div class="video-js-responsive-container vjs-hd">
+	<video class="video-js vjs-big-play-centered" controls preload="auto" poster="" data-setup="{}" <?php if ($carovl['logged_in'] == true) { ?> onplay="registerVideoViews($(this).attr('data-video-id'));" <?php } ?> data-video-id="<?php echo $carovl['media']['story_id']; ?>">
+		<source src="<?php echo $carovl['media']['filename']; ?>#t=0.4" type="video/mp4">
+		<source src="<?php echo $carovl['media']['filename']; ?>#t=0.4" type="video/webm">
+	</video>
+</div>
+<script type="text/javascript" src="<?php echo $carovl['config']['resource']; ?>/player/Video/video.js"></script>

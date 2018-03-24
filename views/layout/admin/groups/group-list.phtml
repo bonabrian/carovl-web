@@ -1,0 +1,26 @@
+<tr id="group_id_<?php echo $carovl['group']['id']; ?>" class="list" data-group-id="<?php echo $carovl['group']['id']; ?>">
+	<td><?php echo $carovl['group']['id']; ?></td>
+	<td>
+		<a href="<?php echo $carovl['group']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['group']['username']; ?>">
+			<img src="<?php echo $carovl['group']['avatar']; ?>" alt="<?php echo $carovl['group']['username']; ?>" class="img-fluid">
+			<?php echo $carovl['group']['username']; ?>
+		</a>
+	</td>
+	<td>
+		<a href="<?php echo $carovl['group']['owner']['url']; ?>" data-redirect="?page=timeline&u=<?php echo $carovl['group']['owner']['username']; ?>">
+			<img src="<?php echo $carovl['group']['owner']['avatar']; ?>" alt="<?php echo $carovl['group']['owner']['username']; ?>" class="img-fluid">
+			<?php echo $carovl['group']['owner']['username']; ?>
+		</a>
+	</td>
+	<td><?php echo $carovl['group']['members']; ?></td>
+	<td>
+		<span class="mr-4">
+			<a href="<?php echo seoLink('index.php?page=group-setting&group=' . $carovl['group']['username']); ?>" target="_blank">
+				<i class="fa fa-pencil"></i>
+			</a>
+		</span>
+		<span class="pointer delete-user" onclick="deleteGroupAdmin(<?php echo $carovl['group']['id']; ?>);">
+			<i class="fa fa-remove"></i>
+		</span>
+	</td>
+</tr>

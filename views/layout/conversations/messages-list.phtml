@@ -1,0 +1,51 @@
+<div class="conversation_msg <?php echo (! empty($carovl['conversation_message']['media'])) ? 'collapsed' : ''; ?>" id="messageid_<?php echo $carovl['conversation_message']['id']; ?>" data-message-id="<?php echo $carovl['conversation_message']['id']; ?>">
+	<!-- <div class="conversation_message_timestamp">
+		<div class="inline_activity">
+			Today at 7:52 PM
+		</div>
+	</div> -->
+	<div>
+
+		<?php if (isset($carovl['conversation_message']['media']) && ! empty($carovl['conversation_message']['media'])) { ?> 
+		<div class="conversation_msg_image">
+			<div class="message_container has_thumbnail">
+				<div class="avatar">
+					<img src="<?php echo $carovl['conversation_message']['message_user']['avatar']; ?>" alt="<?php echo $carovl['conversation_message']['message_user']['username']; ?>">
+				</div>
+				<div class="message_bubble">
+					<a onclick="openConversationImage(<?php echo $carovl['conversation_message']['id']; ?>, <?php echo $_SESSION['conversation_id']; ?>);">
+						<div class="image_thumbnail">
+							<img src="<?php echo $carovl['conversation_message']['media']; ?>" class="pointer">
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<?php 
+		$class = '';
+		if (empty($carovl['conversation_message']['text'])) {
+			$class = 'hidden';
+		}
+		?>
+		<div class="conversation_msg_text message_container <?php echo $class; ?>">
+			<span class="avatar">
+				<img src="<?php echo $carovl['conversation_message']['message_user']['avatar']; ?>" alt="<?php echo $carovl['conversation_message']['message_user']['username']; ?>">
+			</span>
+			<div class="message_bubble">
+				<div class="message_bubble_header">
+					<span class="username" target="_blank">
+						<?php echo $carovl['conversation_message']['message_user']['username']; ?>
+					</span>
+				</div>
+				<div class="message">
+					<?php echo $carovl['conversation_message']['text']; ?>
+					<?php if ($carovl['conversation_message']['message_user']['user_id'] == $carovl['user']['user_id']) { ?> 
+					<span class="has_seen"></span>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+		<div class="message_typing message_details"></div>
+	</div>
+</div>
