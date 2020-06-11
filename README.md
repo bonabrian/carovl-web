@@ -1,1 +1,1 @@
-# Best social network ever
+# First real project :D
